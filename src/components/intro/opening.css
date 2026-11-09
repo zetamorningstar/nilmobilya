@@ -1,0 +1,40 @@
+/* Opening sequence — isolated styles (prefix: nil-opening) */
+.nil-opening {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: auto;
+  background: transparent; /* panels open → the real homepage shows through */
+}
+
+/* Two black halves: the "center rectangle" is the gap between them */
+.nil-opening__panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.3%; /* tiny overlap: no hairline seam while closed */
+  background: #050505;
+  will-change: transform;
+}
+.nil-opening__panel--top { top: 0; }
+.nil-opening__panel--bottom { bottom: 0; }
+
+/* Video sits above the panels, then fades into the black beneath */
+.nil-opening__video {
+  position: absolute;
+  inset: 0;
+  background: #050505;
+  will-change: opacity;
+}
+.nil-opening__video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Homepage content is hidden until the panels are almost gone (see TEXT_AT) */
+html.nil-hold .nil-stage {
+  visibility: hidden;
+}
