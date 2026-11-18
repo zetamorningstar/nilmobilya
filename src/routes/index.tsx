@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Armchair, ArrowRight, ArrowUpRight, BedDouble, ChevronLeft, ChevronRight, Instagram, Mail, Phone, Sofa } from "lucide-react";
+import { Archive, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Tv } from "lucide-react";
 import { useState, type PointerEvent } from "react";
 
 import { collections } from "@/lib/collections";
@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { useHoverPreview } from "@/components/hover-preview";
 import { StageScroll } from "@/components/stage-scroll";
 import { ReviewsMarquee } from "@/components/reviews-marquee";
-import { MaterialsSection } from "@/components/materials-section";
 import { IntroSequence } from "@/components/intro-sequence";
 import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
@@ -32,38 +31,36 @@ export const Route = createFileRoute("/")({
 // Sağdaki çizgi göstergeleri bu listeden üretilir (id'ler sahne id'leriyle aynı olmalı)
 const SCENES = [
   ["top", "Ana sayfa"],
-  ["koleksiyon", "Mobilyalar"],
-  ["malzeme", "Malzemeler"],
+  ["koleksiyon", "Koleksiyon"],
+  ["ozel-uretim", "Özel üretim"],
   ["yorumlar", "Yorumlar"],
   ["sergimiz", "Sergimiz"],
   ["hikaye", "Hikâyemiz"],
-  ["ozel-uretim", "Özel üretim"],
   ["iletisim", "İletişim"],
 ] as const;
 // Üstteki ortalanmış menü (referans tasarımdaki 4 bağlantı)
 const NAV = [
   ["Ana sayfa", "#top"],
   ["Koleksiyon", "#koleksiyon"],
-  ["Malzeme", "#malzeme"],
+  ["Özel üretim", "#ozel-uretim"],
   ["Yorumlar", "#yorumlar"],
   ["Sergimiz", "#sergimiz"],
   ["Hakkımızda", "#hikaye"],
-  ["Özel üretim", "#ozel-uretim"],
   ["İletişim", "#iletisim"],
 ] as const;
 // ---- Koleksiyon sahnesi: tasarımdaki metinler (collections.ts'e dokunmadan) ----
 const KOLEKSIYON_METIN: Record<string, { title: string; lines: readonly [string, string] }> = {
-  oturma: { title: "Oturma Grubu", lines: ["Modern çizgilerle tasarlanan oturma grupları,", "yaşam alanlarınıza zarafet katar."] },
-  berjer: { title: "Berjer Koleksiyonu", lines: ["Rahatlığı ve şıklığı bir araya getiren", "özel tasarım berjerler."] },
-  yemek: { title: "Yemek Odası", lines: ["Davetkar atmosferler için", "özel tasarım yemek odaları."] },
+  "tv-uniteleri": { title: "TV Üniteleri", lines: ["Doğal ahşap dokusunu sade çizgilerle", "buluşturan, ölçünüze özel TV üniteleri."] },
+  banko: { title: "Banko", lines: ["Mağaza, ofis ve karşılama alanları için", "özel ölçüde üretilen ahşap bankolar."] },
+  dolap: { title: "Dolap Sistemleri", lines: ["Mekâna göre ölçülen, ahşap işçiliğiyle", "üretilen dolap ve depolama sistemleri."] },
 };
 
 const KATEGORILER = [
-  ["oturma", "Oturma"],
-  ["berjer", "Berjer"],
-  ["yemek", "Yemek"],
-  ["yatak", "Yatak Odası"],
+  ["tv-uniteleri", "TV Üniteleri"],
+  ["banko", "Banko"],
+  ["dolap", "Dolap"],
 ] as const;
+
 
 function MasaIkon({ className }: { className?: string }) {
   return (
@@ -73,14 +70,26 @@ function MasaIkon({ className }: { className?: string }) {
   );
 }
 
-const KAT_ICON = { oturma: Sofa, berjer: Armchair, yemek: MasaIkon, yatak: BedDouble } as const;
+const KAT_ICON = { "tv-uniteleri": Tv, banko: MasaIkon, dolap: Archive } as const;
+// Kartın üç dilimli görseli: ortada koleksiyonun ilk ürünü, yanlarda sıradaki ikisi.
+// Sıralamayı değiştirmek için collections.ts'deki ürün sırasını değiştir.
+const dilimler = (c: (typeof collections)[number]) => {
+  const imgs = c.products.map((p) => p.image);
+  const a = imgs[0] ?? c.hero;
+  const b = imgs[1] ?? a;
+  const d = imgs[2] ?? b;
+  return [b, a, d];
+};
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
     const [kat, setKat] = useState<string>("tumu");
-  const slugs = collections.map((c) => c.slug);
+   // Ana sayfadaki 3 kart: bu sırayla gösterilir
+  const HOME_SLUGS = ["tv-uniteleri", "banko", "dolap"];
+  const homeCollections = HOME_SLUGS.flatMap((s) => collections.filter((c) => c.slug === s));
+  const slugs = homeCollections.map((c) => c.slug);
   const orderedCollections = slugs.includes(kat)
-    ? [collections.find((c) => c.slug === kat)!, ...collections.filter((c) => c.slug !== kat)]
-    : collections;
+    ? [homeCollections.find((c) => c.slug === kat)!, ...homeCollections.filter((c) => c.slug !== kat)]
+    : homeCollections;
   const pageNo = kat === "tumu" ? 1 : KATEGORILER.findIndex(([s]) => s === kat) + 1;
   const stepKat = (dir: 1 | -1) => {
     const i = slugs.indexOf(kat);
@@ -287,8 +296,20 @@ function Index() {
                           preview.close();
                         }}
                       >
-                        <img data-depth src={item.hero} alt={`Nil Mobilya ${item.title.toLocaleLowerCase("tr-TR")} koleksiyonu`} width={1024} height={1280} decoding="async" className="image-depth [--depth-scale:1.04]" />
-                        <span aria-hidden="true" className="kc-card__shade" />
+                        <div data-depth className="kc-tri image-depth [--depth-scale:1.03]">
+  {dilimler(item).map((src, k) => (
+    <span key={k} className={`kc-pane kc-pane--${k}`}>
+      <img
+        src={src}
+        alt={k === 1 ? `Nil Mobilya ${item.title.toLocaleLowerCase("tr-TR")} koleksiyonu` : ""}
+        width={1024}
+        height={1280}
+        decoding="async"
+      />
+    </span>
+  ))}
+</div>
+<span aria-hidden="true" className="kc-card__shade" />
                       </div>
                       <div className="kc-card__cap">
                         <p data-s="fade" className="kc-card__no">{String(i + 1).padStart(2, "0")}</p>
@@ -347,8 +368,8 @@ function Index() {
           </div>
         </section>
 
-        {/* 3 · Malzeme */}
-        <MaterialsSection preview={preview} />
+                {/* 3 · Özel üretim */}
+        <CustomSection />
 
         {/* 4 · Yorumlar */}
         <ReviewsMarquee />
@@ -375,10 +396,6 @@ function Index() {
 
                 {/* 5 · Hikâye */}
         <AboutSection />
-
-                {/* 6 · Özel üretim */}
-        <CustomSection />
-        
 
                 {/* 7 · İletişim */}
         <ContactSection />

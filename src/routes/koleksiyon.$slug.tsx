@@ -1,11 +1,11 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { CollectionCatalog } from "@/components/collection-catalog";
-import { getCollection } from "@/lib/collections";
+import { getCatalogCollection } from "@/lib/collections";
 
 export const Route = createFileRoute("/koleksiyon/$slug")({
   loader: ({ params }) => {
-    const collection = getCollection(params.slug);
+    const collection = getCatalogCollection(params.slug);
     if (!collection) throw notFound();
     return { collection };
   },
