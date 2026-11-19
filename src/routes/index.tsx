@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Archive, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Tv } from "lucide-react";
 import { useState, type PointerEvent } from "react";
 
+import diningImage from "@/assets/nil-dining.jpg";
 import { collections } from "@/lib/collections";
 import { Button } from "@/components/ui/button";
 import { useHoverPreview } from "@/components/hover-preview";
@@ -54,6 +55,15 @@ const KOLEKSIYON_METIN: Record<string, { title: string; lines: readonly [string,
   banko: { title: "Banko", lines: ["Mağaza, ofis ve karşılama alanları için", "özel ölçüde üretilen ahşap bankolar."] },
   dolap: { title: "Dolap Sistemleri", lines: ["Mekâna göre ölçülen, ahşap işçiliğiyle", "üretilen dolap ve depolama sistemleri."] },
 };
+// Ana sayfadaki 4 kart (sıra ve metinler buradan değişir)
+const heroOf = (slug: string) => collections.find((c) => c.slug === slug)?.hero ?? "";
+
+const HOME_CARDS = [
+  { slug: "banko", title: "Banko", image: heroOf("banko"), lines: ["Mekânınıza özel ölçüde üretilen", "ahşap banko ve servis üniteleri."] },
+  { slug: "dolap", title: "Dolap Sistemleri", image: heroOf("dolap"), lines: ["Ölçünüze göre planlanan", "özel üretim dolap sistemleri."] },
+  { slug: "tv-uniteleri", title: "TV Üniteleri", image: heroOf("tv-uniteleri"), lines: ["Yaşam alanlarınıza estetik ve", "fonksiyon katan TV üniteleri."] },
+  { slug: "tum-urunler", title: "Diğer Ürünler", image: diningImage, lines: ["Sandalye, masa ve daha fazlası ile", "yaşam alanlarınızı tamamlayın."] },
+] as const;
 
 const KATEGORILER = [
   ["tv-uniteleri", "TV Üniteleri"],
@@ -82,20 +92,6 @@ const dilimler = (c: (typeof collections)[number]) => {
 };
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
-    const [kat, setKat] = useState<string>("tumu");
-   // Ana sayfadaki 3 kart: bu sırayla gösterilir
-  const HOME_SLUGS = ["tv-uniteleri", "banko", "dolap"];
-  const homeCollections = HOME_SLUGS.flatMap((s) => collections.filter((c) => c.slug === s));
-  const slugs = homeCollections.map((c) => c.slug);
-  const orderedCollections = slugs.includes(kat)
-    ? [homeCollections.find((c) => c.slug === kat)!, ...homeCollections.filter((c) => c.slug !== kat)]
-    : homeCollections;
-  const pageNo = kat === "tumu" ? 1 : KATEGORILER.findIndex(([s]) => s === kat) + 1;
-  const stepKat = (dir: 1 | -1) => {
-    const i = slugs.indexOf(kat);
-    const n = i < 0 ? (dir > 0 ? 0 : slugs.length - 1) : (i + dir + slugs.length) % slugs.length;
-    setKat(slugs[n]!);
-  };
   const preview = useHoverPreview();
 
   const handleDepth = (event: PointerEvent<HTMLElement>) => {
@@ -218,17 +214,14 @@ function Index() {
             ))}
           </ul>
         </section>
-        {/* 2 · Koleksiyon */}
                 {/* 2 · Koleksiyon */}
         <section id="koleksiyon" aria-label="Yeni koleksiyon" className="nil-scene nil-scene--col">
           <div className="nil-scene__body kc">
-            {/* Sağ üstte dev numara */}
             <span aria-hidden="true" data-s="fade" className="kc-mark">
-              <b>{String(pageNo).padStart(2, "0")}</b>
+              <b>02</b>
               <i>Collection</i>
             </span>
 
-            {/* Başlık bölümü */}
             <div className="kc-head">
               <div className="kc-head__l">
                 <p data-s="text" className="kc-eyebrow"><span aria-hidden="true" className="kc-eyebrow__line" />Koleksiyon</p>
@@ -238,128 +231,59 @@ function Index() {
                   Nil Mobilya'nın yeni koleksiyonu ile estetiği ve konforu bir araya getirin.
                 </p>
               </div>
+            </div>
 
-              <div data-s="fade" className="kc-tabs" role="tablist" aria-label="Koleksiyon kategorileri">
-                {[["tumu", "Tümü"], ...KATEGORILER].map(([slug, label]) => (
-                  <button
-                    key={slug}
-                    type="button"
-                    role="tab"
-                    aria-selected={kat === slug}
-                    disabled={slug === "yatak"}
-                    title={slug === "yatak" ? "Yakında" : undefined}
-                    onClick={() => setKat(slug)}
-                    className="kc-tab"
+            <div className="kc-grid kc-grid--4">
+              {HOME_CARDS.map((card, i) => (
+                <article key={card.slug} className="kc-card kc-card--q group">
+                  <Link
+                    to="/koleksiyon/$slug"
+                    params={{ slug: card.slug }}
+                    className="kc-card__link cursor-pointer"
+                    aria-label={`${card.title} ürünlerini görüntüle`}
                   >
-                    {label}
-                  </button>
-                ))}
-              </div>
-
-              <div data-s="fade" className="kc-pager">
-                <button type="button" aria-label="Önceki" onClick={() => stepKat(-1)}><ChevronLeft className="size-4" strokeWidth={1.4} /></button>
-                <span><b>{String(pageNo).padStart(2, "0")}</b> / {String(KATEGORILER.length).padStart(2, "0")}</span>
-                <button type="button" aria-label="Sonraki" onClick={() => stepKat(1)}><ChevronRight className="size-4" strokeWidth={1.4} /></button>
-              </div>
-            </div>
-
-            {/* Kartlar + sağ kategori listesi */}
-            <div className="kc-grid">
-              {orderedCollections.map((item, i) => {
-                const ui = KOLEKSIYON_METIN[item.slug]!;
-                return (
-                  <article key={item.slug} className={`kc-card kc-card--${i} group`}>
-                    <Link
-                      to="/koleksiyon/$slug"
-                      params={{ slug: item.slug }}
-                      className="kc-card__link cursor-pointer"
-                      aria-label={`${ui.title} koleksiyonunu görüntüle`}
+                    <div
+                      data-s="frame"
+                      className="kc-frame"
+                      onPointerMove={handleDepth}
+                      onPointerEnter={(event) => {
+                        if (event.pointerType === "touch") return;
+                        preview.open(
+                          {
+                            src: card.image,
+                            alt: `Nil Mobilya ${card.title}`,
+                            title: `0${i + 1} · ${card.title}`,
+                            lines: [card.lines[0], card.lines[1]],
+                          },
+                          event.currentTarget,
+                        );
+                      }}
+                      onPointerLeave={(event) => {
+                        resetDepth(event);
+                        preview.close();
+                      }}
                     >
-                      <div
-                        data-s="frame"
-                        className="kc-frame"
-                        onPointerMove={handleDepth}
-                        onPointerEnter={(event) => {
-                          if (event.pointerType === "touch") return;
-                          preview.open(
-                            {
-                              src: item.hero,
-                              alt: `Nil Mobilya ${item.title.toLocaleLowerCase("tr-TR")} koleksiyonu`,
-                              title: `${item.number} · ${item.title}`,
-                              lines: [item.note, item.description],
-                            },
-                            event.currentTarget,
-                          );
-                        }}
-                        onPointerLeave={(event) => {
-                          resetDepth(event);
-                          preview.close();
-                        }}
-                      >
-                        <div data-depth className="kc-tri image-depth [--depth-scale:1.03]">
-  {dilimler(item).map((src, k) => (
-    <span key={k} className={`kc-pane kc-pane--${k}`}>
-      <img
-        src={src}
-        alt={k === 1 ? `Nil Mobilya ${item.title.toLocaleLowerCase("tr-TR")} koleksiyonu` : ""}
-        width={1024}
-        height={1280}
-        decoding="async"
-      />
-    </span>
-  ))}
-</div>
-<span aria-hidden="true" className="kc-card__shade" />
-                      </div>
-                      <div className="kc-card__cap">
-                        <p data-s="fade" className="kc-card__no">{String(i + 1).padStart(2, "0")}</p>
-                        <h3 data-s="text" className="kc-card__title">{ui.title}</h3>
-                        <p data-s="text" className="kc-card__text"><span>{ui.lines[0]}</span><br />{ui.lines[1]}</p>
-                        {i === 0 && <span data-s="rule" aria-hidden="true" className="kc-card__rule" />}
-                        <span data-s="fade" className="kc-card__arrow"><ArrowRight className="size-5" strokeWidth={1.3} /></span>
-                      </div>
-                    </Link>
-                  </article>
-                );
-              })}
-
-              <aside data-s="fade" className="kc-side" aria-label="Kategoriler">
-                <ul>
-                  {KATEGORILER.map(([slug, label]) => {
-                    const Icon = KAT_ICON[slug];
-                    const disabled = slug === "yatak";
-                    return (
-                      <li key={slug}>
-                        <button
-                          type="button"
-                          disabled={disabled}
-                          title={disabled ? "Yakında" : undefined}
-                          aria-current={kat === slug}
-                          onClick={() => setKat(slug)}
-                          className="kc-side__item"
-                        >
-                          <Icon className="kc-side__icon" />
-                          <span>{label}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <p className="kc-side__note">
-                  <span aria-hidden="true" className="kc-side__rule" />
-                  Her detayda<br />yaşam alanlarınıza değer<br />katan tasarımlar...
-                </p>
-              </aside>
+                      <img data-depth src={card.image} alt={`Nil Mobilya ${card.title}`} width={1024} height={1280} decoding="async" className="image-depth [--depth-scale:1.04]" />
+                      <span aria-hidden="true" className="kc-card__shade" />
+                    </div>
+                    <div className="kc-card__cap">
+                      <p data-s="fade" className="kc-card__no">{String(i + 1).padStart(2, "0")}</p>
+                      <h3 data-s="text" className="kc-card__title">{card.title}</h3>
+                      <p data-s="text" className="kc-card__text">{card.lines[0]}<br />{card.lines[1]}</p>
+                      <span data-s="fade" className="kc-card__arrow"><ArrowRight className="size-5" strokeWidth={1.3} /></span>
+                    </div>
+                  </Link>
+                </article>
+              ))}
             </div>
 
-            {/* Alt şerit */}
             <div data-s="fade" className="kc-foot">
               <p className="kc-foot__path"><span>Nil Mobilya</span><i>/</i><span>Koleksiyon</span><em aria-hidden="true" /></p>
               <span aria-hidden="true" className="kc-foot__line" />
-              <div className="kc-foot__arrows">
-                <button type="button" aria-label="Önceki" onClick={() => stepKat(-1)}><ChevronLeft className="size-4" strokeWidth={1.4} /></button>
-                <button type="button" aria-label="Sonraki" onClick={() => stepKat(1)}><ChevronRight className="size-4" strokeWidth={1.4} /></button>
-              </div>
+              <Link to="/koleksiyon/$slug" params={{ slug: "tum-urunler" }} className="kc-more__link">
+                <span>Diğer ürünleri görmek için</span>
+                <b>Tüm Ürünleri Kontrol Edin <ArrowRight className="size-4" strokeWidth={1.4} /></b>
+              </Link>
               <svg className="kc-foot__logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">
                 <path d="M6 26V6l20 20V6" />
                 <path d="M3 29V3M29 29V3" opacity="0.45" />

@@ -3088,3 +3088,87 @@ html.nil-staged .nil-index { display: flex; }
 @media (max-width: 1099px) {
   .kc-frame { --s: 12cqh; }
 }
+/* =============== Ana sayfa koleksiyon: 2x2 kartlar =============== */
+.kc-mark--word { top: 3.4rem; }
+.kc-mark--word i {
+  position: static;
+  display: block;
+  margin: 0 -1.1em 0 0;
+  font-size: clamp(14px, 1.4vw, 24px);
+  letter-spacing: 1.1em;
+}
+
+.kc-grid--4 { grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .kc-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+.kc-card--q { min-height: 200px; }
+.kc-card--q .kc-card__no { color: var(--primary); }
+.kc-card--q .kc-card__title { font-size: clamp(24px, 2vw, 34px); }
+.kc-card--q .kc-card__text { max-width: 16rem; }
+.kc-card--q .kc-card__arrow { left: 28px; bottom: 24px; }
+
+.kc-more {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 1.4rem;
+}
+.kc-more__line {
+  flex: 0 1 18rem;
+  height: 1px;
+  background: color-mix(in oklab, var(--primary) 70%, transparent);
+}
+.kc-more__link {
+  display: block;
+  font-size: 12px;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+}
+.kc-more__link b {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--primary);
+  transition: gap 0.3s;
+}
+.kc-more__link:hover b { gap: 16px; }
+/* ---- 4 kart: fotoğraf kartın sağ kısmını doldurur, solda yazı için koyu geçiş ---- */
+.kc-card--q .kc-frame > img {
+  left: 30%;
+  width: 70%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 28%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 28%);
+}
+.kc-card--q .kc-card__shade {
+  background: linear-gradient(to right, rgb(0 0 0 / 0.55), transparent 45%);
+}
+@media (max-width: 767px) {
+  .kc-card--q .kc-frame > img {
+    left: 0;
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 60%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 60%);
+  }
+}
+
+/* ---- Alt şerit: yol + çizgi + bağlantı + logo ---- */
+.kc-foot .kc-more__link {
+  text-align: right;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.kc-more__link span { display: block; }
+.kc-foot__line { margin-left: 0; }
