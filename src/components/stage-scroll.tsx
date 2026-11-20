@@ -3,18 +3,18 @@ import { useEffect } from "react";
 /* ------------------------------------------------------------------ */
 /*  AYARLAR — hızı ve hissi buradan değiştirebilirsin (milisaniye)    */
 /* ------------------------------------------------------------------ */
-const EXIT_MS = 520; // bir öğenin ekran dışına çıkış süresi
-const EXIT_SPREAD = 160; // çıkarken öğeler arası toplam gecikme
-const ENTER_AT = 1; // çıkışın yüzde kaçında yeni sahne başlasın (0-1)
-const ENTER_MS = 800; // bir öğenin ekranın altından gelme süresi
-const ENTER_SPREAD = 300; // gelirken öğeler arası toplam gecikme
+const EXIT_MS = 380; // bir öğenin ekran dışına çıkış süresi
+const EXIT_SPREAD = 90; // çıkarken öğeler arası toplam gecikme
+const ENTER_AT = 0.72; // çıkışın yüzde kaçında yeni sahne başlasın (0-1)
+const ENTER_MS = 490; // bir öğenin ekranın altından gelme süresi
+const ENTER_SPREAD = 130; // gelirken öğeler arası toplam gecikme
 const EDGE_PAD = 48; // öğe ekran kenarından bu kadar px daha uzağa gider
-const EASE_IN = "cubic-bezier(0.65, 0, 0.35, 1)";
-const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
+const EASE_IN = "cubic-bezier(0.55, 0, 0.85, 0.45)";
+const EASE_OUT = "cubic-bezier(0.18, 0.8, 0.28, 1)";
 const MIN_HEIGHT = 560; // bundan kısa ekranlarda normal kaydırmaya döner
 const STORE_KEY = "nil-scene-index";
-const UNLOCK_AFTER = ENTER_MS + ENTER_SPREAD + 100; // yeni sahne girişi başladıktan kaç ms sonra yeni kaydırma kabul edilsin
-const STEP_GAP = 180; // tekerlekte iki sahne adımı arası en az süre (ms)
+const UNLOCK_AFTER = ENTER_MS + ENTER_SPREAD + 25; // yeni sahne girişi başladıktan kaç ms sonra yeni kaydırma kabul edilsin
+const STEP_GAP = 240; // tekerlekte iki sahne adımı arası en az süre (ms)
 
 type Dir = 1 | -1;
 type Kind = "text" | "frame" | "fade" | "rule";
@@ -227,11 +227,8 @@ export function initStage(options: { persist?: boolean } = {}) {
   markActive();
 
   /* ---------------- Sahne geçişi ---------------- */
-  // Kilit yok: geçiş sürerken gelen kaydırmalar hedefi ileri alır, ara sahneler atlanır.
+  // Bir seferde yalnızca iki komşu sahne hareket eder; sonraki adım kuyruğa alınır.
   let busy = false;
-  let entered = false; // yeni sahnenin girişi başladı mı
-  let tDir: Dir = 1;
-  let tTarget = cur; // devam eden geçişin hedefi
   let queued: number | null = null; // geçiş bitince gidilecek sahne
   let desired = cur; // kullanıcının gitmek istediği son sahne
   const timers = new Set<number>();
@@ -248,10 +245,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     const from = scenes[cur]!;
     from.classList.add("is-leaving"); // çıkış başladı: sahnenin sabit süsleri sönmeye başlar
     busy = true;
-    entered = false;
-    tDir = dir;
-    tTarget = target;
-    desired = target;
+    desired = Math.max(0, Math.min(scenes.length - 1, desired));
 
     // 1) Mevcut sahnenin öğeleri ekran dışına çıkar
     const outAtoms = atomsOf(from);
@@ -263,14 +257,13 @@ export function initStage(options: { persist?: boolean } = {}) {
     // 2) Çıkış sürerken yeni sahnenin öğeleri ekranın dışından gelir (hedef değişmiş olabilir)
     const enterAt = exitTotal * ENTER_AT;
     later(() => {
-      const to = scenes[tTarget]!;
+      const to = scenes[target]!;
       const inAtoms = atomsOf(to);
       const inStep = inAtoms.length > 1 ? ENTER_SPREAD / (inAtoms.length - 1) : 0;
       inAtoms.forEach((a, i) => playAtom(a, "in", dir, i * inStep));
       to.classList.remove("is-off");
       to.classList.remove("is-leaving");
-      entered = true;
-      cur = tTarget;
+      cur = target;
       root.style.setProperty("--nil-p", String(cur));
       if (persist) sessionStorage.setItem(STORE_KEY, String(cur));
       markActive();
@@ -278,18 +271,18 @@ export function initStage(options: { persist?: boolean } = {}) {
 
     // 3) Eski sahneyi gizle (hâlâ aktifse dokunma)
     later(() => {
-      if (from !== scenes[cur] && from !== scenes[tTarget]) from.classList.add("is-off");
+      if (from !== scenes[cur]) from.classList.add("is-off");
       if (from !== scenes[cur]) from.classList.remove("is-leaving");
       outAnims.forEach((an) => an.cancel());
     }, Math.max(exitTotal, enterAt + 60));
 
-    // 4) Erken kilit açma: sıradaki kaydırma varsa hemen başlar
+    // 4) Giriş animasyonu bitince sonraki adımı başlat; sahneler üst üste binmez
     later(() => {
       busy = false;
       if (queued !== null) {
         const q = queued;
         queued = null;
-        if (q !== cur) run(q);
+        if (q !== cur) run(cur + (q > cur ? 1 : -1));
         else desired = cur;
       }
     }, enterAt + UNLOCK_AFTER);
@@ -301,9 +294,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     if (busy) {
       if (target === desired) return;
       desired = target;
-      const dir: Dir = target > cur ? 1 : -1;
-      if (!entered && dir === tDir && target !== cur) tTarget = target; // ara sahneleri atla
-      else queued = target; // giriş başladıysa ya da yön değiştiyse bitince git
+      queued = target; // devam eden geçiş tamamlanınca sıradaki komşu sahneye git
       return;
     }
     if (target === cur) return;
