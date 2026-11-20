@@ -3342,3 +3342,154 @@ html.nil-staged .nil-index { display: flex; }
 @media (prefers-reduced-motion: reduce) {
   .nil-scene--col .kcr-card, .nil-scene--col .kcr-card__slice img { transition: none; }
 }
+
+/* Collection v3: subtle angled seams, uncropped photos, readable copy */
+.nil-scene--col .kcr-card__triptych {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+  background: #151210;
+}
+.nil-scene--col .kcr-card__slice,
+.nil-scene--col .kcr-card__slice--0,
+.nil-scene--col .kcr-card__slice--1,
+.nil-scene--col .kcr-card__slice--2 {
+  position: absolute;
+  inset-block: 0;
+  left: auto;
+  width: 36%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #191512;
+  border: 0;
+  clip-path: none;
+}
+.nil-scene--col .kcr-card__slice--0 {
+  left: 0;
+  width: 38%;
+  clip-path: polygon(0 0,100% 0,86% 100%,0 100%);
+}
+.nil-scene--col .kcr-card__slice--1 {
+  left: 31%;
+  width: 39%;
+  clip-path: polygon(14% 0,100% 0,86% 100%,0 100%);
+}
+.nil-scene--col .kcr-card__slice--2 {
+  left: 63%;
+  width: 37%;
+  clip-path: polygon(15% 0,100% 0,100% 100%,0 100%);
+}
+.nil-scene--col .kcr-card__slice img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  filter: brightness(1.08);
+}
+.nil-scene--col .kcr-card__slice + .kcr-card__slice { border-left: 0; }
+.nil-scene--col .kcr-card__slice--1::before,
+.nil-scene--col .kcr-card__slice--2::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset-block: 0;
+  left: 0;
+  width: 1px;
+  background: rgba(180,151,110,.45);
+  transform: rotate(9deg);
+  pointer-events: none;
+}
+.nil-scene--col .kcr-card__gradient,
+.nil-scene--col .kcr-card--feature .kcr-card__gradient {
+  background: linear-gradient(90deg,
+    rgba(7,6,6,.79) 0%,
+    rgba(7,6,6,.61) 17%,
+    rgba(7,6,6,.24) 32%,
+    rgba(7,6,6,0) 48%);
+}
+.nil-scene--col .kcr-card--small .kcr-card__gradient {
+  background: linear-gradient(90deg,
+    rgba(7,6,6,.88) 0%,
+    rgba(7,6,6,.67) 18%,
+    rgba(7,6,6,.13) 37%,
+    transparent 54%);
+}
+.nil-scene--col .kcr-card__copy {
+  text-shadow: 0 1px 7px rgba(0,0,0,.82);
+}
+.nil-scene--col .kcr-card__copy h3,
+.nil-scene--col .kcr-card__copy p {
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.35));
+}
+.nil-scene--col .kcr-card--small .kcr-card__copy {
+  max-width: 55%;
+}
+.nil-scene--col .kcr-card--small .kcr-card__copy p {
+  max-width: 19ch;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__copy {
+  max-width: 48%;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__copy h3 {
+  font-size: clamp(38px,3.6vw,70px);
+}
+@media (max-width: 1099px) {
+  .nil-scene--col .kcr-card--small .kcr-card__copy { max-width: 66%; }
+  .nil-scene--col .kcr-card--feature .kcr-card__copy { max-width: 65%; }
+}
+@media (max-width: 640px) {
+  .nil-scene--col .kcr-card--small .kcr-card__copy { max-width: 64%; }
+  .nil-scene--col .kcr-card--feature .kcr-card__copy { max-width: 67%; }
+  .nil-scene--col .kcr-card__slice--0 { width: 40%; }
+  .nil-scene--col .kcr-card__slice--1 { left: 32%; width: 40%; }
+  .nil-scene--col .kcr-card__slice--2 { left: 64%; width: 36%; }
+}
+
+/* Sergimiz: small architectural accents only; existing structure retained */
+.nil-showcase {
+  position: relative;
+  isolation: isolate;
+}
+.nil-showcase::before {
+  content: "";
+  position: absolute;
+  inset: -20px -26px;
+  border: 1px solid rgba(172,143,107,.15);
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: -1;
+}
+.nil-showcase__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 12px;
+  background: #ac8f6b;
+  vertical-align: middle;
+}
+.nil-showcase__line {
+  display: inline-block;
+  width: clamp(38px,7vw,110px);
+  height: 1px;
+  margin-left: 16px;
+  background: rgba(172,143,107,.48);
+  vertical-align: middle;
+}
+.nil-showcase__action::before {
+  content: "NİL / SERGİ";
+  display: block;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(172,143,107,.36);
+  font-size: 10px;
+  letter-spacing: .3em;
+  color: #b49a79;
+}
+@media (max-width: 640px) {
+  .nil-showcase::before { inset: -10px -8px; }
+}

@@ -242,7 +242,7 @@ function Index() {
                     <div className="kcr-card__copy">
                       <span data-s="fade" className="kcr-card__number">0{i + 1}<i /></span>
                       <h3 data-s="text">{card.title}</h3>
-                      <p data-s="text">{card.description.split("\\n").map((line, lineIndex) => (
+                      <p data-s="text">{card.description.split(/\\n|\n/).map((line, lineIndex) => (
                         <span key={lineIndex}>{line}{lineIndex === 0 && <br />}</span>
                       ))}</p>
                       <span data-s="fade" className="kcr-card__button"><ArrowRight aria-hidden="true" strokeWidth={1.35} /></span>
@@ -252,9 +252,9 @@ function Index() {
               </div>
 
               <aside className="kcr-benefits" aria-label="Hizmetlerimiz">
-                <div><ShieldCheck aria-hidden="true" /><span>Güvenli<br />Teslimat</span></div>
-                <div><Truck aria-hidden="true" /><span>Türkiye Geneli<br />Teslimat</span></div>
-                <div><Headset aria-hidden="true" /><span>Satış Sonrası<br />Destek</span></div>
+                <div data-s="fade"><ShieldCheck aria-hidden="true" /><span>Güvenli<br />Teslimat</span></div>
+                <div data-s="fade"><Truck aria-hidden="true" /><span>Türkiye Geneli<br />Teslimat</span></div>
+                <div data-s="fade"><Headset aria-hidden="true" /><span>Satış Sonrası<br />Destek</span></div>
               </aside>
             </div>
 
@@ -275,15 +275,15 @@ function Index() {
 
         {/*5 · Sergimiz */}
 <section id="sergimiz" aria-label="Sergimiz" className="nil-scene">
-  <div className="nil-scene__body nil-split nil-split--wide">
+  <div className="nil-scene__body nil-split nil-split--wide nil-showcase">
     <div>
-      <p data-s="text" className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Sergimiz</p>
+      <p data-s="text" className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary"><span className="nil-showcase__dot" aria-hidden="true" /> Sergimiz <span className="nil-showcase__line" aria-hidden="true" /></p>
       <h2 data-s="text" className="max-w-2xl font-display text-4xl leading-tight md:text-6xl">Yaptığımız her dönüşümle bir hayata dokunduk.</h2>
       <p data-s="text" className="mt-6 max-w-xl text-sm font-light leading-7 text-ink-soft md:text-base">
         Her proje, bir mekânın hikâyesini yeniden yazdı. Bugüne kadar hayata geçirdiğimiz çalışmaları sergimizde bir araya getirdik.
       </p>
     </div>
-    <div className="flex flex-col justify-end gap-4">
+    <div className="nil-showcase__action flex flex-col justify-end gap-4">
       <div data-s="fade">
         <Button asChild variant="goldOutline" size="lg" className="h-12 w-full justify-start px-5 text-xs uppercase">
           <Link to="/sergimiz">Sergiyi gez <ArrowUpRight /></Link>
