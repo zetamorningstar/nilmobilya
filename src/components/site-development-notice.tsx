@@ -41,26 +41,39 @@ export function SiteDevelopmentNotice() {
   if (!open) return null;
 
   return (
-    <aside
-      role="status"
-      aria-label="Site yapım aşaması bilgilendirmesi"
-      className="nil-dev-notice fixed bottom-5 left-1/2 z-[85] w-[min(92vw,410px)] -translate-x-1/2 rounded-xl border border-[#8b795d]/50 bg-[#252629]/95 px-5 py-5 text-[#f4f1ec] shadow-[0_18px_55px_rgba(0,0,0,.55)] backdrop-blur-xl"
-      onWheel={(event) => event.stopPropagation()}
-      onTouchEnd={(event) => event.stopPropagation()}
-    >
-      <button
-        type="button"
-        onClick={close}
-        aria-label="Duyuruyu kapat"
-        className="absolute right-3 top-3 rounded-md p-1 text-[#b9b7b4] transition-colors hover:bg-white/10 hover:text-white"
+    <div className="nil-dev-notice-layer fixed inset-0 z-[85] flex items-center justify-center px-4 pointer-events-none">
+      <aside
+        role="status"
+        aria-label="Site yapım aşaması bilgilendirmesi"
+        className="nil-dev-notice relative pointer-events-auto w-full max-w-[530px] overflow-hidden rounded-[14px] border border-[#cba36b]/65 bg-[#242528]/[.97] px-7 py-9 text-[#f7f4ef] shadow-[0_32px_100px_rgba(0,0,0,.72),0_0_48px_rgba(194,145,77,.12)] backdrop-blur-2xl sm:px-11 sm:py-11"
+        onWheel={(event) => event.stopPropagation()}
+        onTouchEnd={(event) => event.stopPropagation()}
       >
-        <X size={17} strokeWidth={1.5} />
-      </button>
-      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[.23em] text-[#c9a66e]">
-        Nil Mobilya · Bilgilendirme
-      </p>
-      <h2 className="pr-5 font-serif text-[23px] leading-snug">Sitemiz yapım aşamasındadır.</h2>
-      <span aria-hidden="true" className="mt-4 block h-px w-12 bg-[#c9a66e]/65" />
-    </aside>
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-transparent via-[#e3b87a] to-transparent" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full bg-[#b8894b]/[.12] blur-[55px]" />
+        <button
+          type="button"
+          onClick={close}
+          aria-label="Duyuruyu kapat"
+          className="absolute right-4 top-4 rounded-md border border-white/10 bg-white/5 p-2 text-[#d1cbc3] transition-all hover:border-[#cba36b]/60 hover:bg-white/10 hover:text-white"
+        >
+          <X size={18} strokeWidth={1.6} />
+        </button>
+        <div className="relative">
+          <p className="mb-5 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[.27em] text-[#d3ab73]">
+            <span aria-hidden="true" className="inline-block h-[2px] w-9 bg-[#d3ab73]" />
+            Nil Mobilya · Bilgilendirme
+          </p>
+          <h2 className="max-w-[410px] pr-5 font-serif text-[clamp(30px,5.5vw,45px)] leading-[1.12] tracking-[-.025em]">
+            Sitemiz <span className="text-[#d5ab70] italic">yapım</span><br />
+            aşamasındadır.
+          </h2>
+          <div aria-hidden="true" className="mt-7 flex items-center gap-3">
+            <span className="h-px w-16 bg-[#d3ab73]" />
+            <span className="h-[5px] w-[5px] rotate-45 border border-[#d3ab73]" />
+          </div>
+        </div>
+      </aside>
+    </div>
   );
 }
