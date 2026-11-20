@@ -4,6 +4,8 @@ import { useState, type PointerEvent } from "react";
 
 import diningImage from "@/assets/nil-dining.jpg";
 import { collections } from "@/lib/collections";
+import dolapPhoto2 from "@/assets/unitevedolapofis.jpg";
+import dolapPhoto3 from "@/assets/dolapsiyah.jpg";
 import { Button } from "@/components/ui/button";
 import { useHoverPreview } from "@/components/hover-preview";
 import { StageScroll } from "@/components/stage-scroll";
@@ -59,11 +61,11 @@ const productPhotos = (slug: string): string[] => {
 };
 const tvPhotos = productPhotos("tv-uniteleri");
 const bankoPhotos = productPhotos("banko");
-const dolapPhotos = productPhotos("dolap");
+const dolapPhotos = [collectionBySlug("dolap")?.hero, dolapPhoto2, dolapPhoto3].filter((p): p is string => Boolean(p));
 const allPhotos = [tvPhotos[0], bankoPhotos[0], dolapPhotos[0]].filter((photo): photo is string => Boolean(photo));
 
 const COLLECTION_CARDS = [
-  { slug: "tum-urunler", title: "Tüm Ürünler", description: "Tüm koleksiyonumuzu\\ntek bir yerde keşfedin.", images: allPhotos, fallback: tvPhotos[0] },
+  { slug: "tum-urunler", title: "Tüm Ürünler", description: "Tüm koleksiyonumuzu\ntek bir yerde keşfedin.", images: allPhotos, fallback: tvPhotos[0] },
   { slug: "tv-uniteleri", title: "TV Üniteleri", description: "Yaşam alanlarınıza estetik ve\\nfonksiyon katan TV üniteleri.", images: tvPhotos, fallback: tvPhotos[0] },
   { slug: "banko", title: "Bankolar", description: "Mekânınıza özel ölçüde üretilen\\nahşap banko ve servis üniteleri.", images: bankoPhotos, fallback: bankoPhotos[0] },
   { slug: "dolap", title: "Dolap Sistemleri", description: "Ölçünüze göre planlanan\\nözel üretim dolap sistemleri.", images: dolapPhotos, fallback: dolapPhotos[0] },
@@ -197,7 +199,7 @@ function Index() {
                 {/* 2 · Koleksiyon — referansın HTML/CSS karşılığı; görseller projeden gelir */}
         <section id="koleksiyon" aria-label="Yeni koleksiyon" className="nil-scene nil-scene--col">
           <div className="nil-scene__body kc kc-rebuilt">
-            <div className="kcr-heading">
+            <div className="kcr-heading" data-s="fade">
               <div className="kcr-heading__left">
                 <div className="kcr-eyebrow"><span className="kcr-eyebrow__square" /> KOLEKSİYON <span className="kcr-eyebrow__rule" /></div>
                 <h2 data-s="text" className="kcr-title">Yeni Koleksiyon</h2>
@@ -209,7 +211,7 @@ function Index() {
               <div className="kcr-mark" aria-hidden="true"><span>02</span><small>COLLECTION</small></div>
             </div>
 
-            <div className="kcr-values" aria-label="Üretim özellikleri">
+            <div className="kcr-values" data-s="fade" aria-label="Üretim özellikleri">
               <div><Diamond aria-hidden="true" /><span>Usta İşçilik</span></div>
               <div><Layers3 aria-hidden="true" /><span>Seçkin Malzemeler</span></div>
               <div><Ruler aria-hidden="true" /><span>Özel Ölçü Üretim</span></div>
@@ -228,23 +230,19 @@ function Index() {
                     data-s="frame"
                   >
                     <div className="kcr-card__visual" aria-hidden="true">
-                      {i === 0 ? (
-                        <div className="kcr-card__triptych">
-                          {[0, 1, 2].map((n) => (
-                            <div className={`kcr-card__slice kcr-card__slice--${n}`} key={n}>
-                              <img src={card.images[n] ?? card.fallback} alt="" loading="lazy" />
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <img className="kcr-card__photo" src={card.images[0] ?? card.fallback} alt="" loading="lazy" />
-                      )}
+                      <div className="kcr-card__triptych">
+                        {[0, 1, 2].map((n) => (
+                          <div className={`kcr-card__slice kcr-card__slice--${n}`} key={n}>
+                            <img src={card.images[n] ?? card.fallback} alt="" loading="lazy" />
+                          </div>
+                        ))}
+                      </div>
                       <span className="kcr-card__gradient" />
                     </div>
-                    <div className="kcr-card__copy">
+                    <div className="kcr-card__copy" data-s="fade">
                       <span className="kcr-card__number">0{i + 1}<i /></span>
-                      <h3>{card.title}</h3>
-                      <p>{card.description.split("\\n").map((line, lineIndex) => (
+                      <h3 data-s="text">{card.title}</h3>
+                      <p data-s="text">{card.description.split("\\n").map((line, lineIndex) => (
                         <span key={lineIndex}>{line}{lineIndex === 0 && <br />}</span>
                       ))}</p>
                       <span className="kcr-card__button"><ArrowRight aria-hidden="true" strokeWidth={1.35} /></span>
@@ -260,7 +258,7 @@ function Index() {
               </aside>
             </div>
 
-            <div className="kcr-footer">
+            <div className="kcr-footer" data-s="fade">
               <span>NİL MOBİLYA</span><span className="kcr-footer__slash">/</span><span>KOLEKSİYON</span>
               <span className="kcr-footer__line" aria-hidden="true" />
               <Link to="/koleksiyon/$slug" params={{ slug: "tum-urunler" }} aria-label="Tüm ürünleri gör" className="kcr-footer__all">Tüm ürünler <ArrowRight aria-hidden="true" /></Link>
