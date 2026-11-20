@@ -8,22 +8,20 @@ export function SiteDevelopmentNotice() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
     const show = () => {
-      timer = setTimeout(() => {
-        try {
-          if (sessionStorage.getItem(SESSION_KEY) !== "1") setOpen(true);
-        } catch {
-          setOpen(true);
-        }
-      }, 5000);
+      try {
+        if (sessionStorage.getItem(SESSION_KEY) !== "1") setOpen(true);
+      } catch {
+        setOpen(true);
+      }
     };
 
-    // The homepage now opens directly; schedule the existing notice independently.
-    show();
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
+    // Show the notice as soon as the intro disappears, without an extra delay.
+    window.addEventListener("nil:intro-finished", show);
+    // Returning visitors may not see the intro at all.
+    if (!document.querySelector(".nil-cinema")) show();
+
+    return () => window.removeEventListener("nil:intro-finished", show);
   }, []);
 
   const close = () => {
