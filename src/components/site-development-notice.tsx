@@ -64,11 +64,23 @@ export function SiteDevelopmentNotice() {
             <span aria-hidden="true" className="inline-block h-[2px] w-9 bg-[#d3ab73]" />
             Nil Mobilya · Bilgilendirme
           </p>
-          <h2 className="max-w-[410px] pr-5 font-serif text-[clamp(30px,5.5vw,45px)] leading-[1.12] tracking-[-.025em]">
+          <h2 className="max-w-[410px] pr-5 font-serif text-[clamp(27px,4.5vw,36px)] leading-[1.12] tracking-[-.025em]">
             Sitemiz <span className="text-[#d5ab70] italic">yapım</span><br />
             aşamasındadır.
           </h2>
-          <div aria-hidden="true" className="mt-7 flex items-center gap-3">
+          <p className="mt-5 max-w-[420px] text-[14px] leading-7 text-[#d3d0cb]">
+            Şu anda siparişlerimiz <span className="font-medium text-[#e0b77d]">WhatsApp üzerinden</span> alınmaktadır.
+            Ürünlerimiz ve özel ölçü üretim talepleriniz için bizimle iletişime geçebilirsiniz.
+          </p>
+          <a
+            href="https://wa.me/905360236146?text=Merhaba%2C%20Nil%20Mobilya%20%C3%BCr%C3%BCnleri%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center justify-center rounded-md border border-[#cba36b]/75 bg-[#cba36b]/10 px-5 py-3 text-[12px] font-semibold tracking-[.08em] text-[#e8c392] transition-colors hover:bg-[#cba36b]/20"
+          >
+            WhatsApp ile İletişime Geç →
+          </a>
+          <div aria-hidden="true" className="mt-6 flex items-center gap-3">
             <span className="h-px w-16 bg-[#d3ab73]" />
             <span className="h-[5px] w-[5px] rotate-45 border border-[#d3ab73]" />
           </div>
