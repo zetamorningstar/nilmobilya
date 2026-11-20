@@ -1,12 +1,18 @@
-import chairImage from "@/assets/nil-chair.jpg";
-import chairImageB from "@/assets/nil-chair-2.jpg";
-import chairImageC from "@/assets/nil-chair-3.jpg";
-import diningImage from "@/assets/nil-dining.jpg";
-import diningImageB from "@/assets/nil-dining-2.jpg";
-import diningImageC from "@/assets/nil-dining-3.jpg";
-import sofaImage from "@/assets/nil-sofa.jpg";
-import sofaImageB from "@/assets/nil-sofa-2.jpg";
-import sofaImageC from "@/assets/nil-sofa-3.jpg";
+// GEÇİCİ GÖRSELLER: kendi fotoğraflarını src/assets/ içine koyup aşağıdaki dosya adlarını değiştir.
+import tv1 from "@/assets/tasduvar.jpg";
+import tv2 from "@/assets/ceviztvunite.jpg";
+import tv3 from "@/assets/tvunitesarıambiyans.jpg";
+import banko1 from "@/assets/banko1.jpg";
+import banko2 from "@/assets/banko2.jpg";
+import banko3 from "@/assets/banko3.jpg";
+import dolap1 from "@/assets/dolap1unite.jpg";
+import dolap2 from "@/assets/unitevedolapofis.jpg";
+import dolap3 from "@/assets/dolapsiyah.jpg";
+import dolap4 from "@/assets/dolap4.jpg";
+import dolap5 from "@/assets/ahsapkosedolap.jpg";
+
+// Fotoğrafı henüz olmayan ürünlerde görünen geçici görsel (public/urunler/yakinda.svg)
+const YAKINDA = "/urunler/yakinda.svg";
 
 export interface CollectionProduct {
   name: string;
@@ -38,61 +44,134 @@ export interface Collection {
 
 export const collections: Collection[] = [
   {
-    slug: "oturma",
+    slug: "tv-uniteleri",
     number: "01",
-    title: "Oturma",
-    pageTitle: "Oturma Grubu",
-    lead: "Konforu, zamansız tasarım ve özenli işçilikle buluşturan seçkin oturma koleksiyonumuz.",
-    note: "Rahatlığın yalın formu",
+    title: "TV Üniteleri",
+    pageTitle: "TV Üniteleri",
+    lead: "Doğal ahşap dokusunu sade çizgilerle buluşturan, ölçünüze özel üretilen TV üniteleri.",
+    note: "Doğal ahşabın sıcaklığı",
     description:
-      "Oturma koleksiyonu, günün her anında dokunulmak için tasarlanan derin otururlar ve yumuşak hatlarla salonun merkezine yerleşen sakin bir zarafet sunar.",
-    hero: sofaImage,
-    heroAlt: "Nil Mobilya oturma koleksiyonu — modern oturma grubu",
-    heroFocus: "62% center",
-    products: [
-      { name: "Bulut Oturma Grubu", material: "Bouclé kumaş · Ceviz ayak", image: sofaImage, category: "Koltuk Takımları", price: 89500 }, // GEÇİCİ
-{ name: "Modüler Köşe Takımı", material: "Yumuşak dokulu kumaş", image: sofaImageB, category: "Köşe Koltuklar", price: 72000 }, // GEÇİCİ
-{ name: "Kavisli Kadife Sofa", material: "Kadife · Pirinç detay", image: sofaImageC, category: "Üçlü Koltuklar", price: 48900 }, // GEÇİCİ
-    ],
-  },
-  {
-    slug: "berjer",
-    number: "02",
-    title: "Berjer",
-    pageTitle: "Berjer Koleksiyonu",
-    lead: "Rahatlığı ve şıklığı bir araya getiren özel tasarım berjerler.",
-    note: "İmza niteliğinde detaylar",
-    description:
-      "Berjer koleksiyonu; köşeyi, okuma ışığını ve sessiz anları düşünerek tasarlandı. Her parça, mekânda bağımsız bir obje gibi durur.",
-    hero: chairImage,
-    heroAlt: "Nil Mobilya berjer koleksiyonu — okuma köşesi berjeri",
-    heroFocus: "55% center",
-    products: [
-      { name: "Kadife Berjer", material: "Kadife döşeme · Ahşap ayak", image: chairImage, category: "Kadife Berjerler", price: 24750 }, // GEÇİCİ
-{ name: "Okuma Köşesi Berjeri", material: "Kadife · Pirinç lamba uyumu", image: chairImageB, category: "Okuma Berjerleri", price: 26900 }, // GEÇİCİ
-{ name: "Heykelsi Bouclé Berjer", material: "Bouclé · Döner taban", image: chairImageC, category: "Bouclé Berjerler", price: 19800 }, // GEÇİCİ
-    ],
-  },
-  {
-    slug: "yemek",
-    number: "03",
-    title: "Yemek",
-    pageTitle: "Yemek Odası",
-    lead: "Davetkar atmosferler için özel tasarım yemek odaları.",
-    note: "Bir araya gelmenin zarafeti",
-    description:
-      "Yemek koleksiyonu; uzun sofralar ve paylaşılan anlar için dengeli oranlar, doğal ahşap ve incelikli döşemelerle üretilir.",
-    hero: diningImage,
-    heroAlt: "Nil Mobilya yemek koleksiyonu — ceviz yemek masası",
+      "TV üniteleri; geniş depolama alanı, sade formlar ve doğal ahşap dokusuyla yaşam alanınıza dengeli ve şık bir görünüm kazandırır. Ölçü ve renk seçenekleri size göre belirlenir.",
+    hero: tv1,
+    heroAlt: "Nil Mobilya TV üniteleri koleksiyonu",
     heroFocus: "50% center",
     products: [
-      { name: "Ceviz Yemek Masası", material: "Masif ceviz", image: diningImage, category: "Masalar", price: 64500 }, // GEÇİCİ
-{ name: "Zemin Ayaklı Yemek Takımı", material: "Ceviz · Döşemeli sandalyeler", image: diningImageB, category: "Yemek Takımları", price: 98000 }, // GEÇİCİ
-{ name: "Deri Kaplama Sandalye", material: "Deri · Ceviz iskelet", image: diningImageC, category: "Sandalyeler", price: 6900 }, // GEÇİCİ
+      { name: "Çekmeceli TV Ünitesi", material: "Doğal ahşap kaplama", image: tv1, category: "TV Üniteleri", price: 24900 }, // GEÇİCİ
+      { name: "Kapaklı TV Ünitesi", material: "Masif ahşap", image: tv2, category: "TV Üniteleri", price: 27500 }, // GEÇİCİ
+      { name: "Asma TV Ünitesi", material: "Ahşap kaplama · Gizli bağlantı", image: tv3, category: "TV Üniteleri", price: 19800 }, // GEÇİCİ
     ],
+  },
+  {
+    slug: "etajerler",
+    number: "05",
+    title: "Etajerler",
+    pageTitle: "Etajerler",
+    lead: "Ölçünüze ve renk tercihinize göre üretilen etajerler için bizimle iletişime geçin.",
+    note: "Size özel üretim",
+    description: "Etajerlerimiz sipariş üzerine üretilir. Detay ve fiyat için bizimle iletişime geçebilirsiniz.",
+    hero: YAKINDA,
+    heroAlt: "Nil Mobilya etajerler",
+    heroFocus: "center",
+    products: [
+      { name: "Çift Çekmeceli Etajer", material: "Seçenek: Demirli", image: YAKINDA, category: "Etajerler" },
+      { name: "40–45 cm Etajer", material: "Özel üretim", image: YAKINDA, category: "Etajerler" },
+      { name: "Demirsiz Etajer", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Etajerler" },
+    ],
+  },
+  {
+    slug: "masalar",
+    number: "06",
+    title: "Masalar",
+    pageTitle: "Masalar",
+    lead: "Makyaj ve manikür masaları ile komodin için ölçüye özel üretim.",
+    note: "Size özel üretim",
+    description: "Masalarımız sipariş üzerine üretilir. Detay ve fiyat için bizimle iletişime geçebilirsiniz.",
+    hero: YAKINDA,
+    heroAlt: "Nil Mobilya masalar",
+    heroFocus: "center",
+    products: [
+      { name: "2 Çekmeceli Makyaj Masası", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
+      { name: "Aynalı Işıklı Masa", material: "Seçenekler: Boyalı / Renkli", image: YAKINDA, category: "Masalar" },
+      { name: "Manikür Masası", material: "Seçenekler: Demirli / Demirsiz", image: YAKINDA, category: "Masalar" },
+      { name: "Demirsiz Manikür Masası", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
+      { name: "3 Çekmeceli Komodin", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
+    ],
+  },
+  {
+    slug: "platformlar",
+    number: "07",
+    title: "Platformlar",
+    pageTitle: "Platformlar",
+    lead: "Platform ve banko modelleri için bizimle iletişime geçin.",
+    note: "Size özel üretim",
+    description: "Platform ve bankolarımız sipariş üzerine üretilir. Detay ve fiyat için bizimle iletişime geçebilirsiniz.",
+    hero: YAKINDA,
+    heroAlt: "Nil Mobilya platformlar",
+    heroFocus: "center",
+    products: [
+      { name: "Platform", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Platformlar" },
+      { name: "Banko Yanlı", material: "Özel üretim", image: YAKINDA, category: "Platformlar" },
+      { name: "Banko Yansız", material: "Özel üretim", image: YAKINDA, category: "Platformlar" },
+    ],
+  },
+  {
+    slug: "banko",
+    number: "02",
+    title: "Banko",
+    pageTitle: "Banko ve Servis Üniteleri",
+    lead: "Mağaza, ofis ve karşılama alanları için özel ölçüde üretilen ahşap bankolar.",
+    note: "Karşılamanın zarafeti",
+    description:
+      "Banko koleksiyonu; mekânın ölçüsüne ve kullanımına göre tasarlanır. Doğal ahşap detaylar ve ince işçilikle ilk izlenimi güçlendirir.",
+    hero: banko1,
+    heroAlt: "Nil Mobilya banko koleksiyonu",
+    heroFocus: "50% center",
+    products: [
+      { name: "Karşılama Bankosu", material: "Ahşap kaplama · Ledli detay", image: banko1, category: "Bankolar", price: 36900 }, // GEÇİCİ
+      { name: "Servis Bankosu", material: "Masif ahşap", image: banko2, category: "Bankolar", price: 28500 }, // GEÇİCİ
+      { name: "Servis Çekmecesi", material: "Ahşap · Metal detay", image: banko3, category: "Çekmeceler", price: 12900 }, // GEÇİCİ
+    ],
+  },
+  {
+    slug: "dolap",
+    number: "03",
+    title: "Dolap",
+    pageTitle: "Dolap Sistemleri",
+    lead: "Mekâna göre ölçülen, ahşap işçiliğiyle üretilen dolap ve depolama sistemleri.",
+    note: "Mekâna özel çözümler",
+    description:
+      "Dolap sistemleri; duvardan duvara ölçü, iç düzen ve kapak detayları kişiye özel planlanarak üretilir.",
+    hero: dolap1,
+    heroAlt: "Nil Mobilya dolap sistemleri",
+    heroFocus: "50% center",
+    // Ürünleri sonra ekleyeceğiz (dolap2 ... dolap5 görselleri hazır duruyor)
+    products: [],
   },
 ];
 
 export function getCollection(slug: string | undefined): Collection | undefined {
   return collections.find((collection) => collection.slug === slug);
+}
+
+// Sol menüde görünen sayfalar (sıra burada belirlenir)
+export const CATALOG_SLUGS = ["tv-uniteleri", "etajerler", "masalar", "platformlar"] as const;
+export const ALL_SLUG = "tum-urunler";
+
+// "Tüm ürünler" sayfası: yukarıdaki koleksiyonların ürünlerini birleştirir
+export function getCatalogCollection(slug: string | undefined): Collection | undefined {
+  if (slug !== ALL_SLUG) return getCollection(slug);
+  const products = CATALOG_SLUGS.flatMap((s) => getCollection(s)?.products ?? []);
+  return {
+    slug: ALL_SLUG,
+    number: "00",
+    title: "Tüm ürünler",
+    pageTitle: "Tüm Ürünler",
+    lead: "Nil Mobilya'nın tüm özel üretim ürünleri.",
+    note: "Tüm ürünler",
+    description: "Tüm ürünlerimiz.",
+    hero: products[0]?.image ?? "",
+    heroAlt: "Nil Mobilya tüm ürünler",
+    heroFocus: "center",
+    products,
+  };
 }

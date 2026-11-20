@@ -1759,13 +1759,16 @@ html.nil-staged .nil-index { display: flex; }
   transition: border-color .4s ease;
 }
 .kc-card:hover .kc-frame { border-color: var(--primary); }
-.kc-frame > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.kc-card__shade {
+.kc-frame > img {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  background: linear-gradient(to right, rgb(0 0 0 / 0.78), rgb(0 0 0 / 0.25) 55%, transparent 80%);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.5s ease;
 }
+
 .kc-card--0 .kc-card__shade {
   background: linear-gradient(to top, rgb(0 0 0 / 0.85), rgb(0 0 0 / 0.25) 40%, transparent 65%);
 }
@@ -3001,3 +3004,171 @@ html.nil-staged .nil-index { display: flex; }
   animation-duration: 0.45s;
   animation-timing-function: ease;
 }
+/* ===== Koleksiyon sahnesi — mockup uyarlaması (v4) ===== */
+
+/* Eyebrow: mockup'ta başında çizgi yok */
+.kc-eyebrow__line { display: none; }
+.kc-eyebrow { gap: 0; }
+
+/* Dev numara: daha küçük ve daha silik */
+.kc-mark b {
+  font-size: clamp(110px, 10.6vw, 200px);
+  color: color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+
+/* Sekmeler: alt çizgi yalnızca seçili sekmede */
+.kc-tabs { border-bottom-color: transparent; }
+
+/* Kartlar: ince, belirgin çerçeve */
+.kc-frame {
+  background: #000;
+  border-color: color-mix(in oklab, var(--foreground) 34%, transparent);
+}
+
+/* Üç dilimli eğik görsel */
+.kc-frame { container-type: size; --s: 17cqh; --g: 5px; }
+.kc-tri { position: absolute; inset: 0; }
+.kc-pane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  left: calc(var(--l) - var(--s) / 2);
+  width: calc(var(--r) - var(--l) + var(--s));
+  clip-path: polygon(var(--s) 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
+}
+.kc-pane > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kc-card:hover .kc-pane > img { transform: scale(1.04); }
+
+/* Büyük kart: 3 dilim */
+.kc-card--0 .kc-frame { --p1: 30cqw; --p2: 74cqw; }
+.kc-card--0 .kc-pane--0 { --l: 0px; --r: calc(var(--p1) - var(--g) / 2); left: 0; width: calc(var(--r) + var(--s) / 2); clip-path: polygon(0 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%); }
+.kc-card--0 .kc-pane--1 { --l: calc(var(--p1) + var(--g) / 2); --r: calc(var(--p2) - var(--g) / 2); }
+.kc-card--0 .kc-pane--2 { --l: calc(var(--p2) + var(--g) / 2); --r: 100cqw; width: calc(100cqw - var(--l) + var(--s) / 2); clip-path: polygon(var(--s) 0, 100% 0, 100% 100%, 0 100%); }
+
+/* Küçük kartlar: solda yazı alanı, sağda eğik kenarlı 3 dilim */
+.kc-card--1 .kc-frame, .kc-card--2 .kc-frame { --p0: 28cqw; --p1: 50.5cqw; --p2: 75cqw; }
+.kc-card--1 .kc-pane--0, .kc-card--2 .kc-pane--0 { --l: calc(var(--p0) + var(--g) / 2); --r: calc(var(--p1) - var(--g) / 2); }
+.kc-card--1 .kc-pane--1, .kc-card--2 .kc-pane--1 { --l: calc(var(--p1) + var(--g) / 2); --r: calc(var(--p2) - var(--g) / 2); }
+.kc-card--1 .kc-pane--2, .kc-card--2 .kc-pane--2 { --l: calc(var(--p2) + var(--g) / 2); --r: 100cqw; width: calc(100cqw - var(--l) + var(--s) / 2); clip-path: polygon(var(--s) 0, 100% 0, 100% 100%, 0 100%); }
+
+/* Okunurluk için gölgeler */
+.kc-card__shade { position: absolute; inset: 0; pointer-events: none; }
+.kc-card--0 .kc-card__shade {
+  background: linear-gradient(to top, rgb(0 0 0 / 0.82), rgb(0 0 0 / 0.3) 34%, transparent 58%);
+}
+.kc-card--1 .kc-card__shade, .kc-card--2 .kc-card__shade {
+  background: linear-gradient(to right, rgb(0 0 0 / 0.92) 0, rgb(0 0 0 / 0.55) 24%, transparent 44%);
+}
+
+/* Kart yazıları: iki satır da açık renk */
+.kc-card__text span { color: inherit; }
+.kc-card__text { color: color-mix(in oklab, var(--foreground) 94%, transparent); }
+
+/* Sağ kategori listesi: sol çizgi yok, ikonlar büyük */
+.kc-side ul { border-left: 0; margin-left: 0; max-height: 66%; }
+.kc-side__item[aria-current="true"]::before { display: none; }
+.kc-side__icon { width: 30px; height: 30px; }
+.kc-side__item { gap: 26px; padding-left: 8px; }
+
+/* Alt şerit: kısa çizgi yok, ince altın hat hemen yazının yanından başlar */
+.kc-foot__path em { display: none; }
+.kc-foot__line {
+  margin-left: 0;
+  background: color-mix(in oklab, var(--primary) 38%, transparent);
+}
+@media (max-width: 1099px) {
+  .kc-frame { --s: 12cqh; }
+}
+/* =============== Ana sayfa koleksiyon: 2x2 kartlar =============== */
+.kc-mark--word { top: 3.4rem; }
+.kc-mark--word i {
+  position: static;
+  display: block;
+  margin: 0 -1.1em 0 0;
+  font-size: clamp(14px, 1.4vw, 24px);
+  letter-spacing: 1.1em;
+}
+
+.kc-grid--4 { grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .kc-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+.kc-card--q { min-height: 200px; }
+.kc-card--q .kc-card__no { color: var(--primary); }
+.kc-card--q .kc-card__title { font-size: clamp(24px, 2vw, 34px); }
+.kc-card--q .kc-card__text { max-width: 16rem; }
+.kc-card--q .kc-card__arrow { left: 28px; bottom: 24px; }
+
+.kc-more {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 1.4rem;
+}
+.kc-more__line {
+  flex: 0 1 18rem;
+  height: 1px;
+  background: color-mix(in oklab, var(--primary) 70%, transparent);
+}
+.kc-more__link {
+  display: block;
+  font-size: 12px;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+}
+.kc-more__link b {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--primary);
+  transition: gap 0.3s;
+}
+.kc-more__link:hover b { gap: 16px; }
+/* ---- 4 kart: fotoğraf kartın sağ kısmını doldurur, solda yazı için koyu geçiş ---- */
+.kc-card--q .kc-frame > img {
+  left: 30%;
+  width: 70%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 28%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 28%);
+}
+.kc-card--q .kc-card__shade {
+  background: linear-gradient(to right, rgb(0 0 0 / 0.55), transparent 45%);
+}
+@media (max-width: 767px) {
+  .kc-card--q .kc-frame > img {
+    left: 0;
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 60%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 60%);
+  }
+}
+
+/* ---- Alt şerit: yol + çizgi + bağlantı + logo ---- */
+.kc-foot .kc-more__link {
+  text-align: right;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.kc-more__link span { display: block; }
+.kc-foot__line { margin-left: 0; }

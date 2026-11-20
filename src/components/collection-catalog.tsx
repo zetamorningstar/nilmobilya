@@ -6,30 +6,27 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
-import type { Collection, CollectionProduct } from "@/lib/collections";
+import { ALL_SLUG, CATALOG_SLUGS, getCollection, type Collection, type CollectionProduct } from "@/lib/collections";
 import { cn } from "@/lib/utils";
 
 // Menü ve arama: ana sayfadaki bölümlerle aynı (id'ler ana sayfa sahneleriyle aynı olmalı)
 const SECTIONS = [
   ["top", "Ana sayfa"],
-  ["koleksiyon", "Mobilyalar"],
-  ["malzeme", "Malzemeler"],
+  ["koleksiyon", "Koleksiyon"],
+  ["ozel-uretim", "Özel üretim"],
   ["yorumlar", "Yorumlar"],
   ["sergimiz", "Sergimiz"],
   ["hikaye", "Hikâyemiz"],
-  ["ozel-uretim", "Özel üretim"],
   ["iletisim", "İletişim"],
 ] as const;
 
-// Üstteki menü: [yazı, ana sayfadaki bölüm]
 const NAV = [
   ["Ana sayfa", "top"],
   ["Koleksiyon", "koleksiyon"],
-  ["Malzeme", "malzeme"],
+  ["Özel üretim", "ozel-uretim"],
   ["Yorumlar", "yorumlar"],
   ["Sergimiz", "sergimiz"],
   ["Hakkımızda", "hikaye"],
-  ["Özel üretim", "ozel-uretim"],
   ["İletişim", "iletisim"],
 ] as const;
 
@@ -55,29 +52,33 @@ const marbleStyle = (position: string, direction: string) => ({
 
 export function CollectionCatalog({ collection }: { collection: Collection }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [category, setCategory] = useState<string>("all");
   const [sort, setSort] = useState<Sort>("oner");
   const [favorites, setFavorites] = useState<ReadonlySet<string>>(new Set());
   const [quick, setQuick] = useState<CollectionProduct | null>(null);
 
   const { products } = collection;
 
-  // Soldaki kategori listesi, ürünlerin kategorilerinden otomatik çıkar
-  const categories = useMemo(() => {
-    const counts = new Map<string, number>();
-    products.forEach((product) => counts.set(product.category, (counts.get(product.category) ?? 0) + 1));
-    return [...counts.entries()];
-  }, [products]);
+    // Soldaki sayfa menüsü
+  const sideLinks: { slug: string; label: string; count: number }[] = [
+    {
+      slug: ALL_SLUG,
+      label: "Tüm ürünler",
+      count: CATALOG_SLUGS.reduce((total, s) => total + (getCollection(s)?.products.length ?? 0), 0),
+    },
+    ...CATALOG_SLUGS.flatMap((s) => {
+      const item = getCollection(s);
+      return item ? [{ slug: s as string, label: item.title, count: item.products.length }] : [];
+    }),
+  ];
 
   const visible = useMemo(() => {
-    const list = category === "all" ? [...products] : products.filter((product) => product.category === category);
+    const list = [...products];
     const BIG = Number.MAX_SAFE_INTEGER;
     if (sort === "artan") list.sort((a, b) => (a.price ?? BIG) - (b.price ?? BIG));
     if (sort === "azalan") list.sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
     if (sort === "isim") list.sort((a, b) => a.name.localeCompare(b.name, "tr"));
     return list;
-  }, [products, category, sort]);
-
+  }, [products, sort]);
   const toggleFavorite = (name: string) =>
     setFavorites((current) => {
       const next = new Set(current);
@@ -165,32 +166,30 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
       {/* ---- Katalog: kategoriler + ürünler ---- */}
       <div className="grid lg:grid-cols-[17rem_minmax(0,1fr)]">
         {/* Kategoriler */}
+                {/* Sayfa menüsü */}
         <aside className="relative overflow-hidden border-foreground/10 px-[clamp(1.25rem,4.9vw,7rem)] py-6 lg:border-r lg:px-8 lg:py-8 lg:pl-[clamp(1.25rem,4.9vw,7rem)]">
-          
-          <ul className="relative flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-0 lg:overflow-visible lg:pb-0" aria-label="Kategoriler">
-            {[["all", `Tüm ürünler`, products.length] as const, ...categories.map(([name, count]) => [name, name, count] as const)].map(
-              ([key, label, count]) => {
-                const active = category === key;
-                return (
-                  <li key={key} className="shrink-0">
-                    <button
-                      type="button"
-                      aria-pressed={active}
-                      onClick={() => setCategory(key)}
-                      className={cn(
-                        "flex w-full items-center justify-between gap-6 border border-foreground/15 px-4 py-2.5 text-left text-sm transition-colors lg:border-0 lg:border-b lg:border-l-2 lg:border-b-foreground/10 lg:px-4 lg:py-3.5",
-                        active
-                          ? "border-primary/60 bg-primary/5 text-primary lg:border-l-primary"
-                          : "text-foreground/80 hover:text-primary lg:border-l-transparent",
-                      )}
-                    >
-                      <span>{label}</span>
-                      <span className="text-xs tabular-nums text-foreground/60">({count})</span>
-                    </button>
-                  </li>
-                );
-              },
-            )}
+          <ul className="relative flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-0 lg:overflow-visible lg:pb-0" aria-label="Ürün sayfaları">
+            {sideLinks.map(({ slug, label, count }) => {
+              const active = collection.slug === slug;
+              return (
+                <li key={slug} className="shrink-0">
+                  <Link
+                    to="/koleksiyon/$slug"
+                    params={{ slug }}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "flex w-full items-center justify-between gap-6 border border-foreground/15 px-4 py-2.5 text-left text-sm transition-colors lg:border-0 lg:border-b lg:border-l-2 lg:border-b-foreground/10 lg:px-4 lg:py-3.5",
+                      active
+                        ? "border-primary/60 bg-primary/5 text-primary lg:border-l-primary"
+                        : "text-foreground/80 hover:text-primary lg:border-l-transparent",
+                    )}
+                  >
+                    <span>{label}</span>
+                    <span className="text-xs tabular-nums text-foreground/60">({count})</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </aside>
 

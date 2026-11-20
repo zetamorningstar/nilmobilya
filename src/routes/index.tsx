@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Armchair, ArrowRight, ArrowUpRight, BedDouble, ChevronLeft, ChevronRight, Instagram, Mail, Phone, Sofa } from "lucide-react";
+import { Archive, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Tv } from "lucide-react";
 import { useState, type PointerEvent } from "react";
 
+import diningImage from "@/assets/nil-dining.jpg";
 import { collections } from "@/lib/collections";
 import { Button } from "@/components/ui/button";
 import { useHoverPreview } from "@/components/hover-preview";
 import { StageScroll } from "@/components/stage-scroll";
 import { ReviewsMarquee } from "@/components/reviews-marquee";
-import { MaterialsSection } from "@/components/materials-section";
 import { IntroSequence } from "@/components/intro-sequence";
 import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
@@ -32,38 +32,45 @@ export const Route = createFileRoute("/")({
 // Sağdaki çizgi göstergeleri bu listeden üretilir (id'ler sahne id'leriyle aynı olmalı)
 const SCENES = [
   ["top", "Ana sayfa"],
-  ["koleksiyon", "Mobilyalar"],
-  ["malzeme", "Malzemeler"],
+  ["koleksiyon", "Koleksiyon"],
+  ["ozel-uretim", "Özel üretim"],
   ["yorumlar", "Yorumlar"],
   ["sergimiz", "Sergimiz"],
   ["hikaye", "Hikâyemiz"],
-  ["ozel-uretim", "Özel üretim"],
   ["iletisim", "İletişim"],
 ] as const;
 // Üstteki ortalanmış menü (referans tasarımdaki 4 bağlantı)
 const NAV = [
   ["Ana sayfa", "#top"],
   ["Koleksiyon", "#koleksiyon"],
-  ["Malzeme", "#malzeme"],
+  ["Özel üretim", "#ozel-uretim"],
   ["Yorumlar", "#yorumlar"],
   ["Sergimiz", "#sergimiz"],
   ["Hakkımızda", "#hikaye"],
-  ["Özel üretim", "#ozel-uretim"],
   ["İletişim", "#iletisim"],
 ] as const;
 // ---- Koleksiyon sahnesi: tasarımdaki metinler (collections.ts'e dokunmadan) ----
 const KOLEKSIYON_METIN: Record<string, { title: string; lines: readonly [string, string] }> = {
-  oturma: { title: "Oturma Grubu", lines: ["Modern çizgilerle tasarlanan oturma grupları,", "yaşam alanlarınıza zarafet katar."] },
-  berjer: { title: "Berjer Koleksiyonu", lines: ["Rahatlığı ve şıklığı bir araya getiren", "özel tasarım berjerler."] },
-  yemek: { title: "Yemek Odası", lines: ["Davetkar atmosferler için", "özel tasarım yemek odaları."] },
+  "tv-uniteleri": { title: "TV Üniteleri", lines: ["Doğal ahşap dokusunu sade çizgilerle", "buluşturan, ölçünüze özel TV üniteleri."] },
+  banko: { title: "Banko", lines: ["Mağaza, ofis ve karşılama alanları için", "özel ölçüde üretilen ahşap bankolar."] },
+  dolap: { title: "Dolap Sistemleri", lines: ["Mekâna göre ölçülen, ahşap işçiliğiyle", "üretilen dolap ve depolama sistemleri."] },
 };
+// Ana sayfadaki 4 kart (sıra ve metinler buradan değişir)
+const heroOf = (slug: string) => collections.find((c) => c.slug === slug)?.hero ?? "";
+
+const HOME_CARDS = [
+  { slug: "banko", title: "Banko", image: heroOf("banko"), lines: ["Mekânınıza özel ölçüde üretilen", "ahşap banko ve servis üniteleri."] },
+  { slug: "dolap", title: "Dolap Sistemleri", image: heroOf("dolap"), lines: ["Ölçünüze göre planlanan", "özel üretim dolap sistemleri."] },
+  { slug: "tv-uniteleri", title: "TV Üniteleri", image: heroOf("tv-uniteleri"), lines: ["Yaşam alanlarınıza estetik ve", "fonksiyon katan TV üniteleri."] },
+  { slug: "tum-urunler", title: "Diğer Ürünler", image: diningImage, lines: ["Sandalye, masa ve daha fazlası ile", "yaşam alanlarınızı tamamlayın."] },
+] as const;
 
 const KATEGORILER = [
-  ["oturma", "Oturma"],
-  ["berjer", "Berjer"],
-  ["yemek", "Yemek"],
-  ["yatak", "Yatak Odası"],
+  ["tv-uniteleri", "TV Üniteleri"],
+  ["banko", "Banko"],
+  ["dolap", "Dolap"],
 ] as const;
+
 
 function MasaIkon({ className }: { className?: string }) {
   return (
@@ -73,20 +80,18 @@ function MasaIkon({ className }: { className?: string }) {
   );
 }
 
-const KAT_ICON = { oturma: Sofa, berjer: Armchair, yemek: MasaIkon, yatak: BedDouble } as const;
+const KAT_ICON = { "tv-uniteleri": Tv, banko: MasaIkon, dolap: Archive } as const;
+// Kartın üç dilimli görseli: ortada koleksiyonun ilk ürünü, yanlarda sıradaki ikisi.
+// Sıralamayı değiştirmek için collections.ts'deki ürün sırasını değiştir.
+const dilimler = (c: (typeof collections)[number]) => {
+  const imgs = c.products.map((p) => p.image);
+  const a = imgs[0] ?? c.hero;
+  const b = imgs[1] ?? a;
+  const d = imgs[2] ?? b;
+  return [b, a, d];
+};
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
-    const [kat, setKat] = useState<string>("tumu");
-  const slugs = collections.map((c) => c.slug);
-  const orderedCollections = slugs.includes(kat)
-    ? [collections.find((c) => c.slug === kat)!, ...collections.filter((c) => c.slug !== kat)]
-    : collections;
-  const pageNo = kat === "tumu" ? 1 : KATEGORILER.findIndex(([s]) => s === kat) + 1;
-  const stepKat = (dir: 1 | -1) => {
-    const i = slugs.indexOf(kat);
-    const n = i < 0 ? (dir > 0 ? 0 : slugs.length - 1) : (i + dir + slugs.length) % slugs.length;
-    setKat(slugs[n]!);
-  };
   const preview = useHoverPreview();
 
   const handleDepth = (event: PointerEvent<HTMLElement>) => {
@@ -209,17 +214,14 @@ function Index() {
             ))}
           </ul>
         </section>
-        {/* 2 · Koleksiyon */}
                 {/* 2 · Koleksiyon */}
         <section id="koleksiyon" aria-label="Yeni koleksiyon" className="nil-scene nil-scene--col">
           <div className="nil-scene__body kc">
-            {/* Sağ üstte dev numara */}
             <span aria-hidden="true" data-s="fade" className="kc-mark">
-              <b>{String(pageNo).padStart(2, "0")}</b>
+              <b>02</b>
               <i>Collection</i>
             </span>
 
-            {/* Başlık bölümü */}
             <div className="kc-head">
               <div className="kc-head__l">
                 <p data-s="text" className="kc-eyebrow"><span aria-hidden="true" className="kc-eyebrow__line" />Koleksiyon</p>
@@ -229,116 +231,59 @@ function Index() {
                   Nil Mobilya'nın yeni koleksiyonu ile estetiği ve konforu bir araya getirin.
                 </p>
               </div>
+            </div>
 
-              <div data-s="fade" className="kc-tabs" role="tablist" aria-label="Koleksiyon kategorileri">
-                {[["tumu", "Tümü"], ...KATEGORILER].map(([slug, label]) => (
-                  <button
-                    key={slug}
-                    type="button"
-                    role="tab"
-                    aria-selected={kat === slug}
-                    disabled={slug === "yatak"}
-                    title={slug === "yatak" ? "Yakında" : undefined}
-                    onClick={() => setKat(slug)}
-                    className="kc-tab"
+            <div className="kc-grid kc-grid--4">
+              {HOME_CARDS.map((card, i) => (
+                <article key={card.slug} className="kc-card kc-card--q group">
+                  <Link
+                    to="/koleksiyon/$slug"
+                    params={{ slug: card.slug }}
+                    className="kc-card__link cursor-pointer"
+                    aria-label={`${card.title} ürünlerini görüntüle`}
                   >
-                    {label}
-                  </button>
-                ))}
-              </div>
-
-              <div data-s="fade" className="kc-pager">
-                <button type="button" aria-label="Önceki" onClick={() => stepKat(-1)}><ChevronLeft className="size-4" strokeWidth={1.4} /></button>
-                <span><b>{String(pageNo).padStart(2, "0")}</b> / {String(KATEGORILER.length).padStart(2, "0")}</span>
-                <button type="button" aria-label="Sonraki" onClick={() => stepKat(1)}><ChevronRight className="size-4" strokeWidth={1.4} /></button>
-              </div>
-            </div>
-
-            {/* Kartlar + sağ kategori listesi */}
-            <div className="kc-grid">
-              {orderedCollections.map((item, i) => {
-                const ui = KOLEKSIYON_METIN[item.slug]!;
-                return (
-                  <article key={item.slug} className={`kc-card kc-card--${i} group`}>
-                    <Link
-                      to="/koleksiyon/$slug"
-                      params={{ slug: item.slug }}
-                      className="kc-card__link cursor-pointer"
-                      aria-label={`${ui.title} koleksiyonunu görüntüle`}
+                    <div
+                      data-s="frame"
+                      className="kc-frame"
+                      onPointerMove={handleDepth}
+                      onPointerEnter={(event) => {
+                        if (event.pointerType === "touch") return;
+                        preview.open(
+                          {
+                            src: card.image,
+                            alt: `Nil Mobilya ${card.title}`,
+                            title: `0${i + 1} · ${card.title}`,
+                            lines: [card.lines[0], card.lines[1]],
+                          },
+                          event.currentTarget,
+                        );
+                      }}
+                      onPointerLeave={(event) => {
+                        resetDepth(event);
+                        preview.close();
+                      }}
                     >
-                      <div
-                        data-s="frame"
-                        className="kc-frame"
-                        onPointerMove={handleDepth}
-                        onPointerEnter={(event) => {
-                          if (event.pointerType === "touch") return;
-                          preview.open(
-                            {
-                              src: item.hero,
-                              alt: `Nil Mobilya ${item.title.toLocaleLowerCase("tr-TR")} koleksiyonu`,
-                              title: `${item.number} · ${item.title}`,
-                              lines: [item.note, item.description],
-                            },
-                            event.currentTarget,
-                          );
-                        }}
-                        onPointerLeave={(event) => {
-                          resetDepth(event);
-                          preview.close();
-                        }}
-                      >
-                        <img data-depth src={item.hero} alt={`Nil Mobilya ${item.title.toLocaleLowerCase("tr-TR")} koleksiyonu`} width={1024} height={1280} decoding="async" className="image-depth [--depth-scale:1.04]" />
-                        <span aria-hidden="true" className="kc-card__shade" />
-                      </div>
-                      <div className="kc-card__cap">
-                        <p data-s="fade" className="kc-card__no">{String(i + 1).padStart(2, "0")}</p>
-                        <h3 data-s="text" className="kc-card__title">{ui.title}</h3>
-                        <p data-s="text" className="kc-card__text"><span>{ui.lines[0]}</span><br />{ui.lines[1]}</p>
-                        {i === 0 && <span data-s="rule" aria-hidden="true" className="kc-card__rule" />}
-                        <span data-s="fade" className="kc-card__arrow"><ArrowRight className="size-5" strokeWidth={1.3} /></span>
-                      </div>
-                    </Link>
-                  </article>
-                );
-              })}
-
-              <aside data-s="fade" className="kc-side" aria-label="Kategoriler">
-                <ul>
-                  {KATEGORILER.map(([slug, label]) => {
-                    const Icon = KAT_ICON[slug];
-                    const disabled = slug === "yatak";
-                    return (
-                      <li key={slug}>
-                        <button
-                          type="button"
-                          disabled={disabled}
-                          title={disabled ? "Yakında" : undefined}
-                          aria-current={kat === slug}
-                          onClick={() => setKat(slug)}
-                          className="kc-side__item"
-                        >
-                          <Icon className="kc-side__icon" />
-                          <span>{label}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <p className="kc-side__note">
-                  <span aria-hidden="true" className="kc-side__rule" />
-                  Her detayda<br />yaşam alanlarınıza değer<br />katan tasarımlar...
-                </p>
-              </aside>
+                      <img data-depth src={card.image} alt={`Nil Mobilya ${card.title}`} width={1024} height={1280} decoding="async" className="image-depth [--depth-scale:1.04]" />
+                      <span aria-hidden="true" className="kc-card__shade" />
+                    </div>
+                    <div className="kc-card__cap">
+                      <p data-s="fade" className="kc-card__no">{String(i + 1).padStart(2, "0")}</p>
+                      <h3 data-s="text" className="kc-card__title">{card.title}</h3>
+                      <p data-s="text" className="kc-card__text">{card.lines[0]}<br />{card.lines[1]}</p>
+                      <span data-s="fade" className="kc-card__arrow"><ArrowRight className="size-5" strokeWidth={1.3} /></span>
+                    </div>
+                  </Link>
+                </article>
+              ))}
             </div>
 
-            {/* Alt şerit */}
             <div data-s="fade" className="kc-foot">
               <p className="kc-foot__path"><span>Nil Mobilya</span><i>/</i><span>Koleksiyon</span><em aria-hidden="true" /></p>
               <span aria-hidden="true" className="kc-foot__line" />
-              <div className="kc-foot__arrows">
-                <button type="button" aria-label="Önceki" onClick={() => stepKat(-1)}><ChevronLeft className="size-4" strokeWidth={1.4} /></button>
-                <button type="button" aria-label="Sonraki" onClick={() => stepKat(1)}><ChevronRight className="size-4" strokeWidth={1.4} /></button>
-              </div>
+              <Link to="/koleksiyon/$slug" params={{ slug: "tum-urunler" }} className="kc-more__link">
+                <span>Diğer ürünleri görmek için</span>
+                <b>Tüm Ürünleri Kontrol Edin <ArrowRight className="size-4" strokeWidth={1.4} /></b>
+              </Link>
               <svg className="kc-foot__logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true">
                 <path d="M6 26V6l20 20V6" />
                 <path d="M3 29V3M29 29V3" opacity="0.45" />
@@ -347,8 +292,8 @@ function Index() {
           </div>
         </section>
 
-        {/* 3 · Malzeme */}
-        <MaterialsSection preview={preview} />
+                {/* 3 · Özel üretim */}
+        <CustomSection />
 
         {/* 4 · Yorumlar */}
         <ReviewsMarquee />
@@ -375,10 +320,6 @@ function Index() {
 
                 {/* 5 · Hikâye */}
         <AboutSection />
-
-                {/* 6 · Özel üretim */}
-        <CustomSection />
-        
 
                 {/* 7 · İletişim */}
         <ContactSection />
