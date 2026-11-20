@@ -3846,3 +3846,13 @@ html.nil-staged .nil-index { display: flex; }
 @media(max-width:767px) {
  .nil-bg__img {background-position:58% center !important}
 }
+
+/* Hero 2 — everyday interior with TV unit and wardrobes */
+.nil-bg__img {
+  background-image:url("/images/anasayfa/hero2.webp") !important;
+  background-size:cover !important;
+  background-position:center center !important;
+}
+@media(max-width:767px) {
+  .nil-bg__img {background-position:62% center !important}
+}
