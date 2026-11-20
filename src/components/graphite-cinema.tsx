@@ -21,6 +21,7 @@ export function GraphiteCinema() {
       done = true;
       sessionStorage.setItem(KEY, "1");
       setVisible(false);
+      window.dispatchEvent(new Event("nil:intro-finished"));
     };
     const timeout = window.setTimeout(finish, 4700);
     return () => { done = true; window.clearTimeout(timeout); };
@@ -29,7 +30,7 @@ export function GraphiteCinema() {
   return (
     <div className="nil-cinema" role="presentation" onAnimationEnd={(event) => {
       if (event.target === event.currentTarget && event.animationName === "nil-cinema-exit") {
-        sessionStorage.setItem(KEY, "1"); setVisible(false);
+        sessionStorage.setItem(KEY, "1"); setVisible(false); window.dispatchEvent(new Event("nil:intro-finished"));
       }
     }}>
       <div className="nil-cinema__flow nil-cinema__flow--a" />
@@ -44,7 +45,7 @@ export function GraphiteCinema() {
         </div>
         <div className="nil-cinema__line" /><div className="nil-cinema__tag">FORM · MALZEME · ZAMANSIZLIK</div>
       </div>
-      <button type="button" className="nil-cinema__skip" onClick={() => {sessionStorage.setItem(KEY, "1");setVisible(false);}}>GEÇ</button>
+      <button type="button" className="nil-cinema__skip" onClick={() => {sessionStorage.setItem(KEY, "1");setVisible(false);window.dispatchEvent(new Event("nil:intro-finished"));}}>GEÇ</button>
     </div>
   );
 }
