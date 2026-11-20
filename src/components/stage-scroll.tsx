@@ -238,35 +238,38 @@ export function initStage(options: { persist?: boolean } = {}) {
     const selected = Array.from(scene.querySelectorAll<HTMLElement>("[data-s]"));
     return selected.filter(el => !selected.some(parent => parent !== el && parent.contains(el)));
   };
+  // Translate ayrı CSS özelliği: var olan transform'ları ezmez.
   const elementY = (el: HTMLElement) => {
-    const t = getComputedStyle(el).transform;
-    return !t || t === "none" ? 0 : new DOMMatrixReadOnly(t).m42;
+    const value = getComputedStyle(el).translate;
+    if (!value || value === "none") return 0;
+    const parts = value.split(/\\s+/);
+    return Number.parseFloat(parts[1] ?? "0") || 0;
   };
   const resetElements = (scene: HTMLElement) => {
     motionItems(scene).forEach(el => {
       elementAnimations.get(el)?.cancel();
       elementAnimations.delete(el);
-      el.style.transform = "";
+      el.style.translate = "";
     });
   };
   const moveElements = (scene: HTMLElement, phase: "in" | "out", dir: Dir, duration: number) => {
     const list = motionItems(scene);
     list.forEach((el, index) => {
-      const current = elementY(el);
+      const previous = elementY(el);
       elementAnimations.get(el)?.cancel();
       elementAnimations.delete(el);
-      el.style.transform = "";
-      // Panelle beraber kayarken fotoğraf, metin ve çerçeve farklı mesafe kat eder.
-      // Başlangıçlar eşzamanlı; gecikme veya art arda landing yok.
+      el.style.translate = "";
+      // Sayfa sınırları beraber ilerlerken iç öğeler daha büyük,
+      // farklı mesafelerde hareket eder. Hepsi aynı karede başlar.
       const kind = el.dataset["s"];
-      const amount = kind === "frame" ? 110 : kind === "text" ? 74 : kind === "fade" ? 56 : 42;
-      const variation = 1 + (index % 3) * .13;
-      const offset = dir * amount * variation;
-      const from = phase === "in" ? (current || offset) : current;
+      const base = kind === "frame" ? 300 : kind === "text" ? 235 : kind === "fade" ? 185 : 155;
+      const amount = base * (1 + (index % 3) * .12);
+      const offset = dir * amount;
+      const from = phase === "in" ? (previous || offset) : previous;
       const to = phase === "in" ? 0 : -offset;
       const anim = el.animate(
-        [{transform:`translate3d(0,${from}px,0)`}, {transform:`translate3d(0,${to}px,0)`}],
-        {duration, easing:phase === "in" ? "cubic-bezier(.16,.82,.25,1)" : "cubic-bezier(.42,0,.62,1)",fill:"forwards"}
+        [{translate:`0 ${from}px`}, {translate:`0 ${to}px`}],
+        {duration, easing:"cubic-bezier(.38,0,.2,1)",fill:"forwards"}
       );
       elementAnimations.set(el, anim);
     });
@@ -420,6 +423,7 @@ export function initStage(options: { persist?: boolean } = {}) {
 
   // Giriş animasyonu varsa: ilk sahnenin öğeleri paneller çıkarken yerine gelir
   let onReveal: (() => void) | undefined;
+  let revealFallbackTimer: number | undefined;
   if (document.querySelector(".nil-opening") && !sessionStorage.getItem("nil-intro-seen")) {
     let released = false;
     onReveal = () => {
@@ -431,11 +435,14 @@ export function initStage(options: { persist?: boolean } = {}) {
       first.forEach((a, i) => playAtom(a, "in", 1, i * stepMs));
     };
     window.addEventListener("nil:reveal", onReveal, { once: true });
-    later(() => onReveal?.(), 20000); // emniyet
+    const revealFallback = window.setTimeout(() => onReveal?.(), 20000); // emniyet
+    // Kapatılırsa fallback zamanlayıcısı aşağıdaki cleanup içinde temizlenir.
+    revealFallbackTimer = revealFallback;
   }
 
   return () => {
     if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
+    if (revealFallbackTimer !== undefined) window.clearTimeout(revealFallbackTimer);
     panelAnimations.forEach((animation) => animation.cancel());
     elementAnimations.forEach((animation) => animation.cancel());
     window.clearTimeout(rt);
@@ -450,7 +457,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     scenes.forEach((s) => {
       s.classList.remove("is-off", "is-leaving");
       s.style.transform = "";
-      s.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => { el.style.translate = ""; });
+      s.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => { el.style.translate = ""; el.style.transform = ""; });
     });
     root.classList.remove("nil-staged");
     root.style.removeProperty("--nil-p");
