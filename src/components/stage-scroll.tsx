@@ -5,7 +5,7 @@ import { useEffect } from "react";
 /* ------------------------------------------------------------------ */
 const EXIT_MS = 520; // bir öğenin ekran dışına çıkış süresi
 const EXIT_SPREAD = 160; // çıkarken öğeler arası toplam gecikme
-const ENTER_AT = 0.35; // çıkışın yüzde kaçında yeni sahne başlasın (0-1)
+const ENTER_AT = 1; // çıkışın yüzde kaçında yeni sahne başlasın (0-1)
 const ENTER_MS = 800; // bir öğenin ekranın altından gelme süresi
 const ENTER_SPREAD = 300; // gelirken öğeler arası toplam gecikme
 const EDGE_PAD = 48; // öğe ekran kenarından bu kadar px daha uzağa gider
@@ -13,7 +13,7 @@ const EASE_IN = "cubic-bezier(0.65, 0, 0.35, 1)";
 const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
 const MIN_HEIGHT = 560; // bundan kısa ekranlarda normal kaydırmaya döner
 const STORE_KEY = "nil-scene-index";
-const UNLOCK_AFTER = 140; // yeni sahne girişi başladıktan kaç ms sonra yeni kaydırma kabul edilsin
+const UNLOCK_AFTER = ENTER_MS + ENTER_SPREAD + 100; // yeni sahne girişi başladıktan kaç ms sonra yeni kaydırma kabul edilsin
 const STEP_GAP = 180; // tekerlekte iki sahne adımı arası en az süre (ms)
 
 type Dir = 1 | -1;
