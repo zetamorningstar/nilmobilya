@@ -5,7 +5,6 @@ import { useEffect } from "react";
 /* ------------------------------------------------------------------ */
 const EXIT_MS = 380; // bir öğenin ekran dışına çıkış süresi
 const EXIT_SPREAD = 90; // çıkarken öğeler arası toplam gecikme
-const ENTER_AT = 0.72; // çıkışın yüzde kaçında yeni sahne başlasın (0-1)
 const ENTER_MS = 490; // bir öğenin ekranın altından gelme süresi
 const ENTER_SPREAD = 130; // gelirken öğeler arası toplam gecikme
 const EDGE_PAD = 48; // öğe ekran kenarından bu kadar px daha uzağa gider
@@ -13,8 +12,7 @@ const EASE_IN = "cubic-bezier(0.55, 0, 0.85, 0.45)";
 const EASE_OUT = "cubic-bezier(0.18, 0.8, 0.28, 1)";
 const MIN_HEIGHT = 560; // bundan kısa ekranlarda normal kaydırmaya döner
 const STORE_KEY = "nil-scene-index";
-const UNLOCK_AFTER = ENTER_MS + ENTER_SPREAD + 25; // yeni sahne girişi başladıktan kaç ms sonra yeni kaydırma kabul edilsin
-const STEP_GAP = 240; // tekerlekte iki sahne adımı arası en az süre (ms)
+const STEP_GAP = 165; // tekerlekte iki sahne adımı arası en az süre (ms)
 
 type Dir = 1 | -1;
 type Kind = "text" | "frame" | "fade" | "rule";
@@ -226,80 +224,83 @@ export function initStage(options: { persist?: boolean } = {}) {
     );
   markActive();
 
-  /* ---------------- Sahne geçişi ---------------- */
-  // Bir seferde yalnızca iki komşu sahne hareket eder; sonraki adım kuyruğa alınır.
-  let busy = false;
-  let queued: number | null = null; // geçiş bitince gidilecek sahne
-  let desired = cur; // kullanıcının gitmek istediği son sahne
-  const timers = new Set<number>();
-  const later = (fn: () => void, ms: number) => {
-    const id = window.setTimeout(() => {
-      timers.delete(id);
-      fn();
-    }, ms);
-    timers.add(id);
+  /* ---------------- Kesintisiz, yönü koruyan sahne geçişi ---------------- */
+  // Yeni kaydırma geldiğinde eski giriş animasyonu tamamlanmak zorunda değil.
+  // Önce mevcut görünür konumu yakalayıp aynı yönde çıkışa çeviriyoruz.
+  let desired = cur;
+  let transitionTimer: number | undefined;
+  let cleanupTimer: number | undefined;
+  let transitioning = false;
+  const activeAnimations = new Set<Animation>();
+  const cancelAnimations = (scene: HTMLElement) => {
+    scene.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => {
+      el.getAnimations().forEach((animation) => {
+        // Mevcut görsel pozisyonu yeni çıkışın başlangıcı olarak koru.
+        const y = currentY(el);
+        animation.cancel();
+        el.style.translate = y ? `0 ${y}px` : "";
+        activeAnimations.delete(animation);
+      });
+    });
   };
-
-    const run = (target: number) => {
-    const dir: Dir = target > cur ? 1 : -1;
-    const from = scenes[cur]!;
-    from.classList.add("is-leaving"); // çıkış başladı: sahnenin sabit süsleri sönmeye başlar
-    busy = true;
-    desired = Math.max(0, Math.min(scenes.length - 1, desired));
-
-    // 1) Mevcut sahnenin öğeleri ekran dışına çıkar
-    const outAtoms = atomsOf(from);
-    const outStep = outAtoms.length > 1 ? EXIT_SPREAD / (outAtoms.length - 1) : 0;
-    const outAnims: Animation[] = [];
-    outAtoms.forEach((a, i) => outAnims.push(...playAtom(a, "out", dir, i * outStep)));
-    const exitTotal = EXIT_MS + EXIT_SPREAD;
-
-    // 2) Çıkış sürerken yeni sahnenin öğeleri ekranın dışından gelir (hedef değişmiş olabilir)
-    const enterAt = exitTotal * ENTER_AT;
-    later(() => {
-      const to = scenes[target]!;
-      const inAtoms = atomsOf(to);
-      const inStep = inAtoms.length > 1 ? ENTER_SPREAD / (inAtoms.length - 1) : 0;
-      inAtoms.forEach((a, i) => playAtom(a, "in", dir, i * inStep));
-      to.classList.remove("is-off");
-      to.classList.remove("is-leaving");
-      cur = target;
-      root.style.setProperty("--nil-p", String(cur));
-      if (persist) sessionStorage.setItem(STORE_KEY, String(cur));
-      markActive();
-    }, enterAt);
-
-    // 3) Eski sahneyi gizle (hâlâ aktifse dokunma)
-    later(() => {
-      if (from !== scenes[cur]) from.classList.add("is-off");
-      if (from !== scenes[cur]) from.classList.remove("is-leaving");
-      outAnims.forEach((an) => an.cancel());
-    }, Math.max(exitTotal, enterAt + 60));
-
-    // 4) Giriş animasyonu bitince sonraki adımı başlat; sahneler üst üste binmez
-    later(() => {
-      busy = false;
-      const next = queued ?? desired;
-      queued = null;
-      if (next !== cur) run(cur + (next > cur ? 1 : -1));
-      else desired = cur;
-    }, enterAt + UNLOCK_AFTER);
+  const clearScene = (scene: HTMLElement) => {
+    cancelAnimations(scene);
+    scene.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => {
+      el.style.translate = "";
+    });
+    scene.classList.add("is-off");
+    scene.classList.remove("is-leaving");
   };
-
+  const play = (scene: HTMLElement, phase: "in" | "out", dir: Dir) => {
+    const atoms = atomsOf(scene);
+    const spread = phase === "in" ? ENTER_SPREAD : EXIT_SPREAD;
+    const step = atoms.length > 1 ? spread / (atoms.length - 1) : 0;
+    atoms.forEach((atom, index) => {
+      const animations = playAtom(atom, phase, dir, index * step);
+      animations.forEach((animation) => activeAnimations.add(animation));
+    });
+  };
   const goTo = (target: number) => {
     if (target < 0 || target >= scenes.length) return;
-    if (document.querySelector(".nil-intro, .nil-opening")) return; // giriş sürerken kilitli
-    if (busy) {
-      if (target === desired) return;
-      desired = target;
-      queued = target; // devam eden geçiş tamamlanınca sıradaki komşu sahneye git
-      return;
-    }
-    if (target === cur) return;
-    run(target);
-  };
+    if (document.querySelector(".nil-intro, .nil-opening")) return;
+    if (target === desired && transitioning) return;
+    if (target === cur && !transitioning) return;
 
-  const step = (d: Dir) => goTo(desired + d);
+    const dir: Dir = target > cur ? 1 : -1;
+    desired = target;
+    if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
+    if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer);
+
+    // Önceki geçişten kalan üçüncü sahneleri kapat; yalnızca mevcut ve hedef sahne görünür.
+    scenes.forEach((scene, index) => {
+      if (index !== cur && index !== target) clearScene(scene);
+    });
+    const from = scenes[cur]!;
+    const to = scenes[target]!;
+    cancelAnimations(from);
+    from.classList.remove("is-off");
+    from.classList.add("is-leaving");
+    play(from, "out", dir);
+    cancelAnimations(to);
+    to.classList.remove("is-off", "is-leaving");
+    play(to, "in", dir);
+
+    cur = target; // hedef anında aktif olur: ikinci kaydırma landing'i beklemez
+    root.style.setProperty("--nil-p", String(cur));
+    if (persist) sessionStorage.setItem(STORE_KEY, String(cur));
+    markActive();
+    transitioning = true;
+    const finishedFrom = from;
+    cleanupTimer = window.setTimeout(() => {
+      if (finishedFrom !== scenes[cur]) clearScene(finishedFrom);
+      cleanupTimer = undefined;
+    }, EXIT_MS + EXIT_SPREAD + 35);
+    transitionTimer = window.setTimeout(() => {
+      transitioning = false;
+      transitionTimer = undefined;
+    }, ENTER_MS + ENTER_SPREAD);
+  };
+  const step = (d: Dir) => goTo(Math.max(0, Math.min(scenes.length - 1, cur + d)));
 
   /* ---------------- Girdiler ---------------- */
   let lastWheel = 0;
@@ -366,7 +367,7 @@ export function initStage(options: { persist?: boolean } = {}) {
   /* Genişlik / font değişince satırları yeniden hesapla */
   let lastW = window.innerWidth;
   const refit = () => {
-    if (busy) return later(refit, 400);
+    if (transitioning) return;
     splitAll();
   };
   let rt = 0;
@@ -399,7 +400,9 @@ export function initStage(options: { persist?: boolean } = {}) {
   }
 
   return () => {
-    timers.forEach((id) => window.clearTimeout(id));
+    if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
+    if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer);
+    activeAnimations.forEach((animation) => animation.cancel());
     window.clearTimeout(rt);
     window.removeEventListener("wheel", onWheel);
     window.removeEventListener("touchstart", onTouchStart);
@@ -409,7 +412,10 @@ export function initStage(options: { persist?: boolean } = {}) {
     if (onReveal) window.removeEventListener("nil:reveal", onReveal);
     document.removeEventListener("click", onClick);
     splitters.forEach((s) => s.undo());
-    scenes.forEach((s) => s.classList.remove("is-off", "is-leaving"));
+    scenes.forEach((s) => {
+      s.classList.remove("is-off", "is-leaving");
+      s.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => { el.style.translate = ""; });
+    });
     root.classList.remove("nil-staged");
     root.style.removeProperty("--nil-p");
   };
