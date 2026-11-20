@@ -1,20 +1,20 @@
 
-.nil-cinema{position:fixed;inset:0;z-index:9999;overflow:hidden;isolation:isolate;background:#090a0c;pointer-events:auto;animation:nil-cinema-exit 1.5s cubic-bezier(.4,0,.2,1) 3s forwards}
+.nil-cinema{position:fixed;inset:0;z-index:9999;overflow:hidden;isolation:isolate;background:#080706;pointer-events:auto;animation:nil-cinema-exit 1.5s cubic-bezier(.4,0,.2,1) 3s forwards}
 .nil-cinema__flow{position:absolute;inset:-45%;filter:blur(52px);mix-blend-mode:screen;will-change:transform,opacity}
-.nil-cinema__flow--a{background:conic-gradient(from 20deg,transparent,#202329,#454a50,#181c21,transparent,#32363c,transparent);animation:nil-cf-a 3s ease-in-out both}
-.nil-cinema__flow--b{background:radial-gradient(ellipse 30% 25% at 32% 46%,#51565d,transparent 85%),radial-gradient(ellipse 36% 28% at 70% 60%,#292e36,transparent 85%);animation:nil-cf-b 3s ease-in-out both}
-.nil-cinema__flow--c{background:conic-gradient(from 210deg,transparent,#1b2027,#3b4047,transparent,#24282f,transparent);animation:nil-cf-c 3s ease-in-out both}
-.nil-cinema__shade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,.06),rgba(0,0,0,.75) 80%,#050607)}
-.nil-cinema__beam{position:absolute;inset:-35%;background:linear-gradient(110deg,transparent 43%,rgba(240,245,250,.02) 48%,rgba(240,245,250,.12) 50%,rgba(240,245,250,.02) 52%,transparent 58%);filter:blur(16px);animation:nil-cbeam 3s both}
+.nil-cinema__flow--a{background:conic-gradient(from 20deg,transparent,#17120e,#45301d,#17110c,transparent,#302215,transparent);animation:nil-cf-a 3s ease-in-out both}
+.nil-cinema__flow--b{background:radial-gradient(ellipse 30% 25% at 32% 46%,rgba(122,81,35,.56),transparent 85%),radial-gradient(ellipse 36% 28% at 70% 60%,rgba(72,45,23,.48),transparent 85%);animation:nil-cf-b 3s ease-in-out both}
+.nil-cinema__flow--c{background:conic-gradient(from 210deg,transparent,#1b140e,#47301b,transparent,#271a10,transparent);animation:nil-cf-c 3s ease-in-out both}
+.nil-cinema__shade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,.06),rgba(0,0,0,.75) 80%,#050403)}
+.nil-cinema__beam{position:absolute;inset:-35%;background:linear-gradient(110deg,transparent 43%,rgba(244,207,133,.025) 48%,rgba(255,221,151,.19) 50%,rgba(244,207,133,.025) 52%,transparent 58%);filter:blur(16px);animation:nil-cbeam 3s both}
 .nil-cinema__center{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.nil-cinema__mark{font:italic clamp(25px,4vw,44px) Georgia,serif;color:#d5d0c8;margin-bottom:22px;animation:nil-cmark 3s both}
+.nil-cinema__mark{font:italic clamp(25px,4vw,44px) Georgia,serif;color:#c7a46c;margin-bottom:22px;animation:nil-cmark 3s both}
 .nil-cinema__brand{display:flex;align-items:center;justify-content:center;white-space:nowrap;font:400 clamp(26px,7.2vw,88px)/1.15 Georgia,serif;animation:nil-cbrand 3s both}
-.nil-cinema__letter{display:inline-block;background:linear-gradient(105deg,#5c626a,#b3b7ba 20%,#f6f4ed 37%,#7c8289 52%,#f6f4ee 65%,#5e6269);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:nil-cletter 3s cubic-bezier(.16,1,.3,1) both,nil-cchrome 3s linear both;filter:drop-shadow(0 4px 15px rgba(0,0,0,.4))}
+.nil-cinema__letter{display:inline-block;background:linear-gradient(105deg,#48301a 0%,#9d7138 14%,#e4c38a 27%,#fff0c7 36%,#8e612d 49%,#cda363 61%,#f3dba6 69%,#785027 84%,#392617 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:nil-cletter 3s cubic-bezier(.16,1,.3,1) both,nil-cchrome 3s linear both;filter:drop-shadow(0 4px 15px rgba(0,0,0,.4))}
 .nil-cinema__space{width:.28em}
-.nil-cinema__line{height:1px;width:0;margin:24px auto 0;background:linear-gradient(90deg,transparent,#b6b8bb,transparent);animation:nil-cline 3s both}
-.nil-cinema__tag{font:400 clamp(8px,1vw,11px) system-ui,sans-serif;letter-spacing:.3em;color:#aaaeb4;margin-top:18px;animation:nil-ctag 3s both}
-.nil-cinema__skip{position:absolute;z-index:5;right:clamp(18px,4vw,55px);bottom:clamp(18px,4vw,45px);border:1px solid #ffffff35;background:#11131888;color:#d5d5d5;padding:10px 16px;border-radius:2px;font:11px system-ui,sans-serif;letter-spacing:.14em;cursor:pointer}
-.nil-cinema__skip:hover{background:#ffffff18}
+.nil-cinema__line{height:1px;width:0;margin:24px auto 0;background:linear-gradient(90deg,transparent,#b99458,transparent);animation:nil-cline 3s both}
+.nil-cinema__tag{font:400 clamp(8px,1vw,11px) system-ui,sans-serif;letter-spacing:.3em;color:#ae9675;margin-top:18px;animation:nil-ctag 3s both}
+.nil-cinema__skip{position:absolute;z-index:5;right:clamp(18px,4vw,55px);bottom:clamp(18px,4vw,45px);border:1px solid #cba76c55;background:#100d0a99;color:#d9bf93;padding:10px 16px;border-radius:2px;font:11px system-ui,sans-serif;letter-spacing:.14em;cursor:pointer}
+.nil-cinema__skip:hover{background:#d5aa6a20}
 @keyframes nil-cinema-exit{to{opacity:0;visibility:hidden;pointer-events:none}}
 @keyframes nil-cf-a{0%{opacity:0;transform:translate(-18%,15%) rotate(-35deg) scale(.7)}45%{opacity:.55}78%{opacity:.58;transform:translate(12%,-10%) rotate(35deg) scale(1.15)}100%{opacity:.12;transform:translate(20%,-15%) rotate(65deg) scale(1.3)}}
 @keyframes nil-cf-b{0%{opacity:0;transform:translate(22%,-12%) scale(.7)}45%{opacity:.65}80%{opacity:.65;transform:translate(-12%,10%) scale(1.15)}100%{opacity:.1;transform:translate(-18%,15%) scale(1.3)}}
