@@ -4462,3 +4462,38 @@ html:not(.nil-staged) .nil-stage #hikaye {
 html:not(.nil-staged) .nil-stage #iletisim {
   background: radial-gradient(ellipse at 71% 17%,rgba(46,34,28,.12),transparent 66%),linear-gradient(120deg,#090808,#110e0c 58%,#080807);
 }
+
+
+/* Homepage hero — centered editorial layout trial. Preserve hero photography. */
+@media (min-width: 768px) {
+  .nil-scene--hero .nil-hero2__content {
+    left: 50% !important;
+    right: auto !important;
+    width: min(1100px, calc(100% - 80px)) !important;
+    max-width: none !important;
+    transform: translateX(-50%) !important;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .nil-scene--hero .nil-hero2__eyebrow {
+    justify-content: center;
+  }
+  .nil-scene--hero .nil-hero2__title {
+    max-width: 1100px;
+    text-align: center;
+  }
+  .nil-scene--hero .nil-hero2__text {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 650px;
+    text-align: center;
+  }
+  .nil-scene--hero .nil-hero2__ctawrap {
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
