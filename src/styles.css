@@ -3756,3 +3756,23 @@ html.nil-staged .nil-index { display: flex; }
 @media (max-width: 640px) {
   .nil-scene--col .kcr-card--small .kcr-card__hero { width: 76%; }
 }
+
+/* Subtle image disclaimer, slightly above the collection footer */
+.nil-scene--col .kcr-reference-note {
+  position: relative;
+  flex: 0 0 auto;
+  margin: 7px 0 0;
+  padding-right: clamp(100px, 9vw, 160px);
+  color: rgba(210,199,186,.65);
+  font-size: clamp(9px,.65vw,11px);
+  line-height: 1.35;
+  letter-spacing: .015em;
+  text-align: right;
+}
+@media (max-width:640px) {
+  .nil-scene--col .kcr-reference-note {
+    padding-right: 0;
+    margin-top: 12px;
+    text-align: left;
+  }
+}

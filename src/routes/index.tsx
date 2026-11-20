@@ -262,6 +262,8 @@ function Index() {
               </aside>
             </div>
 
+            <p className="kcr-reference-note" data-s="fade">Görseller referans amaçlıdır, ürünlerin gerçek görünümünü yansıtmayabilir.</p>
+
             <div className="kcr-footer" data-s="fade">
               <span>NİL MOBİLYA</span><span className="kcr-footer__slash">/</span><span>KOLEKSİYON</span>
               <span className="kcr-footer__line" aria-hidden="true" />
