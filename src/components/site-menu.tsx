@@ -47,9 +47,10 @@ export function SiteMenu({
         tabIndex={-1}
         aria-label="Menüyü kapat"
         onClick={onClose}
-        className="absolute inset-0 cursor-default bg-[#080706]/65 backdrop-blur-[14px] transition-[backdrop-filter,background-color] duration-500"
+        className="absolute inset-0 cursor-default bg-[#080706]/35 backdrop-blur-[14px] transition-[backdrop-filter,background-color] duration-500"
       />
-      <aside className="nil-menu-panel absolute inset-y-0 right-0 flex w-[min(100vw,33rem)] flex-col overflow-y-auto bg-[#100e0d]/90 px-5 py-6 shadow-[-24px_0_70px_rgba(0,0,0,.32)] animate-in slide-in-from-right duration-500 md:px-9 md:py-8">
+      <aside className="nil-menu-panel absolute inset-y-0 right-0 flex w-[min(100vw,33rem)] flex-col overflow-y-auto bg-transparent px-5 py-6 shadow-none animate-in slide-in-from-right duration-500 md:px-9 md:py-8">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-full bg-gradient-to-l from-black/35 via-black/15 to-transparent" />
         <div className="flex items-center justify-between">
           <span className="font-display text-xl uppercase tracking-[0.08em] text-primary">Menü</span>
           <button
@@ -79,7 +80,7 @@ export function SiteMenu({
           ))}
         </nav>
 
-        <div className="nil-menu-footer space-y-3.5 rounded-[18px] border border-[#54473e]/25 bg-[#1a1613]/70 px-5 py-5 text-xs text-foreground/75">
+        <div className="nil-menu-footer space-y-3.5 rounded-[18px] border border-[#54473e]/25 bg-[#1a1613]/85 px-5 py-5 text-xs text-foreground/75">
           <a href="/yasal/kurumsal-bilgiler" onClick={onClose} className="block transition-colors hover:text-primary">Yasal bilgiler ve satış koşulları</a>
           <Link
             to="/odanda-dene"
