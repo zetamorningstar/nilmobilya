@@ -4053,40 +4053,19 @@ html.nil-staged .nil-index { display: flex; }
   .nil-scene--hero .nil-hero2__ctawrap { animation: none; }
 }
 
-/* Tek, kesintisiz koyu aurora tuvali: ince, ayrık, düşey ışık iplikleri.
-   --nil-p 0..6: sahneler arasında aynı yüzey üzerinde ilerler. */
+/* Hafif, sabit SVG Aurora: tüm sahnelerde tek yüzey, animasyon yok. */
 .nil-bg {background:#090807;}
 .nil-bg__marble,.nil-bg__scene {display:none !important;}
 .nil-bg::before {
   content:"";
   position:absolute;
-  inset:-3%;
+  inset:0;
   pointer-events:none;
-  background:
-    radial-gradient(ellipse 1.3% 20% at 9% 14%,rgba(170,114,58,.13),transparent 100%),
-    radial-gradient(ellipse 1.1% 19% at 19% 28%,rgba(202,151,82,.14),transparent 100%),
-    radial-gradient(ellipse 1.5% 24% at 30% 45%,rgba(147,94,48,.13),transparent 100%),
-    radial-gradient(ellipse 1.1% 18% at 42% 11%,rgba(190,135,72,.13),transparent 100%),
-    radial-gradient(ellipse 1.3% 25% at 55% 67%,rgba(193,137,72,.15),transparent 100%),
-    radial-gradient(ellipse 1.1% 19% at 68% 35%,rgba(162,101,53,.13),transparent 100%),
-    radial-gradient(ellipse 1.4% 22% at 81% 80%,rgba(195,141,80,.13),transparent 100%),
-    radial-gradient(ellipse 1.1% 18% at 93% 21%,rgba(161,104,56,.12),transparent 100%),
-    radial-gradient(ellipse 1% 23% at 13% 83%,rgba(189,126,68,.12),transparent 100%),
-    radial-gradient(ellipse 1.2% 22% at 36% 87%,rgba(194,141,79,.12),transparent 100%),
-    radial-gradient(ellipse 1.1% 21% at 74% 10%,rgba(168,108,57,.12),transparent 100%),
-    radial-gradient(ellipse 1% 20% at 89% 54%,rgba(185,127,71,.12),transparent 100%);
-  background-size:100% 610%;
-  background-position:center calc(clamp(0,var(--nil-p,0),6) * 16.666%);
-  filter:blur(9px);
-  opacity:.88;
-  transform:skewX(-9deg) scale(1.07);
-  transition:background-position .9s ease-out;
-  /* Large blurred background stays static to avoid continuous full-screen repaints. */
+  background:#090807 url("/nil-aurora-static.svg") center center / cover no-repeat;
+  opacity:1;
+  animation:none !important;
+  transition:none !important;
+  transform:none !important;
+  filter:none !important;
 }
-@keyframes nil-aurora-breathe {
-  from {transform:skewX(-9deg) translateX(-1.5%) scale(1.07);opacity:.68}
-  to {transform:skewX(-5deg) translateX(1.5%) scale(1.1);opacity:.94}
-}
-@media(prefers-reduced-motion:reduce) {
-  .nil-bg::before {animation:none;transition:none}
-}
+.nil-bg__shade {pointer-events:none;}
