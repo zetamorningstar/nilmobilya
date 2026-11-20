@@ -227,84 +227,69 @@ export function initStage(options: { persist?: boolean } = {}) {
     );
   markActive();
 
-  /* ---------------- Kesintisiz, yönü koruyan sahne geçişi ---------------- */
-  // Yeni kaydırma geldiğinde eski giriş animasyonu tamamlanmak zorunda değil.
-  // Önce mevcut görünür konumu yakalayıp aynı yönde çıkışa çeviriyoruz.
-  let desired = cur;
-  let transitionTimer: number | undefined;
-  let cleanupTimer: number | undefined;
+  /* Kesintisiz panel itme: bütün içerik tek bir yüzey olarak kayar. */
   let transitioning = false;
-  const activeAnimations = new Set<Animation>();
-  const cancelAnimations = (scene: HTMLElement) => {
-    scene.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => {
-      el.getAnimations().forEach((animation) => {
-        // Mevcut görsel pozisyonu yeni çıkışın başlangıcı olarak koru.
-        const y = currentY(el);
-        animation.cancel();
-        el.style.translate = y ? `0 ${y}px` : "";
-        activeAnimations.delete(animation);
-      });
-    });
+  let transitionTimer: number | undefined;
+  const panelAnimations = new Map<HTMLElement, Animation>();
+  const positionOf = (scene: HTMLElement) => {
+    const transform = getComputedStyle(scene).transform;
+    return !transform || transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m42;
   };
-  const clearScene = (scene: HTMLElement) => {
-    cancelAnimations(scene);
-    scene.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => {
-      el.style.translate = "";
-    });
+  const stopPanel = (scene: HTMLElement) => {
+    const y = positionOf(scene);
+    panelAnimations.get(scene)?.cancel();
+    panelAnimations.delete(scene);
+    scene.style.transform = `translate3d(0,${y}px,0)`;
+    return y;
+  };
+  const hidePanel = (scene: HTMLElement) => {
+    panelAnimations.get(scene)?.cancel();
+    panelAnimations.delete(scene);
+    scene.style.transform = "";
     scene.classList.add("is-off");
     scene.classList.remove("is-leaving");
   };
-  const play = (scene: HTMLElement, phase: "in" | "out", dir: Dir, fast: boolean) => {
-    const atoms = atomsOf(scene);
-    const spread = phase === "in" ? ENTER_SPREAD : EXIT_SPREAD;
-    const step = atoms.length > 1 ? spread / (atoms.length - 1) : 0;
-    atoms.forEach((atom, index) => {
-      const animations = playAtom(atom, phase, dir, index * step, fast);
-      animations.forEach((animation) => activeAnimations.add(animation));
-    });
+  const animatePanel = (scene: HTMLElement, from: number, to: number, duration: number) => {
+    scene.style.transform = "";
+    const animation = scene.animate([
+      { transform: `translate3d(0,${from}px,0)` },
+      { transform: `translate3d(0,${to}px,0)` },
+    ], { duration, easing: "cubic-bezier(0.38, 0, 0.2, 1)", fill: "forwards" });
+    panelAnimations.set(scene, animation);
   };
   const goTo = (target: number) => {
     if (target < 0 || target >= scenes.length) return;
     if (document.querySelector(".nil-intro, .nil-opening")) return;
-    if (target === desired && transitioning) return;
-    if (target === cur && !transitioning) return;
-
-    const dir: Dir = target > cur ? 1 : -1;
-    const fast = transitioning;
-    desired = target;
-    if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
-    if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer);
-
-    // Önceki geçişten kalan üçüncü sahneleri kapat; yalnızca mevcut ve hedef sahne görünür.
-    scenes.forEach((scene, index) => {
-      if (index !== cur && index !== target) clearScene(scene);
-    });
+    if (target === cur) return;
     const from = scenes[cur]!;
     const to = scenes[target]!;
-    cancelAnimations(from);
+    const dir: Dir = target > cur ? 1 : -1;
+    const duration = transitioning ? 570 : 760;
+    if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
+    const fromY = stopPanel(from);
+    const toY = to.classList.contains("is-off") ? fromY + dir * window.innerHeight : stopPanel(to);
+    scenes.forEach((scene) => {
+      if (scene !== from && scene !== to) hidePanel(scene);
+    });
     from.classList.remove("is-off");
     from.classList.add("is-leaving");
-    play(from, "out", dir, fast);
-    cancelAnimations(to);
     to.classList.remove("is-off", "is-leaving");
-    play(to, "in", dir, fast);
-
-    cur = target; // hedef anında aktif olur: ikinci kaydırma landing'i beklemez
-    // Arka plan çapraz geçişi, fotoğraf ve metinle aynı sürede başlar.
-    root.style.setProperty("--nil-bg-ms", `${fast ? 340 : ENTER_MS}ms`);
+    animatePanel(from, fromY, -dir * window.innerHeight, duration);
+    animatePanel(to, toY, 0, duration);
+    cur = target;
+    root.style.setProperty("--nil-bg-ms", `${duration}ms`);
     root.style.setProperty("--nil-p", String(cur));
     if (persist) sessionStorage.setItem(STORE_KEY, String(cur));
     markActive();
     transitioning = true;
-    const finishedFrom = from;
-    cleanupTimer = window.setTimeout(() => {
-      if (finishedFrom !== scenes[cur]) clearScene(finishedFrom);
-      cleanupTimer = undefined;
-    }, (fast ? 520 : EXIT_MS) + EXIT_SPREAD + 35);
     transitionTimer = window.setTimeout(() => {
+      hidePanel(from);
+      panelAnimations.get(to)?.cancel();
+      panelAnimations.delete(to);
+      to.style.transform = "";
       transitioning = false;
       transitionTimer = undefined;
-    }, (fast ? 520 : ENTER_MS) + ENTER_SPREAD);
+    }, duration + 30);
   };
   const step = (d: Dir) => goTo(Math.max(0, Math.min(scenes.length - 1, cur + d)));
 
@@ -407,8 +392,7 @@ export function initStage(options: { persist?: boolean } = {}) {
 
   return () => {
     if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
-    if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer);
-    activeAnimations.forEach((animation) => animation.cancel());
+    panelAnimations.forEach((animation) => animation.cancel());
     window.clearTimeout(rt);
     window.removeEventListener("wheel", onWheel);
     window.removeEventListener("touchstart", onTouchStart);
@@ -420,6 +404,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     splitters.forEach((s) => s.undo());
     scenes.forEach((s) => {
       s.classList.remove("is-off", "is-leaving");
+      s.style.transform = "";
       s.querySelectorAll<HTMLElement>("[data-s], .nil-mask").forEach((el) => { el.style.translate = ""; });
     });
     root.classList.remove("nil-staged");
