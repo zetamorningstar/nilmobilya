@@ -289,6 +289,8 @@ export function initStage(options: { persist?: boolean } = {}) {
     play(to, "in", dir, fast);
 
     cur = target; // hedef anında aktif olur: ikinci kaydırma landing'i beklemez
+    // Arka plan çapraz geçişi, fotoğraf ve metinle aynı sürede başlar.
+    root.style.setProperty("--nil-bg-ms", `${fast ? 340 : ENTER_MS}ms`);
     root.style.setProperty("--nil-p", String(cur));
     if (persist) sessionStorage.setItem(STORE_KEY, String(cur));
     markActive();
@@ -421,6 +423,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     });
     root.classList.remove("nil-staged");
     root.style.removeProperty("--nil-p");
+    root.style.removeProperty("--nil-bg-ms");
   };
 }
 
