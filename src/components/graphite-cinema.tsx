@@ -4,10 +4,16 @@ import "./graphite-cinema.css";
 const KEY = "nil-graphite-cinema-v5-seen";
 const letters = [..."NİL MOBİLYA"];
 export function GraphiteCinema() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   useEffect(() => {
     const force = new URLSearchParams(window.location.search).get("intro") === "1";
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || (!force && sessionStorage.getItem(KEY))) return;
+    if (
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+  (!force && sessionStorage.getItem(KEY))
+) {
+  setVisible(false);
+  return;
+}
     setVisible(true);
     let done = false;
     const finish = () => {

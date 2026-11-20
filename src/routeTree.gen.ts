@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as OdandaDeneRouteImport } from './routes/odanda-dene'
 import { Route as SergimizRouteImport } from './routes/sergimiz'
 import { Route as ApiRoomComposeRouteImport } from './routes/api/room-compose'
 import { Route as ApiSpinFrameRouteImport } from './routes/api/spin-frame'
 import { Route as KoleksiyonSlugRouteImport } from './routes/koleksiyon.$slug'
+import { Route as YasalSlugRouteImport } from './routes/yasal.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OdandaDeneRoute = OdandaDeneRouteImport.update({
@@ -46,66 +53,85 @@ const KoleksiyonSlugRoute = KoleksiyonSlugRouteImport.update({
   path: '/koleksiyon/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const YasalSlugRoute = YasalSlugRouteImport.update({
+  id: '/yasal/$slug',
+  path: '/yasal/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/odanda-dene': typeof OdandaDeneRoute
   '/sergimiz': typeof SergimizRoute
   '/api/room-compose': typeof ApiRoomComposeRoute
   '/api/spin-frame': typeof ApiSpinFrameRoute
   '/koleksiyon/$slug': typeof KoleksiyonSlugRoute
+  '/yasal/$slug': typeof YasalSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/odanda-dene': typeof OdandaDeneRoute
   '/sergimiz': typeof SergimizRoute
   '/api/room-compose': typeof ApiRoomComposeRoute
   '/api/spin-frame': typeof ApiSpinFrameRoute
   '/koleksiyon/$slug': typeof KoleksiyonSlugRoute
+  '/yasal/$slug': typeof YasalSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/odanda-dene': typeof OdandaDeneRoute
   '/sergimiz': typeof SergimizRoute
   '/api/room-compose': typeof ApiRoomComposeRoute
   '/api/spin-frame': typeof ApiSpinFrameRoute
   '/koleksiyon/$slug': typeof KoleksiyonSlugRoute
+  '/yasal/$slug': typeof YasalSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/odanda-dene'
     | '/sergimiz'
     | '/api/room-compose'
     | '/api/spin-frame'
     | '/koleksiyon/$slug'
+    | '/yasal/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/odanda-dene'
     | '/sergimiz'
     | '/api/room-compose'
     | '/api/spin-frame'
     | '/koleksiyon/$slug'
+    | '/yasal/$slug'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/odanda-dene'
     | '/sergimiz'
     | '/api/room-compose'
     | '/api/spin-frame'
     | '/koleksiyon/$slug'
+    | '/yasal/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   OdandaDeneRoute: typeof OdandaDeneRoute
   SergimizRoute: typeof SergimizRoute
   ApiRoomComposeRoute: typeof ApiRoomComposeRoute
   ApiSpinFrameRoute: typeof ApiSpinFrameRoute
   KoleksiyonSlugRoute: typeof KoleksiyonSlugRoute
+  YasalSlugRoute: typeof YasalSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -115,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/odanda-dene': {
@@ -152,16 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KoleksiyonSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/yasal/$slug': {
+      id: '/yasal/$slug'
+      path: '/yasal/$slug'
+      fullPath: '/yasal/$slug'
+      preLoaderRoute: typeof YasalSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   OdandaDeneRoute: OdandaDeneRoute,
   SergimizRoute: SergimizRoute,
   ApiRoomComposeRoute: ApiRoomComposeRoute,
   ApiSpinFrameRoute: ApiSpinFrameRoute,
   KoleksiyonSlugRoute: KoleksiyonSlugRoute,
+  YasalSlugRoute: YasalSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
