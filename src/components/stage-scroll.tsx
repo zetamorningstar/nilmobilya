@@ -162,8 +162,7 @@ export function initStage(options: { persist?: boolean } = {}) {
   if (!stage) return undefined;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
   if (window.innerHeight < MIN_HEIGHT) return undefined;
-  // Touch devices need natural page scrolling; the desktop scene lock clips mobile content.
-  if (window.matchMedia("(max-width: 1099px), (pointer: coarse)").matches) return undefined;
+  // Hybrid touchscreen laptops often report a coarse pointer even while used\n  // with a mouse or trackpad. Keep cinematic scenes on wide laptop screens;\n  // reserve native scrolling for genuinely narrow/mobile layouts.\n  if (window.innerWidth < 1100) return undefined;
 
   const root = document.documentElement;
   const scenes = Array.from(stage.querySelectorAll<HTMLElement>(".nil-scene"));
