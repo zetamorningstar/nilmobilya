@@ -3,13 +3,13 @@ import { useEffect } from "react";
 /* ------------------------------------------------------------------ */
 /*  AYARLAR — hızı ve hissi buradan değiştirebilirsin (milisaniye)    */
 /* ------------------------------------------------------------------ */
-const EXIT_MS = 440; // bir öğenin ekran dışına çıkış süresi
+const EXIT_MS = 510; // bir öğenin ekran dışına çıkış süresi
 const EXIT_SPREAD = 0; // çıkarken öğeler arası toplam gecikme
-const ENTER_MS = 440; // bir öğenin ekranın altından gelme süresi
+const ENTER_MS = 510; // bir öğenin ekranın altından gelme süresi
 const ENTER_SPREAD = 0; // gelirken öğeler arası toplam gecikme
 const EDGE_PAD = 48; // öğe ekran kenarından bu kadar px daha uzağa gider
-const EASE_IN = "cubic-bezier(0.45, 0, 0.55, 1)";
-const EASE_OUT = "cubic-bezier(0.45, 0, 0.55, 1)";
+const EASE_IN = "cubic-bezier(0.42, 0, 0.58, 1)";
+const EASE_OUT = "cubic-bezier(0.42, 0, 0.58, 1)";
 const MIN_HEIGHT = 560; // bundan kısa ekranlarda normal kaydırmaya döner
 const STORE_KEY = "nil-scene-index";
 const STEP_GAP = 165; // tekerlekte iki sahne adımı arası en az süre (ms)
@@ -147,9 +147,9 @@ function playAtom(atom: Atom, phase: "in" | "out", dir: Dir, delay: number, fast
 
   return [
     el.animate(frames, {
-      duration: fast ? 270 : (phase === "in" ? ENTER_MS : EXIT_MS),
+      duration: fast ? 340 : (phase === "in" ? ENTER_MS : EXIT_MS),
       delay,
-      easing: fast ? "linear" : (phase === "in" ? EASE_OUT : EASE_IN),
+      easing: fast ? "cubic-bezier(0.32, 0.08, 0.68, 0.92)" : (phase === "in" ? EASE_OUT : EASE_IN),
       fill: phase === "in" ? "backwards" : "forwards",
     }),
   ];
@@ -297,11 +297,11 @@ export function initStage(options: { persist?: boolean } = {}) {
     cleanupTimer = window.setTimeout(() => {
       if (finishedFrom !== scenes[cur]) clearScene(finishedFrom);
       cleanupTimer = undefined;
-    }, (fast ? 270 : EXIT_MS) + EXIT_SPREAD + 35);
+    }, (fast ? 340 : EXIT_MS) + EXIT_SPREAD + 35);
     transitionTimer = window.setTimeout(() => {
       transitioning = false;
       transitionTimer = undefined;
-    }, (fast ? 270 : ENTER_MS) + ENTER_SPREAD);
+    }, (fast ? 340 : ENTER_MS) + ENTER_SPREAD);
   };
   const step = (d: Dir) => goTo(Math.max(0, Math.min(scenes.length - 1, cur + d)));
 
