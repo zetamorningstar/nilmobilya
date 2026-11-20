@@ -3867,3 +3867,15 @@ html.nil-staged .nil-index { display: flex; }
 @media (max-width:767px) {
   .nil-bg__img {background-position:63% center !important}
 }
+
+/* Intro sonrası bilgilendirme: yumuşak alttan yükseliş */
+@keyframes nil-dev-notice-rise {
+  from { opacity:0; transform:translate(-50%, 48px); filter:blur(5px); }
+  to { opacity:1; transform:translate(-50%, 0); filter:blur(0); }
+}
+.nil-dev-notice {
+  animation:nil-dev-notice-rise 850ms cubic-bezier(.16,1,.3,1) both;
+}
+@media (prefers-reduced-motion:reduce) {
+  .nil-dev-notice { animation:none; }
+}
