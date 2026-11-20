@@ -4077,11 +4077,11 @@ html.nil-staged .nil-index { display: flex; }
     radial-gradient(ellipse 1% 20% at 89% 54%,rgba(185,127,71,.12),transparent 100%);
   background-size:100% 610%;
   background-position:center calc(clamp(0,var(--nil-p,0),6) * 16.666%);
-  filter:blur(17px);
+  filter:blur(9px);
   opacity:.88;
   transform:skewX(-9deg) scale(1.07);
-  transition:background-position 1.25s cubic-bezier(.2,.75,.2,1);
-  animation:nil-aurora-breathe 27s ease-in-out infinite alternate;
+  transition:background-position .9s ease-out;
+  /* Large blurred background stays static to avoid continuous full-screen repaints. */
 }
 @keyframes nil-aurora-breathe {
   from {transform:skewX(-9deg) translateX(-1.5%) scale(1.07);opacity:.68}
