@@ -3879,3 +3879,21 @@ html.nil-staged .nil-index { display: flex; }
 @media (prefers-reduced-motion:reduce) {
   .nil-dev-notice { animation:none; }
 }
+
+/* Center-stage development announcement: stronger rise after intro */
+@keyframes nil-dev-notice-center-rise {
+  0% {opacity:0;transform:translateY(135px) scale(.93);filter:blur(10px)}
+  65% {opacity:1;filter:blur(0)}
+  100% {opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+.nil-dev-notice-layer {
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.15),rgba(0,0,0,.38));
+  animation:nil-dev-notice-layer-in .65s ease-out both;
+}
+@keyframes nil-dev-notice-layer-in {from{opacity:0}to{opacity:1}}
+.nil-dev-notice-layer .nil-dev-notice {
+  animation:nil-dev-notice-center-rise 1.05s cubic-bezier(.16,1,.3,1) both;
+}
+@media(prefers-reduced-motion:reduce) {
+ .nil-dev-notice-layer,.nil-dev-notice-layer .nil-dev-notice {animation:none}
+}
