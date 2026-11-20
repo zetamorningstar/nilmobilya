@@ -4164,3 +4164,79 @@ html.nil-staged .nil-index { display: flex; }
   .nil-review-page__results {min-height:95px;max-height:105px}
   .nil-review-page__empty {min-height:54px}
 }
+
+
+/* 7 sahne / 7 özgün, sabit bronz kompozisyon. Arka plan ve içerik aynı anda akar.
+   Katmanlar yalnızca opacity ile çapraz geçer; filtre/blur animasyonu yok. */
+.nil-bg {background:#090706}
+.nil-bg::before {display:none !important}
+.nil-bg__marble {display:none !important}
+.nil-bg__scene {
+  display:block !important;
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  transform:none !important;
+  filter:none !important;
+  opacity:clamp(0,calc(1 - max(var(--nil-p,0) - var(--i),var(--i) - var(--nil-p,0))),1);
+  transition:opacity var(--nil-bg-ms,510ms) cubic-bezier(.42,0,.58,1) !important;
+  will-change:opacity;
+}
+.nil-bg__scene::after {display:none !important}
+.nil-bg__scene--1 {
+  --i:1;
+  background-image:
+    radial-gradient(ellipse 42% 52% at 9% 78%,rgba(142,77,35,.34),transparent 80%),
+    radial-gradient(ellipse 35% 65% at 83% 15%,rgba(113,76,45,.22),transparent 80%),
+    repeating-linear-gradient(112deg,transparent 0 135px,rgba(202,144,80,.045) 136px,transparent 138px),
+    linear-gradient(130deg,#120d0a,#21150f 48%,#0b0807);
+}
+.nil-bg__scene--2 {
+  --i:2;
+  background-image:
+    radial-gradient(ellipse 28% 80% at 76% 38%,rgba(171,111,53,.24),transparent 85%),
+    repeating-linear-gradient(90deg,transparent 0 85px,rgba(203,146,85,.055) 86px,transparent 88px),
+    linear-gradient(153deg,#090807 5%,#291a12 55%,#100b09);
+}
+.nil-bg__scene--3 {
+  --i:3;
+  background-image:
+    radial-gradient(ellipse 46% 43% at 16% 22%,rgba(171,103,54,.24),transparent 83%),
+    radial-gradient(ellipse 48% 42% at 91% 90%,rgba(119,76,45,.25),transparent 78%),
+    repeating-linear-gradient(145deg,transparent 0 170px,rgba(224,167,93,.045) 171px,transparent 173px),
+    linear-gradient(125deg,#0d0908,#1c110d 56%,#0b0807);
+}
+.nil-bg__scene--4 {
+  --i:4;
+  background-image:
+    radial-gradient(ellipse 58% 35% at 4% 98%,rgba(169,91,42,.27),transparent 80%),
+    radial-gradient(ellipse 45% 60% at 95% 16%,rgba(143,94,53,.18),transparent 85%),
+    repeating-linear-gradient(128deg,transparent 0 230px,rgba(214,147,72,.07) 231px,transparent 233px),
+    linear-gradient(120deg,#100b09,#21150f 52%,#0b0807);
+}
+.nil-bg__scene--5 {
+  --i:5;
+  background-image:
+    radial-gradient(ellipse 54% 60% at 72% 76%,rgba(152,96,48,.26),transparent 85%),
+    repeating-linear-gradient(0deg,transparent 0 105px,rgba(196,135,72,.045) 106px,transparent 108px),
+    linear-gradient(145deg,#0a0807,#23170f 58%,#0d0908);
+}
+.nil-bg__scene--6 {
+  --i:6;
+  background-image:
+    radial-gradient(ellipse 54% 55% at 50% 100%,rgba(171,105,53,.27),transparent 82%),
+    radial-gradient(ellipse 32% 52% at 8% 15%,rgba(129,85,50,.18),transparent 82%),
+    repeating-linear-gradient(90deg,transparent 0 205px,rgba(224,171,98,.05) 206px,transparent 208px),
+    linear-gradient(140deg,#100b09,#1d130e 60%,#090807);
+}
+.nil-bg__img {
+  transition:opacity var(--nil-bg-ms,510ms) cubic-bezier(.42,0,.58,1) !important;
+  transform:none !important;
+}
+.nil-bg__shade {background:linear-gradient(90deg,rgba(6,5,4,.16),rgba(6,5,4,.05)) !important}
+.nil-review-page__backdrop {display:none !important}
+@media (prefers-reduced-motion:reduce) {
+  .nil-bg__scene,.nil-bg__img {transition:none !important}
+}
