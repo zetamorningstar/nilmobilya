@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowLeft, BarChart3, Database, Images, LockKeyhole, LogOut, Package } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
+import { AdminProducts } from "@/components/admin-products";
 
 export const Route = createFileRoute("/admin")({ component: AdminPage });
 
@@ -19,6 +20,7 @@ function AdminPage() {
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [section, setSection] = useState<"overview" | "products">("overview");
 
   useEffect(() => {
     const supabase = getSupabaseClient();
@@ -100,8 +102,8 @@ function AdminPage() {
           <div><p className="text-xs uppercase tracking-widest text-[#c9a46c]">Yetkili yönetici</p><p className="mt-2 text-sm text-[#d7d0c7]">{account}</p></div>
           <button onClick={logout} className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm hover:border-[#c9a46c]"><LogOut size={16}/> Çıkış Yap</button>
         </div>
-        <p className="mb-5 text-sm text-[#bbb7b1]">Giriş sistemi aktif. İçerik düzenleme ve analitik bağlantıları sonraki aşamada eklenecek.</p>
-        <div className="grid gap-4 sm:grid-cols-2">{modules.map(({title,description,icon:Icon})=><section key={title} className="rounded-xl border border-white/10 bg-[#1d1e20] p-6"><Icon className="mb-5 text-[#c9a46c]" size={27}/><h3 className="font-serif text-2xl">{title}</h3><p className="mt-2 text-sm leading-6 text-[#aaa8a5]">{description}</p><p className="mt-5 text-xs uppercase tracking-widest text-[#b7a083]">Yakında</p></section>)}</div>
+        <p className="mb-5 text-sm text-[#bbb7b1]">Ürün yönetimi Supabase ile bağlantılıdır. Diğer modüller hazırlanıyor.</p>
+        {section === "products" ? <div><button onClick={()=>setSection("overview")} className="mb-6 text-sm text-[#c9a46c] hover:underline">← Panele dön</button><AdminProducts /></div> : <div className="grid gap-4 sm:grid-cols-2">{modules.map(({title,description,icon:Icon})=><button type="button" onClick={()=>title==="Ürünler" && setSection("products")} key={title} className="rounded-xl border border-white/10 bg-[#1d1e20] p-6 text-left transition hover:border-[#c9a46c]/60"><Icon className="mb-5 text-[#c9a46c]" size={27}/><h3 className="font-serif text-2xl">{title}</h3><p className="mt-2 text-sm leading-6 text-[#aaa8a5]">{description}</p><p className="mt-5 text-xs uppercase tracking-widest text-[#b7a083]">{title==="Ürünler"?"Ürünleri yönet →":"Yakında"}</p></button>)}</div>}
       </>}
     </div>
   </main>;
