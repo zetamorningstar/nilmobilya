@@ -3776,3 +3776,26 @@ html.nil-staged .nil-index { display: flex; }
     text-align: left;
   }
 }
+
+/* Collection v10: purpose-made wide images, consistent across all four cards */
+.nil-scene--col .kcr-card .kcr-card__hero,
+.nil-scene--col .kcr-card--small .kcr-card__hero {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  filter:brightness(.96);
+  transform:none;
+  transition:transform .5s ease;
+}
+.nil-scene--col .kcr-card:hover .kcr-card__hero,
+.nil-scene--col .kcr-card--small:hover .kcr-card__hero {
+  transform:scale(1.015);
+}
+.nil-scene--col .kcr-card--feature .kcr-card__gradient {
+  background:linear-gradient(90deg,rgba(8,7,6,.88) 0%,rgba(8,7,6,.67) 23%,rgba(8,7,6,.12) 51%,transparent 74%);
+}
+.nil-scene--col .kcr-card--small .kcr-card__gradient {
+  background:linear-gradient(90deg,rgba(8,7,6,.91) 0%,rgba(8,7,6,.73) 29%,rgba(8,7,6,.12) 63%,transparent 85%);
+}

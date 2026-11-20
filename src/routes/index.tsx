@@ -65,10 +65,10 @@ const dolapPhotos = [collectionBySlug("dolap")?.hero, dolapPhoto2, dolapPhoto3].
 const allPhotos = [tvPhotos[0], bankoPhotos[0], dolapPhotos[0]].filter((photo): photo is string => Boolean(photo));
 
 const COLLECTION_CARDS = [
-  { slug: "tum-urunler", title: "Tüm Ürünler", description: "Tüm koleksiyonumuzu\ntek bir yerde keşfedin.", images: allPhotos, fallback: tvPhotos[0] },
-  { slug: "tv-uniteleri", title: "TV Üniteleri", description: "Yaşam alanlarınıza estetik ve\\nfonksiyon katan TV üniteleri.", images: tvPhotos, fallback: tvPhotos[0] },
-  { slug: "banko", title: "Bankolar", description: "Mekânınıza özel ölçüde üretilen\\nahşap banko ve servis üniteleri.", images: [bankoPhotos[2], ...bankoPhotos.filter((_, index) => index !== 2)], fallback: bankoPhotos[2] ?? bankoPhotos[0] },
-  { slug: "dolap", title: "Dolap Sistemleri", description: "Ölçünüze göre planlanan\\nözel üretim dolap sistemleri.", images: [dolapPhoto3, ...dolapPhotos.filter((photo) => photo !== dolapPhoto3)], fallback: dolapPhoto3 },
+  { slug: "tum-urunler", title: "Tüm Ürünler", description: "Tüm koleksiyonumuzu\\ntek bir yerde keşfedin.", image: "/images/koleksiyon/tum-urunler.webp" },
+  { slug: "tv-uniteleri", title: "TV Üniteleri", description: "Yaşam alanlarınıza estetik ve\\nfonksiyon katan TV üniteleri.", image: "/images/koleksiyon/tv-unitesi.webp" },
+  { slug: "banko", title: "Bankolar", description: "Mekânınıza özel ölçüde üretilen\\nahşap banko ve servis üniteleri.", image: "/images/koleksiyon/banko.webp" },
+  { slug: "dolap", title: "Dolap Sistemleri", description: "Ölçünüze göre planlanan\\nözel üretim dolap sistemleri.", image: "/images/koleksiyon/dolap.webp" },
 ] as const;
 
 function Index() {
@@ -230,17 +230,7 @@ function Index() {
                     data-s="frame"
                   >
                     <div className="kcr-card__visual" aria-hidden="true">
-                      {i === 0 ? (
-                        <div className="kcr-card__triptych">
-                          {[0, 1, 2].map((n) => (
-                            <div className={`kcr-card__slice kcr-card__slice--${n}`} key={n}>
-                              <img src={card.images[n] ?? card.fallback} alt="" loading="lazy" />
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <img className="kcr-card__hero" src={card.images[0] ?? card.fallback} alt="" loading="lazy" />
-                      )}
+                      <img className="kcr-card__hero" src={card.image} alt="" loading="lazy" />
                       <span className="kcr-card__gradient" />
                     </div>
                     <div className="kcr-card__copy">
