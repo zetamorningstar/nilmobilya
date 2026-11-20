@@ -4497,3 +4497,24 @@ html:not(.nil-staged) .nil-stage #iletisim {
     margin-right: auto;
   }
 }
+
+
+/* Hero center vignette: deepen only behind the copy, keep outer photo luminous. */
+.nil-scene--hero .nil-hero2__veil {
+  background:
+    radial-gradient(ellipse 49% 48% at 50% 46%,
+      rgba(5, 5, 6, .63) 0%,
+      rgba(5, 5, 6, .47) 34%,
+      rgba(5, 5, 6, .22) 65%,
+      rgba(5, 5, 6, 0) 100%) !important;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .nil-scene--hero .nil-hero2__veil {
+    background:
+      radial-gradient(ellipse 82% 45% at 50% 40%,
+        rgba(5, 5, 6, .62) 0%,
+        rgba(5, 5, 6, .34) 55%,
+        rgba(5, 5, 6, 0) 100%) !important;
+  }
+}
