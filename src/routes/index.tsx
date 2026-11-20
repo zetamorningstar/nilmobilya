@@ -199,12 +199,12 @@ function Index() {
                 {/* 2 · Koleksiyon — referansın HTML/CSS karşılığı; görseller projeden gelir */}
         <section id="koleksiyon" aria-label="Yeni koleksiyon" className="nil-scene nil-scene--col">
           <div className="nil-scene__body kc kc-rebuilt">
-            <div className="kcr-heading" data-s="fade">
+            <div className="kcr-heading">
               <div className="kcr-heading__left">
                 <div className="kcr-eyebrow"><span className="kcr-eyebrow__square" /> KOLEKSİYON <span className="kcr-eyebrow__rule" /></div>
                 <h2 data-s="text" className="kcr-title">Yeni Koleksiyon</h2>
               </div>
-              <div className="kcr-heading__description">
+              <div className="kcr-heading__description" data-s="fade">
                 <span aria-hidden="true" className="kcr-heading__divider" />
                 <p>Zamansız tasarımlar, modern yaşam alanları için.<br />Nil Mobilya'nın yeni koleksiyonunu keşfedin.</p>
               </div>
@@ -239,13 +239,13 @@ function Index() {
                       </div>
                       <span className="kcr-card__gradient" />
                     </div>
-                    <div className="kcr-card__copy" data-s="fade">
-                      <span className="kcr-card__number">0{i + 1}<i /></span>
+                    <div className="kcr-card__copy">
+                      <span data-s="fade" className="kcr-card__number">0{i + 1}<i /></span>
                       <h3 data-s="text">{card.title}</h3>
                       <p data-s="text">{card.description.split("\\n").map((line, lineIndex) => (
                         <span key={lineIndex}>{line}{lineIndex === 0 && <br />}</span>
                       ))}</p>
-                      <span className="kcr-card__button"><ArrowRight aria-hidden="true" strokeWidth={1.35} /></span>
+                      <span data-s="fade" className="kcr-card__button"><ArrowRight aria-hidden="true" strokeWidth={1.35} /></span>
                     </div>
                   </Link>
                 ))}
