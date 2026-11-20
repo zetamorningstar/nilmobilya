@@ -79,6 +79,7 @@ export function SiteMenu({
         </nav>
 
         <div className="space-y-3.5 border-t border-foreground/10 pt-6 text-xs text-foreground/75">
+          <a href="/yasal/kurumsal-bilgiler" onClick={onClose} className="block transition-colors hover:text-primary">Yasal bilgiler ve satış koşulları</a>
           <Link
             to="/odanda-dene"
             onClick={onClose}

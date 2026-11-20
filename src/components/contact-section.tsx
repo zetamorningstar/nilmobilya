@@ -168,9 +168,13 @@ export function ContactSection() {
             <span className="ct-foot__tag">Tasarım <em>/</em> Kalite <em>/</em> Zarafet</span>
           </div>
           <div className="ct-foot__r">
-            <span>Gizlilik Politikası</span>
+            <a href="/yasal/gizlilik-politikasi" className="hover:text-primary">Gizlilik Politikası</a>
             <i aria-hidden="true" />
-            <span>Kullanım Şartları</span>
+            <a href="/yasal/kullanim-kosullari" className="hover:text-primary">Kullanım Şartları</a>
+            <i aria-hidden="true" />
+            <a href="/yasal/kvkk-aydinlatma" className="hover:text-primary">KVKK</a>
+            <i aria-hidden="true" />
+            <a href="/yasal/teslimat-iade" className="hover:text-primary">Teslimat ve İade</a>
             <NLogo className="ct-foot__logo ct-foot__logo--r" />
           </div>
         </div>

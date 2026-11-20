@@ -9,6 +9,7 @@ import { useHoverPreview } from "@/components/hover-preview";
 import { StageScroll } from "@/components/stage-scroll";
 import { ReviewsMarquee } from "@/components/reviews-marquee";
 import { IntroSequence } from "@/components/intro-sequence";
+import { SiteDevelopmentNotice } from "@/components/site-development-notice";
 import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
 import { AboutSection } from "@/components/about-section";
@@ -114,6 +115,7 @@ function Index() {
     <main className="min-h-screen text-foreground">
       <IntroSequence />
       <StageScroll />
+      <SiteDevelopmentNotice />
 
       {/* Sabit arka plan: koyu villa salonu. Fotoğraf: public/bg-villa.jpg */}
    <div aria-hidden="true" className="nil-bg">
