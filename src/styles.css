@@ -4240,3 +4240,31 @@ html.nil-staged .nil-index { display: flex; }
 @media (prefers-reduced-motion:reduce) {
   .nil-bg__scene,.nil-bg__img {transition:none !important}
 }
+
+
+/* Yorumlar — koyu, organik, el işçiliği hissinde referans tasarımı */
+.nil-review-page__layout {width:min(1320px,92vw)}
+.nil-review-page__intro {position:relative}
+.nil-review-page__trust {display:flex;gap:12px;margin-top:clamp(16px,3vh,30px);align-items:center}
+.nil-review-page__trust span {display:flex;align-items:center;gap:8px;color:#c6a17a;font-size:11px;line-height:1.3;flex:1}
+.nil-review-page__trust span+span {border-left:1px solid rgba(182,128,77,.25);padding-left:12px}
+.nil-review-page__trust svg {color:#c6a071;flex-shrink:0}
+.nil-review-page__results {position:relative;background:radial-gradient(ellipse 55% 100% at 100% 100%,rgba(99,60,35,.15),transparent 80%),linear-gradient(120deg,rgba(20,15,12,.96),rgba(14,11,10,.97));border-color:rgba(159,113,72,.25);overflow:hidden}
+.nil-review-page__results::before {content:"";position:absolute;inset:0;pointer-events:none;opacity:.38;background:radial-gradient(ellipse 18% 90% at 0% 80%,rgba(128,79,43,.23),transparent),repeating-linear-gradient(92deg,transparent 0 12px,rgba(138,87,47,.08) 13px,transparent 15px);mask-image:linear-gradient(90deg,#000,transparent 30%)}
+.nil-review-page__results::after {content:"";position:absolute;right:-7%;bottom:-80%;width:37%;height:170%;border:1px solid rgba(158,101,59,.17);border-radius:48% 52% 35% 65%;transform:rotate(32deg);pointer-events:none}
+.nil-review-page__results>* {position:relative;z-index:1}
+.nil-review-page__first {display:inline-flex;align-items:center;gap:8px;margin-top:12px;border:1px solid rgba(191,136,82,.55);border-radius:9px;background:rgba(20,14,11,.72);color:#d7ae7d;padding:8px 18px;font-size:12px;cursor:pointer}
+.nil-review-page__first:hover {background:rgba(93,59,33,.35)}
+.nil-review-page__form {background:linear-gradient(130deg,rgba(26,20,16,.96),rgba(17,14,12,.96));border-color:rgba(163,113,73,.25);box-shadow:0 12px 36px rgba(0,0,0,.24);backdrop-filter:none}
+.nil-review-page__submit {background:linear-gradient(105deg,#d6aa77,#b88b5b);color:#21160e}
+.nil-review-page__intro h2 {color:#ead8c4}
+.nil-review-page__intro>p:last-of-type {color:#cdb29a}
+.nil-bg__scene--3 {background-image:radial-gradient(ellipse 55% 75% at -8% 34%,rgba(115,65,36,.22),transparent 80%),radial-gradient(ellipse 40% 70% at 105% 92%,rgba(119,73,43,.15),transparent 78%),linear-gradient(132deg,#090807,#160f0b 53%,#0a0807)}
+.nil-bg__scene--3::before {content:"";position:absolute;inset:-25% -15%;border:1px solid rgba(173,111,61,.13);border-radius:48% 52% 61% 39%;transform:rotate(-18deg) scale(1.1);pointer-events:none}
+@media (min-width:1100px) and (min-height:730px) {
+ .nil-review-page__layout {width:min(1320px,92vw);grid-template-columns:.9fr 1.1fr;grid-template-rows:minmax(0,1fr) auto;row-gap:clamp(15px,2.5vh,25px)}
+ .nil-review-page__results {min-height:clamp(165px,25vh,255px);max-height:clamp(165px,25vh,255px)}
+ .nil-review-page__empty {min-height:125px}
+ .nil-review-page__form {padding:clamp(16px,1.8vw,26px)}
+}
+@media (max-width:700px) {.nil-review-page__trust {flex-wrap:wrap}.nil-review-page__trust span {min-width:100px}}
