@@ -235,6 +235,23 @@ function Index() {
               </div>
             </div>
 
+            {/* Referans görsel masaüstünde birebir gösterilir; kart alanları gerçek bağlantıdır.
+                Dosya: public/koleksiyon-referans.webp. Mobilde normal HTML kartlar korunur. */}
+            <div className="kc-reference" data-s="frame">
+              <img
+                className="kc-reference__image"
+                src="/koleksiyon-referans.webp"
+                alt="Yeni Koleksiyon: Tüm Ürünler, TV Üniteleri, Bankolar ve Dolap Sistemleri"
+                width={1684}
+                height={934}
+                decoding="async"
+              />
+              <Link to="/koleksiyon/$slug" params={{ slug: "tum-urunler" }} className="kc-reference__hotspot kc-reference__hotspot--all" aria-label="Tüm ürünleri incele" />
+              <Link to="/koleksiyon/$slug" params={{ slug: "tv-uniteleri" }} className="kc-reference__hotspot kc-reference__hotspot--tv" aria-label="TV ünitelerini incele" />
+              <Link to="/koleksiyon/$slug" params={{ slug: "banko" }} className="kc-reference__hotspot kc-reference__hotspot--banko" aria-label="Bankoları incele" />
+              <Link to="/koleksiyon/$slug" params={{ slug: "dolap" }} className="kc-reference__hotspot kc-reference__hotspot--dolap" aria-label="Dolap sistemlerini incele" />
+            </div>
+
             <div className="kc-grid kc-grid--4">
               {HOME_CARDS.map((card, i) => (
                 <article key={card.slug} className="kc-card kc-card--q group">
