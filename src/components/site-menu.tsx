@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Phone, Sparkles, X } from "lucide-react";
+import { whatsappOfferUrl } from "@/lib/sales";
 import { useEffect, type KeyboardEvent as ReactKeyboardEvent, type SyntheticEvent } from "react";
 
 const stop = (event: SyntheticEvent) => event.stopPropagation();
@@ -97,6 +98,12 @@ export function SiteMenu({
           </a>
           <a href="tel:+905360236146" className="flex items-center gap-2 transition-colors hover:text-primary">
             <Phone className="size-4" /> 0 (536) 023 61 46
+          </a>
+          <a href="tel:+905012516134" className="flex items-center gap-2 transition-colors hover:text-primary">
+            <Phone className="size-4" /> +90 501 251 61 34
+          </a>
+          <a href={whatsappOfferUrl()} target="_blank" rel="noopener noreferrer" className="block text-primary hover:text-foreground">
+            WhatsApp'tan ölçü ve teklif al →
           </a>
         </div>
       </aside>

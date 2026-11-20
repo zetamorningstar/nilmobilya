@@ -8,6 +8,7 @@ import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
 import { ALL_SLUG, CATALOG_SLUGS, getCollection, type Collection, type CollectionProduct } from "@/lib/collections";
 import { cn } from "@/lib/utils";
+import { whatsappOfferUrl } from "@/lib/sales";
 
 // Menü ve arama: ana sayfadaki bölümlerle aynı (id'ler ana sayfa sahneleriyle aynı olmalı)
 const SECTIONS = [
@@ -30,16 +31,12 @@ const NAV = [
   ["İletişim", "iletisim"],
 ] as const;
 
-type Sort = "oner" | "artan" | "azalan" | "isim";
+type Sort = "oner" | "isim";
 
 const SORT_OPTIONS: readonly (readonly [Sort, string])[] = [
   ["oner", "Sıralama: Öne Çıkanlar"],
-  ["artan", "Sıralama: Fiyat (Artan)"],
-  ["azalan", "Sıralama: Fiyat (Azalan)"],
   ["isim", "Sıralama: İsim (A-Z)"],
 ];
-
-const formatPrice = (price: number) => `₺${new Intl.NumberFormat("tr-TR").format(price)}`;
 
 // Dekoratif mermer: public/bg-blocks.webp (ana sayfadaki mermerle aynı)
 const marbleStyle = (position: string, direction: string) => ({
@@ -73,9 +70,6 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
 
   const visible = useMemo(() => {
     const list = [...products];
-    const BIG = Number.MAX_SAFE_INTEGER;
-    if (sort === "artan") list.sort((a, b) => (a.price ?? BIG) - (b.price ?? BIG));
-    if (sort === "azalan") list.sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
     if (sort === "isim") list.sort((a, b) => a.name.localeCompare(b.name, "tr"));
     return list;
   }, [products, sort]);
@@ -123,7 +117,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
           </nav>
 
           <div className="nil-nav__tools">
-            <Link to="/" hash="iletisim" className="nil-quote">Teklif Al</Link>
+            <a href={whatsappOfferUrl()} target="_blank" rel="noopener noreferrer" className="nil-quote">Teklif Al</a>
             <SiteSearch sections={SECTIONS} base="/" />
             <button
               type="button"
@@ -251,7 +245,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                   </div>
                   <div className="flex items-end justify-between gap-3 px-5 pb-5 pt-2">
                     <p className="text-sm text-foreground/90">
-                      {product.price !== undefined ? formatPrice(product.price) : <span className="text-xs text-foreground/60">Fiyat için teklif alın</span>}
+                      <span className="text-xs text-foreground/60">Ölçüye özel teklif · WhatsApp</span>
                     </p>
                     <button
                       type="button"
@@ -291,11 +285,11 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                   <DialogTitle className="mt-3 font-display text-3xl font-normal leading-tight">{quick.name}</DialogTitle>
                   <DialogDescription className="mt-3 text-sm font-light text-foreground/70">{quick.material}</DialogDescription>
                   <p className="mt-6 text-lg text-foreground">
-                    {quick.price !== undefined ? formatPrice(quick.price) : <span className="text-sm text-foreground/60">Fiyat için teklif alın</span>}
+                    <span className="text-sm leading-6 text-foreground/70">Fiyat; ölçü, malzeme ve tasarım tercihinize göre WhatsApp üzerinden paylaşılır.</span>
                   </p>
                 </div>
                 <Button asChild variant="goldOutline" size="lg" className="h-12 px-6 text-xs uppercase">
-                  <Link to="/" hash="iletisim" onClick={() => setQuick(null)}>Teklif al <ArrowUpRight /></Link>
+                  <a href={whatsappOfferUrl(quick.name)} target="_blank" rel="noopener noreferrer" onClick={() => setQuick(null)}>WhatsApp’tan teklif al <ArrowUpRight /></a>
                 </Button>
               </div>
             </div>

@@ -19,9 +19,9 @@ export const legalDocuments: Record<string, LegalDocument> = {
     title: "Satıcı ve İletişim Bilgileri",
     description: "Nil Mobilya web sitesinin işleteni ve sözleşmede satıcı sıfatını taşıyan gerçek kişi veya tüzel kişiye dair bilgiler.",
     sections: [
-      { heading: "Resmî işletme kimliği", text: [`Marka: ${s.brand}`, `Satıcı unvanı: ${s.sellerName}`, `İşletme adresi: ${s.sellerAddress}`, `Resmî kayıt bilgileri: ${s.businessRegistration}`] },
-      { heading: "İletişim", text: [`E-posta: ${s.email}`, `Telefon: ${s.phone}`] },
-      { heading: "Satış yöntemi", text: ["Ürünleri bu sitede inceleyebilir ve sipariş/teklif için bizimle iletişime geçebilirsiniz. Güncel fiyat, ürün özellikleri, teslimat ve ödeme koşulları sipariş öncesinde yazılı olarak teyit edilir."] },
+      { heading: "Resmî işletme kimliği", text: [`Marka: ${s.brand}`, `Satıcı unvanı: ${s.sellerName}`, `Resmî işletme adresi: ${s.sellerAddress}`, `Mağaza/atölye adresi: ${s.showroomAddress}`, `Resmî kayıt bilgileri: ${s.businessRegistration}`] },
+      { heading: "İletişim", text: [`E-posta: ${s.email}`, `Telefon: ${s.phone}`, `İkinci telefon: ${s.additionalPhone}`] },
+      { heading: "Satış yöntemi", text: ["Web sitemiz ürünlerin tanıtımı ve teklif talepleri içindir; sabit ürün fiyatı gösterilmez. Müşteriler WhatsApp üzerinden ürün, ölçü, malzeme, renk ve teslimat taleplerini paylaşır. Satıcı işletme, vergi dâhil fiyatı ve diğer koşulları yazılı teklif olarak iletir. Gerekli ön bilgilendirme ve sözleşme onaylarından sonra üretim ve teslimat planlanır."] },
     ],
   },
   "kvkk-aydinlatma": {
@@ -58,18 +58,18 @@ export const legalDocuments: Record<string, LegalDocument> = {
     title: "Teslimat, İade ve Cayma Hakkı",
     description: "Standart ürünler ile alıcının talebine göre özel hazırlanan mobilyalarda farklı kurallar uygulanabilir.",
     sections: [
-      { heading: "Teslimat", text: ["Ürün özellikleri, vergiler dâhil toplam bedel, nakliye/montaj ücretleri ve taahhüt edilen teslim süresi her sipariş için önceden yazılı olarak bildirilir."] },
+      { heading: "Teslimat", text: ["Ölçü ve tasarım bilgileri WhatsApp üzerinden netleştirildikten sonra ürün özellikleri, vergiler dâhil toplam bedel, nakliye/montaj ücretleri ve taahhüt edilen teslim süresi her sipariş için önceden yazılı olarak bildirilir. Onaydan sonra ürün üretilir ve teslim edilir."] },
       { heading: "Cayma hakkı", text: ["Mesafeli satışlarda kural olarak tüketicinin 14 günlük cayma hakkı vardır. Cayma bildirimi, iade süreci, nakliye ve geri ödeme koşulları sipariş öncesinde açıklanır."] },
       { heading: "Kişiye özel üretim istisnası", text: ["Tüketicinin istekleri veya kişisel ihtiyaçları doğrultusunda hazırlanan mallarda cayma hakkı istisnası uygulanabilir. Her mobilya otomatik olarak istisna kapsamında değildir; somut siparişin kişiye özel niteliği değerlendirilmelidir."] },
       { heading: "Ayıplı ürünler", text: ["Cayma hakkına ilişkin bir istisna bulunması, 6502 sayılı Kanun kapsamında ayıplı mal için tanınan tüketici haklarını kaldırmaz."] },
-      { heading: "İletişim", text: [`Talep kanalı: ${s.email} ve ${s.phone}. Satıcı adresi: ${s.sellerAddress}.`] },
+      { heading: "İletişim", text: [`Talep kanalı: ${s.email}, ${s.phone} veya ${s.additionalPhone}. Satıcı adresi: ${s.sellerAddress}.`] },
     ],
   },
   "on-bilgilendirme": {
     title: "Ön Bilgilendirme",
     description: "Bu genel web sayfası tek başına yeterli değildir; her alıcıya siparişinden ÖNCE somut siparişe özel ön bilgilendirme verilmelidir.",
     sections: [
-      { heading: "Siparişin temel bilgileri", text: ["Ürün modeli, ölçü, malzeme, renk, adet ve varsa kişiye özel üretim ayrıntıları açıkça kaydedilir."], bullets: ["Satıcının gerçek kimliği ve iletişim bilgileri", "Vergi dâhil toplam fiyat ve varsa nakliye/montaj ücretleri", "Ödeme yöntemi, teslimat adresi ve teslimat zamanı", "Cayma hakkı ve uygulanacak somut istisnalar", "Başvuru, şikâyet ve hak arama yolları"] },
+      { heading: "Siparişin temel bilgileri", text: ["Müşterinin WhatsApp üzerinden seçtiği ürün modeli, ölçüler, malzeme, renk, adet ve varsa kişiye özel üretim ayrıntıları sipariş öncesinde yazılı olarak kaydedilir."], bullets: ["Satıcının gerçek kimliği ve iletişim bilgileri", "Vergi dâhil toplam fiyat ve varsa nakliye/montaj ücretleri", "Ödeme yöntemi, teslimat adresi ve teslimat zamanı", "Cayma hakkı ve uygulanacak somut istisnalar", "Başvuru, şikâyet ve hak arama yolları"] },
       { heading: "Siparişin kesinleşmesi", text: ["Ön bilgilendirme, siparişin ödeme yükümlülüğü doğurduğu hususu ve müşterinin sipariş onayı kalıcı biçimde kayıt altına alınmalıdır. WhatsApp üzerinden gelen talep de somut koşullara göre mesafeli satış niteliğinde olabilir."] },
     ],
   },
