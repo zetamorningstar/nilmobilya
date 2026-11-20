@@ -8,7 +8,7 @@
 export const legalInfo = {
   brand: "Nil Mobilya",
   website: "https://nilmobilyatasarim.com",
-  sellerName: "[DAYINIZIN İŞLETMESİNİN RESMÎ UNVANI - TEYİT EDİLECEK]",
+  sellerName: "[SATIŞI GERÇEKLEŞTİREN İŞLETMENİN RESMÎ UNVANI - DOLDURULACAK]",
   sellerAddress: "[İŞLETMENİN RESMÎ TEBLİGAT ADRESİ - KAYITLA TEYİT EDİLECEK]",
   showroomAddress: "580/3. Sk. 24-26A, Karayolları, 34255 Gaziosmanpaşa / İstanbul",
   email: "nilmobilyatasarim@gmail.com",

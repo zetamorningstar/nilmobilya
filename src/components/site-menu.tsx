@@ -49,7 +49,7 @@ export function SiteMenu({
         onClick={onClose}
         className="absolute inset-0 cursor-default bg-black/55 backdrop-blur-sm"
       />
-      <aside className="absolute inset-y-0 right-0 flex w-[min(100vw,30rem)] flex-col border-l border-foreground/15 bg-background px-8 py-7 animate-in slide-in-from-right duration-500 md:px-12">
+      <aside className="absolute inset-y-0 right-0 flex w-[min(100vw,30rem)] flex-col overflow-y-auto border-l border-foreground/15 bg-background px-8 py-7 animate-in slide-in-from-right duration-500 md:px-12">
         <div className="flex items-center justify-between">
           <span className="font-display text-xl uppercase tracking-[0.08em] text-primary">Menü</span>
           <button
