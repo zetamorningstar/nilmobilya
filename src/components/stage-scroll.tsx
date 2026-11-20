@@ -161,6 +161,8 @@ export function initStage(options: { persist?: boolean } = {}) {
   if (!stage) return undefined;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
   if (window.innerHeight < MIN_HEIGHT) return undefined;
+  // Touch devices need natural page scrolling; the desktop scene lock clips mobile content.
+  if (window.matchMedia("(max-width: 1099px), (pointer: coarse)").matches) return undefined;
 
   const root = document.documentElement;
   const scenes = Array.from(stage.querySelectorAll<HTMLElement>(".nil-scene"));
