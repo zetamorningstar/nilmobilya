@@ -25,7 +25,7 @@ export function SiteAnalytics(){
   document.addEventListener("click",click,true);
   return()=>{clearInterval(interval);document.removeEventListener("click",click,true)};
  },[choice]);
- if(choice!==null)return null;
+ if(choice!==null || (typeof window!=="undefined" && window.location.pathname.startsWith("/admin")))return null;
  return <aside aria-label="Analitik tercihleri" className="fixed bottom-5 left-1/2 z-[9999] w-[min(440px,calc(100vw-32px))] -translate-x-1/2 rounded-xl border border-[#6b5940] bg-[#18191e] p-5 text-[#f2eee7] shadow-2xl">
   <p className="text-xs font-bold uppercase tracking-[.16em] text-[#d5b37c]">Nil Mobilya · Gizlilik</p>
   <p className="mt-3 text-sm leading-6 text-[#d1cdd0]">Sitemizi geliştirmek için sayfa görüntülemelerini ve WhatsApp tıklamalarını anonim olay sayıları olarak ölçmek istiyoruz. Kabul etmezsen ölçüm yapılmaz. Tercihini daha sonra tarayıcı verilerini temizleyerek sıfırlayabilirsin.</p>
