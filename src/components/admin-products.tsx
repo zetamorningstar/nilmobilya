@@ -49,8 +49,8 @@ export function AdminProducts() {
   const {error:e}=await db.from("products").delete().eq("id",p.id);
   if(e)setError(e.message);else{setSuccess("Ürün silindi.");await load()}
  }
- async function addCategory(e:FormEvent){
-  e.preventDefault();const db=getSupabaseClient();if(!db||!newCategory.trim())return;
+ async function addCategory(event:FormEvent){
+  event.preventDefault();const db=getSupabaseClient();if(!db||!newCategory.trim())return;
   const {error:e}=await db.from("categories").insert({name:newCategory.trim(),slug:slugify(newCategory)});
   if(e)setError(e.message);else{setNewCategory("");setSuccess("Kategori eklendi.");await load()}
  }
