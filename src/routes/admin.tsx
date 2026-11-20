@@ -4,6 +4,7 @@ import { ArrowLeft, BarChart3, Database, Images, LockKeyhole, LogOut, Package, L
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { AdminProducts } from "@/components/admin-products";
 import { AdminInsights } from "@/components/admin-insights";
+import { AdminTraffic } from "@/components/admin-traffic";
 import "@/styles/admin-polish.css";
 
 export const Route = createFileRoute("/admin")({ component: AdminPage });
@@ -22,7 +23,7 @@ function AdminPage() {
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [section, setSection] = useState<"overview" | "products">("overview");
+  const [section, setSection] = useState<"overview" | "products" | "analytics">("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [counts, setCounts] = useState<{total:number;published:number;categories:number}|null>(null);
   useEffect(()=>{ if(status!=="admin")return; const db=getSupabaseClient();if(!db)return;let active=true;Promise.all([db.from("products").select("id,published"),db.from("categories").select("id")]).then(([p,c])=>{if(active&&!p.error&&!c.error)setCounts({total:p.data?.length??0,published:p.data?.filter(x=>x.published).length??0,categories:c.data?.length??0})});return()=>{active=false}},[status,section]);
@@ -84,10 +85,10 @@ function AdminPage() {
     {id:"overview",label:"Genel Bakış",icon:LayoutDashboard,enabled:true},
     {id:"products",label:"Ürün Yönetimi",icon:Package,enabled:true},
     {id:"showcase",label:"Sergimiz",icon:Images,enabled:false},
-    {id:"analytics",label:"Analitik",icon:BarChart3,enabled:false},
+    {id:"analytics",label:"Analitik",icon:BarChart3,enabled:true},
     {id:"database",label:"Veritabanı",icon:Database,enabled:false},
   ] as const;
-  const selectSection=(id:"overview"|"products")=>{setSection(id);setSidebarOpen(false)};
+  const selectSection=(id:"overview"|"products"|"analytics")=>{setSection(id);setSidebarOpen(false)};
   const panel = "admin-panel rounded-xl border border-[#282a31] bg-[#17181d]";
   const smallLabel = "text-[11px] font-semibold uppercase tracking-[.15em] text-[#92949e]";
   return <main className="min-h-screen bg-[#090a0d] text-[#f2f2f4]">
@@ -114,11 +115,11 @@ function AdminPage() {
       </aside>
       <div className="min-w-0 flex-1">
         <header className="sticky top-0 z-20 flex h-[72px] items-center justify-between border-b border-[#303138] bg-[#111216]/95 px-5 backdrop-blur-xl sm:px-8">
-          <div className="flex items-center gap-3"><button onClick={()=>setSidebarOpen(true)} aria-label="Menüyü aç" className="mr-1 lg:hidden"><Menu size={22}/></button><span className="text-xs text-[#777984]">Yönetim</span><ChevronRight size={14} className="text-[#666874]"/><span className="text-sm font-semibold">{section==="products"?"Ürün Yönetimi":"Genel Bakış"}</span></div>
+          <div className="flex items-center gap-3"><button onClick={()=>setSidebarOpen(true)} aria-label="Menüyü aç" className="mr-1 lg:hidden"><Menu size={22}/></button><span className="text-xs text-[#777984]">Yönetim</span><ChevronRight size={14} className="text-[#666874]"/><span className="text-sm font-semibold">{section==="products"?"Ürün Yönetimi":section==="analytics"?"Analitik":"Genel Bakış"}</span></div>
           <div className="flex items-center gap-4"><span className="hidden items-center gap-2 rounded-full border border-[#3c5144] bg-[#1c3026] px-3 py-1.5 text-[11px] font-medium text-[#92d9aa] sm:inline-flex"><span className="h-1.5 w-1.5 rounded-full bg-[#71d99b]"/> Yönetici doğrulandı</span><Link to="/" className="inline-flex items-center gap-2 rounded-lg border border-[#383a43] px-3 py-2 text-xs text-[#c4c5cc] hover:bg-[#292b32]"><ArrowLeft size={15}/> <span className="hidden sm:inline">Siteye dön</span></Link></div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-10">
-          {section==="products"?<><div className="mb-7"><p className={smallLabel}>Katalog / İçerik Yönetimi</p><h1 className="mt-2 text-3xl font-bold tracking-tight">Ürün Yönetimi</h1><p className="mt-2 text-sm text-[#999ba6]">Kategorileri, taslakları ve ürün bilgilerini tek yerden yönet.</p></div><AdminProducts/></>:
+          {section==="analytics"?<AdminTraffic/>:section==="products"?<><div className="mb-7"><p className={smallLabel}>Katalog / İçerik Yönetimi</p><h1 className="mt-2 text-3xl font-bold tracking-tight">Ürün Yönetimi</h1><p className="mt-2 text-sm text-[#999ba6]">Kategorileri, taslakları ve ürün bilgilerini tek yerden yönet.</p></div><AdminProducts/></>:
           <>
             <div className="mb-8 flex flex-wrap items-end justify-between gap-5"><div><p className={smallLabel}>Yönetim Merkezi / Dashboard</p><h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Genel Bakış</h1><p className="mt-3 text-sm text-[#999ba6]">Nil Mobilya içerik yönetimine hoş geldin.</p></div><button onClick={()=>selectSection("products")} className="flex items-center gap-2 rounded-lg bg-[#c5a16d] px-5 py-3 text-sm font-semibold text-[#1b1916] hover:bg-[#e0bb85]"><PlusIcon/> Ürün Yönetimine Git</button></div>
             <div className="mb-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -131,7 +132,7 @@ function AdminPage() {
             </div>
             <AdminInsights counts={counts}/>
             <div className="grid gap-5 xl:grid-cols-[1.65fr_1fr]">
-              <section className={panel+" overflow-hidden"}><div className="flex items-center justify-between border-b border-[#34363d] px-6 py-5"><div><h2 className="text-base font-semibold">Hızlı Erişim</h2><p className="mt-1 text-xs text-[#8e909a]">Yönetim araçları</p></div><LayoutDashboard size={18} className="text-[#9e825c]"/></div><div className="grid gap-3 p-5 sm:grid-cols-2">{modules.map(({title,description,icon:Icon})=><button key={title} disabled={title!=="Ürünler"} onClick={()=>title==="Ürünler"&&selectSection("products")} className={`rounded-xl border border-[#373942] bg-[#1c1d23] p-5 text-left transition ${title==="Ürünler"?"hover:border-[#c5a16d]/70 hover:bg-[#2c2b2b]":"cursor-not-allowed opacity-60"}`}><div className="mb-5 flex items-center justify-between"><Icon size={21} className="text-[#c5a16d]"/><span className="text-[10px] uppercase tracking-wider text-[#999ba6]">{title==="Ürünler"?"Aktif":"Yakında"}</span></div><h3 className="text-sm font-semibold">{title}</h3><p className="mt-2 text-xs leading-5 text-[#9c9ea8]">{description}</p></button>)}</div></section>
+              <section className={panel+" overflow-hidden"}><div className="flex items-center justify-between border-b border-[#34363d] px-6 py-5"><div><h2 className="text-base font-semibold">Hızlı Erişim</h2><p className="mt-1 text-xs text-[#8e909a]">Yönetim araçları</p></div><LayoutDashboard size={18} className="text-[#9e825c]"/></div><div className="grid gap-3 p-5 sm:grid-cols-2">{modules.map(({title,description,icon:Icon})=><button key={title} disabled={title!=="Ürünler"&&title!=="Analitik"} onClick={()=>title==="Ürünler"?selectSection("products"):title==="Analitik"?selectSection("analytics"):undefined} className={`rounded-xl border border-[#373942] bg-[#1c1d23] p-5 text-left transition ${(title==="Ürünler"||title==="Analitik")?"hover:border-[#c5a16d]/70 hover:bg-[#2c2b2b]":"cursor-not-allowed opacity-60"}`}><div className="mb-5 flex items-center justify-between"><Icon size={21} className="text-[#c5a16d]"/><span className="text-[10px] uppercase tracking-wider text-[#999ba6]">{title==="Ürünler"||title==="Analitik"?"Aktif":"Yakında"}</span></div><h3 className="text-sm font-semibold">{title}</h3><p className="mt-2 text-xs leading-5 text-[#9c9ea8]">{description}</p></button>)}</div></section>
               <div className="space-y-5"><section className={panel+" p-6"}><div className="mb-5 flex items-center gap-3"><ShieldCheck className="text-[#8ad0a4]" size={21}/><h2 className="text-base font-semibold">Sistem Durumu</h2></div><div className="space-y-4 text-sm"><div className="flex justify-between gap-3"><span className="text-[#a0a2ad]">Yönetici oturumu</span><span className="text-[#8ad0a4]">Aktif</span></div><div className="flex justify-between gap-3"><span className="text-[#a0a2ad]">Ürün veritabanı</span><span className="text-[#d8bd8d]">{counts?"Bağlı":"Kontrol ediliyor"}</span></div><div className="flex justify-between gap-3"><span className="text-[#a0a2ad]">Trafik analizi</span><span className="text-[#8c8e99]">Bekliyor</span></div></div></section><section className={panel+" p-6"}><div className="mb-3 flex items-center gap-3"><CircleHelp size={20} className="text-[#c5a16d]"/><h2 className="text-base font-semibold">Sonraki Adım</h2></div><p className="text-sm leading-6 text-[#a0a2ad]">Ürünleri yönetebilir, kategoriler oluşturabilir ve yayın durumunu değiştirebilirsin. Fotoğraf yükleme ve analitik bağlantıları sonraki geliştirmede eklenecek.</p></section></div>
             </div>
           </>}
