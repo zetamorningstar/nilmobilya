@@ -3799,3 +3799,35 @@ html.nil-staged .nil-index { display: flex; }
 .nil-scene--col .kcr-card--small .kcr-card__gradient {
   background:linear-gradient(90deg,rgba(8,7,6,.91) 0%,rgba(8,7,6,.73) 29%,rgba(8,7,6,.12) 63%,transparent 85%);
 }
+
+/* Hero 2026: uploaded photo, original wide composition, dark-gold identity */
+.nil-bg__img {
+  inset:0;
+  background-image:url("/images/anasayfa/hero.webp") !important;
+  background-size:contain;
+  background-position:center center;
+  background-repeat:no-repeat;
+  background-color:#0a0807;
+}
+.nil-scene--hero .nil-hero2__veil {
+  background:linear-gradient(90deg,rgba(5,4,4,.76) 0%,rgba(5,4,4,.53) 33%,rgba(5,4,4,.12) 64%,transparent 100%);
+}
+.nil-scene--hero .nil-hero2__content {
+  left:clamp(24px,6vw,105px);
+  top:clamp(135px,24svh,235px);
+  max-width:min(740px,calc(100vw - 48px));
+}
+.nil-scene--hero .nil-hero2__title {
+  font-size:clamp(34px,3.6vw,68px);
+}
+.nil-scene--hero .nil-hero2__text {max-width:520px}
+.nil-scene--hero .nil-hero2__ctawrap {display:flex;flex-wrap:wrap;gap:14px}
+.nil-scene--hero .nil-hero2__cta {min-width:230px;gap:15px}
+.nil-scene--hero .nil-hero2__cta--secondary {background:rgba(12,10,9,.42)}
+@media(max-width:767px) {
+ .nil-bg__img {background-size:cover;background-position:60% center}
+ .nil-scene--hero .nil-hero2__content {top:clamp(120px,19svh,190px)}
+ .nil-scene--hero .nil-hero2__title {font-size:clamp(31px,7vw,45px)}
+ .nil-scene--hero .nil-hero2__ctawrap {gap:10px}
+ .nil-scene--hero .nil-hero2__cta {min-width:0;width:100%;max-width:330px}
+}

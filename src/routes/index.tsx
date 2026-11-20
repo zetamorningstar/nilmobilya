@@ -164,19 +164,23 @@ function Index() {
           <div className="nil-hero2__content">
             <div className="nil-hero2__eyebrow">
               <span data-s="rule" aria-hidden="true" className="nil-hero2__line" />
-              <p data-s="text">Modern yaşam alanları</p>
+              <p data-s="text">Özel üretim &amp; mimari ahşap çözümleri</p>
             </div>
             <h1 className="nil-hero2__title">
-              <span data-s="text" className="block">Zamansız Tasarımlar,</span>
-              <span data-s="text" className="nil-hero2__gold block">Modern Yaşamlar.</span>
+              <span data-s="text" className="block">Yaşam Alanınıza Özel,</span>
+              <span data-s="text" className="nil-hero2__gold block">Zamansız Tasarımlar.</span>
             </h1>
             <p data-s="text" className="nil-hero2__text">
-              Nil Mobilya, estetik ve konforu bir araya getirerek hayallerinizdeki yaşam alanlarını gerçeğe dönüştürür.
+              Mobilyadan mimari projelere; yaşam ve çalışma alanlarınız için özel ölçü mobilya, ahşap kaplama ve projeye özel üretim çözümleri sunuyoruz.
             </p>
             <div data-s="fade" className="nil-hero2__ctawrap">
               <a href="#koleksiyon" className="nil-hero2__cta">
                 <span>Koleksiyonu keşfet</span>
                 <ArrowRight className="size-4" strokeWidth={1.4} />
+              </a>
+              <a href="https://wa.me/905360236146?text=Merhaba%2C%20%C3%B6zel%20%C3%BCretim%20i%C3%A7in%20teklif%20almak%20istiyorum." className="nil-hero2__cta nil-hero2__cta--secondary" target="_blank" rel="noopener noreferrer">
+                <span>WhatsApp'tan teklif al</span>
+                <ArrowUpRight className="size-4" strokeWidth={1.4} />
               </a>
             </div>
           </div>
@@ -188,7 +192,7 @@ function Index() {
           </div>
 
           <ul data-s="fade" className="nil-hero2__tags">
-            {["Özel üretim", "Modern tasarım", "Üst düzey kalite"].map((item, i) => (
+            {["Özel ölçü üretim", "Mimari ahşap uygulamalar", "Usta işçilik"].map((item, i) => (
               <li key={item} className="flex items-center gap-[18px]">
                 {i > 0 && <span aria-hidden="true" className="text-foreground/40">/</span>}
                 {item}
