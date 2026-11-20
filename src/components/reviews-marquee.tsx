@@ -1,148 +1,57 @@
 import { useState } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-
+import { MessageCircle, Pencil, ImagePlus, Send, Star } from "lucide-react";
 import heroImage from "@/assets/nil-hero.jpg";
-import sofaImage from "@/assets/nil-sofa.jpg";
-import diningImage from "@/assets/nil-dining.jpg";
-import chairImage from "@/assets/nil-chair.jpg";
 
-interface Review {
-  name: string;
-  city: string;
-  text: string;
-}
-
-// Öne çıkan yorumlar (sağdaki fotoğrafla birlikte değişir)
-const featured: (Review & { image: string })[] = [
-  {
-    name: "Mert K.",
-    city: "İstanbul",
-    image: heroImage,
-    text: "Nil Mobilya ile çalışmak gerçekten çok keyifliydi. Hem tasarım sürecinde hem de teslimatta her adımda profesyonel ve ilgili bir ekip vardı. Evimiz şimdi tam olarak hayal ettiğimiz gibi.",
-  },
-  {
-    name: "Elif A.",
-    city: "İstanbul",
-    image: sofaImage,
-    text: "Salonumuzun tamamını Nil Mobilya ile yeniledik. Oranlar ve kumaş dokusu beklediğimizin çok üzerinde çıktı.",
-  },
-  {
-    name: "Kaan D.",
-    city: "Bursa",
-    image: diningImage,
-    text: "Ofisimiz için adetli üretim yaptılar. Teslim süresi ve renk tutarlılığı kusursuzdu.",
-  },
-  {
-    name: "Ahmet K.",
-    city: "Antalya",
-    image: chairImage,
-    text: "Kadife döşemenin tonu evdeki ışıkla birebir uyumlu geldi. Sessiz ama güçlü bir duruşu var.",
-  },
-];
-
-// Alttaki üç yorum
-const reviews: Review[] = [
-  {
-    name: "Ayşe D.",
-    city: "Ankara",
-    text: "Kaliteyi gerçekten hissediyorsunuz. Özellikle malzeme seçimi ve işçilik konusunda çok titizler. Kesinlikle tavsiye ederim.”",
-  },
-  {
-    name: "Emre T.",
-    city: "İzmir",
-    text: "Hayal ettiğimizden çok daha fazlasını sundular. Hem estetik hem de konfor açısından beklentimizin üzerinde bir sonuç aldık.”",
-  },
-  {
-    name: "Selin Y.",
-    city: "Bursa",
-    text: "Evimdeki her köşede Nil Mobilya'nın imzası var. Modern tasarımları ve kaliteli malzemeleri için teşekkür ederim.”",
-  },
-];
-
-const pad = (n: number) => String(n).padStart(2, "0");
+type Review = { id: number; name: string; product: string; rating: number; text: string };
+const STORAGE_KEY = "nil-reviews-preview";
 
 export function ReviewsMarquee() {
-  const [index, setIndex] = useState(0);
-  const current = featured[index]!;
-  const step = (dir: 1 | -1) => setIndex((v) => (v + dir + featured.length) % featured.length);
-
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [name, setName] = useState("");
+  const [product, setProduct] = useState("");
+  const [rating, setRating] = useState(0);
+  const [message, setMessage] = useState("");
+  const [photoName, setPhotoName] = useState("");
+  const [notice, setNotice] = useState("");
+  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!name.trim() || !product || !rating || !message.trim()) {
+      setNotice("Lütfen adınızı, ürününüzü, puanınızı ve yorumunuzu doldurun.");
+      return;
+    }
+    // Üyelik ve sipariş doğrulama altyapısı kurulana kadar yorumlar sunucuya gönderilmez.
+    const review = { id: Date.now(), name: name.trim(), product, rating, text: message.trim() };
+    setReviews((old) => [review, ...old]);
+    setMessage("");
+    setRating(0);
+    setPhotoName("");
+    setNotice("Yorumunuz yalnızca bu sayfada önizleme olarak görünüyor. Henüz kaydedilmiyor veya yayınlanmıyor.");
+  };
   return (
-    <section id="yorumlar" aria-label="Müşteri yorumları" lang="tr" className="nil-scene nil-scene--rev">
-      <div className="nil-scene__body rev">
-        {/* Başlık */}
-        <div className="rev-head">
-          <div className="rev-eyebrow">
-            <span aria-hidden="true" className="rev-eyebrow__line" />
-            <p data-s="text">Müşteri deneyimleri</p>
-          </div>
-          <h2 data-s="text" className="rev-title">Her detayda memnuniyet.</h2>
-          <p data-s="text" className="rev-sub">Tasarımlarımızı yaşam alanlarına taşıyanların deneyimleri.</p>
+    <section id="yorumlar" aria-label="Müşteri yorumları" lang="tr" className="nil-scene nil-scene--rev nil-review-page">
+      <div className="nil-review-page__backdrop" style={{ backgroundImage: `linear-gradient(90deg,rgba(9,7,6,.46),rgba(9,7,6,.58)),url(${heroImage})` }} />
+      <div className="nil-review-page__layout">
+        <div className="nil-review-page__intro" data-s="fade">
+          <p className="nil-review-page__eyebrow">NİL MOBİLYA · MÜŞTERİ DENEYİMLERİ</p>
+          <h2>Yorumlar <span aria-hidden="true">—</span></h2>
+          <p>Nil Mobilya'dan alışveriş yapanların deneyimlerini keşfedin ve siz de deneyiminizi paylaşın.</p>
         </div>
-
-        {/* Öne çıkan yorum + fotoğraf + sayfalama */}
-        <div className="rev-feature">
-          <div data-s="fade" className="rev-quote">
-            <div key={index} className="rev-quote__in rev-swap">
-              <span aria-hidden="true" className="rev-mark">“</span>
-              <div>
-                <blockquote className="rev-quote__text">
-                  {current.text}
-                  <span className="rev-quote__end">”</span>
-                </blockquote>
-                <p className="rev-by">
-                  <span aria-hidden="true" className="rev-by__dash" />
-                  <b className="rev-by__name">{current.name}</b>
-                  <em aria-hidden="true" className="rev-by__sep">|</em>
-                  <span className="rev-by__city">{current.city}</span>
-                </p>
-              </div>
-            </div>
+        <form className="nil-review-page__form" data-s="frame" onSubmit={submit}>
+          <div className="nil-review-page__formhead"><Pencil size={23}/><div><h3>Yorum Yaz</h3><p>Satın aldığınız ürünle ilgili deneyiminizi paylaşın.</p></div></div>
+          <div className="nil-review-page__fields">
+            <label className="nil-review-page__field"><span>Adınız</span><input value={name} onChange={e=>setName(e.target.value)} placeholder="Adınız ve soyadınız" maxLength={80}/></label>
+            <label className="nil-review-page__field"><span>Ürün seçin</span><select value={product} onChange={e=>setProduct(e.target.value)}><option value="">Ürün seçin</option><option>TV ünitesi</option><option>Dolap sistemi</option><option>Masa</option><option>Sandalye</option><option>Konsol</option><option>Özel üretim</option><option>Diğer</option></select></label>
           </div>
-
-          <div data-s="frame" className="rev-photo">
-            <img
-              key={current.image}
-              src={current.image}
-              alt="Nil Mobilya ile yenilenen bir yaşam alanı"
-              width={1280}
-              height={720}
-              decoding="async"
-              className="rev-swap"
-            />
-          </div>
-
-          <div data-s="fade" className="rev-ctrl">
-            <p className="rev-count"><b>{pad(index + 1)}</b> / <span>{pad(featured.length)}</span></p>
-            <div className="rev-arrows">
-              <button type="button" aria-label="Önceki yorum" onClick={() => step(-1)}><ArrowLeft className="size-7" strokeWidth={1} /></button>
-              <button type="button" aria-label="Sonraki yorum" onClick={() => step(1)}><ArrowRight className="size-7" strokeWidth={1} /></button>
-            </div>
-          </div>
-        </div>
-
-        <span data-s="rule" aria-hidden="true" className="rev-divider" />
-
-        {/* Üç yorum */}
-        <div className="rev-cols">
-          {reviews.map((review) => (
-            <figure key={review.name} className="rev-col">
-              <div data-s="fade" className="rev-stars" role="img" aria-label="5 yıldız">★★★★★</div>
-              <blockquote data-s="text" className="rev-col__text">{review.text}</blockquote>
-              <span data-s="rule" aria-hidden="true" className="rev-col__dash" />
-              <figcaption data-s="fade" className="rev-col__by">
-                <b className="rev-by__name">{review.name}</b>
-                <em aria-hidden="true" className="rev-by__sep">|</em>
-                <span className="rev-by__city">{review.city}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-
-        {/* Alt yazı */}
-        <div data-s="fade" className="rev-tag">
-          <i aria-hidden="true" />
-          <p>Gerçek mekânlar, gerçek deneyimler.</p>
-          <i aria-hidden="true" />
+          <div className="nil-review-page__rating"><span>Puanınız</span><div role="group" aria-label="Yıldız puanı">{[1,2,3,4,5].map(n=><button key={n} type="button" aria-label={`${n} yıldız`} aria-pressed={rating===n} onClick={()=>setRating(n)}><Star size={23} fill={n<=rating?"currentColor":"none"}/></button>)}</div></div>
+          <label className="nil-review-page__field"><span>Yorumunuz</span><textarea rows={3} value={message} onChange={e=>setMessage(e.target.value)} placeholder="Deneyiminizi yazın..." maxLength={1200}/></label>
+          <div className="nil-review-page__actions"><label className="nil-review-page__upload"><ImagePlus size={18}/><span>{photoName || "Fotoğraf ekle (yakında)"}</span><input type="file" accept="image/*" disabled aria-label="Fotoğraf yükleme yakında" /></label><button className="nil-review-page__submit" type="submit"><Send size={17}/> Yorumu Önizle</button></div>
+          {notice && <p className="nil-review-page__notice" role="status">{notice}</p>}
+          <p className="nil-review-page__disclaimer">Üyelik, sipariş doğrulama ve yorumların kalıcı kaydı henüz aktif değil. Bu form şimdilik tasarım önizlemesidir.</p>
+        </form>
+        <div className="nil-review-page__results" data-s="fade">
+          <h3>Yorumlarınız</h3>
+          {reviews.length===0 ? <div className="nil-review-page__empty"><MessageCircle size={32}/><strong>Henüz yorum bulunmuyor.</strong><p>İlk yorumu siz yazın, deneyiminizi paylaşın.</p></div> :
+          <div className="nil-review-page__cards">{reviews.map(review=><article key={review.id}><div className="nil-review-page__cardtop"><b>{review.name}</b><span>{"★".repeat(review.rating)}{"☆".repeat(5-review.rating)}</span></div><small>{review.product} · Önizleme</small><p>{review.text}</p></article>)}</div>}
         </div>
       </div>
     </section>
