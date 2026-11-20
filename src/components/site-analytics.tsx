@@ -5,7 +5,9 @@ const KEY="nil-analytics-consent-v1";
 type Consent="accepted"|"rejected"|null;
 export function SiteAnalytics(){
  const [choice,setChoice]=useState<Consent>(null);
+ const [preferencesOpen,setPreferencesOpen]=useState(false);
  useEffect(()=>{const v=localStorage.getItem(KEY);if(v==="accepted"||v==="rejected")setChoice(v)},[]);
+ const choose=(value:"accepted"|"rejected")=>{localStorage.setItem(KEY,value);setChoice(value);setPreferencesOpen(false)};
  useEffect(()=>{
   if(choice!=="accepted")return;
   let last="";
@@ -25,10 +27,11 @@ export function SiteAnalytics(){
   document.addEventListener("click",click,true);
   return()=>{clearInterval(interval);document.removeEventListener("click",click,true)};
  },[choice]);
- if(choice!==null || (typeof window!=="undefined" && window.location.pathname.startsWith("/admin")))return null;
+ if(typeof window!=="undefined" && window.location.pathname.startsWith("/admin"))return null;
+ if(choice!==null && !preferencesOpen)return <button type="button" onClick={()=>setPreferencesOpen(true)} className="fixed bottom-3 left-3 z-[9998] rounded-full border border-[#6b5940]/60 bg-[#18191e]/90 px-3 py-2 text-[11px] text-[#d5b37c] shadow-lg backdrop-blur-md hover:bg-[#24252b]">Analitik tercihleri</button>;
  return <aside aria-label="Analitik tercihleri" className="fixed bottom-5 left-1/2 z-[9999] w-[min(440px,calc(100vw-32px))] -translate-x-1/2 rounded-xl border border-[#6b5940] bg-[#18191e] p-5 text-[#f2eee7] shadow-2xl">
   <p className="text-xs font-bold uppercase tracking-[.16em] text-[#d5b37c]">Nil Mobilya · Gizlilik</p>
-  <p className="mt-3 text-sm leading-6 text-[#d1cdd0]">Sitemizi geliştirmek için sayfa görüntülemelerini ve WhatsApp tıklamalarını anonim olay sayıları olarak ölçmek istiyoruz. Kabul etmezsen ölçüm yapılmaz. Tercihini daha sonra tarayıcı verilerini temizleyerek sıfırlayabilirsin.</p>
-  <div className="mt-4 flex gap-3"><button onClick={()=>{localStorage.setItem(KEY,"rejected");setChoice("rejected")}} className="flex-1 rounded-lg border border-[#51525a] px-4 py-3 text-sm">Reddet</button><button onClick={()=>{localStorage.setItem(KEY,"accepted");setChoice("accepted")}} className="flex-1 rounded-lg bg-[#c6a16a] px-4 py-3 text-sm font-semibold text-[#191919]">Kabul Et</button></div>
+  <p className="mt-3 text-sm leading-6 text-[#d1cdd0]">Sitemizi geliştirmek için sayfa görüntülemelerini ve WhatsApp tıklamalarını anonim olay sayıları olarak ölçmek istiyoruz. Kabul etmezsen ölçüm yapılmaz. Tercihini istediğin zaman bu sayfadaki “Analitik tercihleri” düğmesinden değiştirebilirsin.</p>
+  <div className="mt-4 flex gap-3"><button onClick={()=>choose("rejected")} className="flex-1 rounded-lg border border-[#51525a] px-4 py-3 text-sm">Reddet</button><button onClick={()=>choose("accepted")} className="flex-1 rounded-lg bg-[#c6a16a] px-4 py-3 text-sm font-semibold text-[#191919]">Kabul Et</button></div>
  </aside>;
 }
