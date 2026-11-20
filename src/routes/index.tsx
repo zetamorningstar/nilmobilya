@@ -13,6 +13,7 @@ import { ReviewsMarquee } from "@/components/reviews-marquee";
 import { SiteDevelopmentNotice } from "@/components/site-development-notice";
 import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
+import { GraphiteCinema } from "@/components/graphite-cinema";
 import { AboutSection } from "@/components/about-section";
 import { CustomSection } from "@/components/custom-section";
 import { ContactSection } from "@/components/contact-section";
@@ -130,6 +131,7 @@ function Index() {
 
   return (
     <main className="min-h-screen text-foreground">
+      <GraphiteCinema />
       <StageScroll />
       <SiteDevelopmentNotice />
 
