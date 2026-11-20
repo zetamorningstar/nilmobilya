@@ -4366,3 +4366,45 @@ html.nil-staged .nil-index { display: flex; }
  html.nil-staged .nil-stage #hikaye {background-image:radial-gradient(ellipse at 28% 79%,rgba(44,34,28,.12),transparent 66%),linear-gradient(150deg,#090808,#100e0c 55%,#080807)}
  html.nil-staged .nil-stage #iletisim {background-image:radial-gradient(ellipse at 71% 17%,rgba(46,34,28,.12),transparent 66%),linear-gradient(120deg,#090808,#110e0c 58%,#080807)}
 }
+
+
+/* Refined image-card hover: quiet, controlled motion without jarring zoom. */
+@media (hover: hover) and (pointer: fine) {
+  .nil-scene--col .kcr-card,
+  .nil-scene--col .kcr-card--small {
+    transition: border-color 380ms ease, box-shadow 380ms ease !important;
+  }
+  .nil-scene--col .kcr-card:hover,
+  .nil-scene--col .kcr-card--small:hover {
+    transform: none !important;
+    border-color: rgba(180, 162, 145, .48) !important;
+    box-shadow: 0 14px 32px rgba(0,0,0,.17);
+  }
+  .nil-scene--col .kcr-card .kcr-card__hero,
+  .nil-scene--col .kcr-card--small .kcr-card__hero,
+  .nil-scene--col .kcr-card .kcr-card__photo,
+  .nil-scene--col .kcr-card .kcr-card__slice img {
+    transform: none !important;
+    transition: filter 650ms cubic-bezier(.22,1,.36,1) !important;
+    will-change: auto;
+  }
+  .nil-scene--col .kcr-card:hover .kcr-card__hero,
+  .nil-scene--col .kcr-card--small:hover .kcr-card__hero,
+  .nil-scene--col .kcr-card:hover .kcr-card__photo,
+  .nil-scene--col .kcr-card:hover .kcr-card__slice img {
+    transform: none !important;
+    filter: brightness(1.055) !important;
+  }
+  .nil-scene--col .kcr-card__button svg {
+    transition: transform 400ms cubic-bezier(.22,1,.36,1);
+  }
+  .nil-scene--col .kcr-card:hover .kcr-card__button svg {
+    transform: translateX(2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nil-scene--col .kcr-card,
+  .nil-scene--col .kcr-card img {
+    transition: none !important;
+  }
+}
