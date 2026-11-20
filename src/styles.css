@@ -3904,3 +3904,16 @@ html.nil-staged .nil-index { display: flex; }
     linear-gradient(90deg,rgba(5,5,6,.77) 0%,rgba(5,5,6,.54) 36%,rgba(5,5,6,.24) 70%,rgba(5,5,6,.18) 100%),
     linear-gradient(0deg,rgba(5,5,6,.22),rgba(5,5,6,.12));
 }
+
+/* Contact footer: give Instagram/social links breathing room above legal bar. */
+@media (min-width: 1100px) {
+  .nil-scene--ct .ct {
+    grid-template-rows: minmax(0, 229fr) minmax(420px, 366fr) minmax(58px, 58fr);
+  }
+  .nil-scene--ct .ct-info {
+    padding-bottom: 44px;
+  }
+  .nil-scene--ct .ct-foot {
+    align-self: end;
+  }
+}
