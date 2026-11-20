@@ -67,8 +67,8 @@ const allPhotos = [tvPhotos[0], bankoPhotos[0], dolapPhotos[0]].filter((photo): 
 const COLLECTION_CARDS = [
   { slug: "tum-urunler", title: "Tüm Ürünler", description: "Tüm koleksiyonumuzu\ntek bir yerde keşfedin.", images: allPhotos, fallback: tvPhotos[0] },
   { slug: "tv-uniteleri", title: "TV Üniteleri", description: "Yaşam alanlarınıza estetik ve\\nfonksiyon katan TV üniteleri.", images: tvPhotos, fallback: tvPhotos[0] },
-  { slug: "banko", title: "Bankolar", description: "Mekânınıza özel ölçüde üretilen\\nahşap banko ve servis üniteleri.", images: bankoPhotos, fallback: bankoPhotos[0] },
-  { slug: "dolap", title: "Dolap Sistemleri", description: "Ölçünüze göre planlanan\\nözel üretim dolap sistemleri.", images: dolapPhotos, fallback: dolapPhotos[0] },
+  { slug: "banko", title: "Bankolar", description: "Mekânınıza özel ölçüde üretilen\\nahşap banko ve servis üniteleri.", images: [bankoPhotos[2], ...bankoPhotos.filter((_, index) => index !== 2)], fallback: bankoPhotos[2] ?? bankoPhotos[0] },
+  { slug: "dolap", title: "Dolap Sistemleri", description: "Ölçünüze göre planlanan\\nözel üretim dolap sistemleri.", images: [dolapPhoto3, ...dolapPhotos.filter((photo) => photo !== dolapPhoto3)], fallback: dolapPhoto3 },
 ] as const;
 
 function Index() {
