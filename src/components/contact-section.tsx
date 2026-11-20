@@ -78,7 +78,7 @@ export function ContactSection() {
             <div data-s="fade" className="ct-item">
               <span className="ct-item__ico"><MapPin strokeWidth={1.5} /></span>
               <div>
-                <p className="ct-item__t">Mağaza Adresi</p>
+                <p className="ct-item__t">Atölye Adresi</p>
                 <p className="ct-item__l">{ILETISIM.adres[0]}<br />{ILETISIM.adres[1]}</p>
               </div>
             </div>
@@ -162,7 +162,7 @@ export function ContactSection() {
               <span className="ct-map__pin"><MapPin fill="currentColor" strokeWidth={1} /></span>
               <span className="ct-map__tag">Nil Mobilya</span>
             </a>
-            <h3 data-s="text" className="ct-side__t">Mağazamız</h3>
+            <h3 data-s="text" className="ct-side__t">Atölyemiz</h3>
             <p data-s="text" className="ct-side__a">{ILETISIM.adres[0]}<br />{ILETISIM.adres[1]}</p>
             <a data-s="fade" href={MAP_URL} target="_blank" rel="noopener noreferrer" className="ct-side__link">
               <span>Haritada Göster</span>
