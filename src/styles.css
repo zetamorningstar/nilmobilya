@@ -3831,3 +3831,18 @@ html.nil-staged .nil-index { display: flex; }
  .nil-scene--hero .nil-hero2__ctawrap {gap:10px}
  .nil-scene--hero .nil-hero2__cta {min-width:0;width:100%;max-width:330px}
 }
+
+/* Hero framing correction: fill the viewport without letterboxing */
+.nil-bg__img {
+  background-size:cover !important;
+  background-position:center center !important;
+}
+.nil-scene--hero .nil-hero2__veil {
+  background:linear-gradient(90deg,rgba(5,4,4,.57) 0%,rgba(5,4,4,.33) 34%,rgba(5,4,4,.05) 62%,transparent 85%);
+}
+@media(min-width:768px) {
+ .nil-bg__img {background-position:50% 50% !important}
+}
+@media(max-width:767px) {
+ .nil-bg__img {background-position:58% center !important}
+}
