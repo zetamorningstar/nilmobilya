@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MessageCircle, Pencil, ImagePlus, Send, Star } from "lucide-react";
+import { MessageCircle, Pencil, ImagePlus, Send, Star, ShieldCheck, PackageCheck } from "lucide-react";
 import heroImage from "@/assets/nil-hero.jpg";
 
 type Review = { id: number; name: string; product: string; rating: number; text: string };
@@ -34,7 +34,7 @@ export function ReviewsMarquee() {
         <div className="nil-review-page__intro" data-s="fade">
           <p className="nil-review-page__eyebrow">NİL MOBİLYA · MÜŞTERİ DENEYİMLERİ</p>
           <h2>Yorumlar <span aria-hidden="true">—</span></h2>
-          <p>Nil Mobilya'dan alışveriş yapanların deneyimlerini keşfedin ve siz de deneyiminizi paylaşın.</p>
+          <p>Nil Mobilya'dan alışveriş yapanların deneyimlerini keşfedin ve siz de deneyiminizi paylaşın.</p><div className="nil-review-page__trust"><span><ShieldCheck size={20}/> Doğrulanmış alışveriş</span><span><PackageCheck size={20}/> Gerçek deneyimler</span><span><Star size={20}/> Sizin yorumunuz</span></div>
         </div>
         <form className="nil-review-page__form" data-s="frame" onSubmit={submit}>
           <div className="nil-review-page__formhead"><Pencil size={23}/><div><h3>Yorum Yaz</h3><p>Satın aldığınız ürünle ilgili deneyiminizi paylaşın.</p></div></div>
@@ -50,7 +50,7 @@ export function ReviewsMarquee() {
         </form>
         <div className="nil-review-page__results" data-s="fade">
           <h3>Yorumlarınız</h3>
-          {reviews.length===0 ? <div className="nil-review-page__empty"><MessageCircle size={32}/><strong>Henüz yorum bulunmuyor.</strong><p>İlk yorumu siz yazın, deneyiminizi paylaşın.</p></div> :
+          {reviews.length===0 ? <div className="nil-review-page__empty"><MessageCircle size={32}/><strong>Henüz yorum bulunmuyor.</strong><p>İlk yorumu siz yazın, deneyiminizi paylaşın.</p><button type="button" className="nil-review-page__first" onClick={() => document.querySelector<HTMLInputElement>(".nil-review-page__field input")?.focus()}><Pencil size={15}/> İlk Yorumu Yaz</button></div> :
           <div className="nil-review-page__cards">{reviews.map(review=><article key={review.id}><div className="nil-review-page__cardtop"><b>{review.name}</b><span>{"★".repeat(review.rating)}{"☆".repeat(5-review.rating)}</span></div><small>{review.product} · Önizleme</small><p>{review.text}</p></article>)}</div>}
         </div>
       </div>
