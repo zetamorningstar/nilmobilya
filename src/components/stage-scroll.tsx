@@ -3,13 +3,13 @@ import { useEffect } from "react";
 /* ------------------------------------------------------------------ */
 /*  AYARLAR — hızı ve hissi buradan değiştirebilirsin (milisaniye)    */
 /* ------------------------------------------------------------------ */
-const EXIT_MS = 380; // bir öğenin ekran dışına çıkış süresi
-const EXIT_SPREAD = 90; // çıkarken öğeler arası toplam gecikme
-const ENTER_MS = 490; // bir öğenin ekranın altından gelme süresi
-const ENTER_SPREAD = 130; // gelirken öğeler arası toplam gecikme
+const EXIT_MS = 440; // bir öğenin ekran dışına çıkış süresi
+const EXIT_SPREAD = 0; // çıkarken öğeler arası toplam gecikme
+const ENTER_MS = 440; // bir öğenin ekranın altından gelme süresi
+const ENTER_SPREAD = 0; // gelirken öğeler arası toplam gecikme
 const EDGE_PAD = 48; // öğe ekran kenarından bu kadar px daha uzağa gider
-const EASE_IN = "cubic-bezier(0.55, 0, 0.85, 0.45)";
-const EASE_OUT = "cubic-bezier(0.18, 0.8, 0.28, 1)";
+const EASE_IN = "cubic-bezier(0.45, 0, 0.55, 1)";
+const EASE_OUT = "cubic-bezier(0.45, 0, 0.55, 1)";
 const MIN_HEIGHT = 560; // bundan kısa ekranlarda normal kaydırmaya döner
 const STORE_KEY = "nil-scene-index";
 const STEP_GAP = 165; // tekerlekte iki sahne adımı arası en az süre (ms)
@@ -125,7 +125,7 @@ function currentY(el: HTMLElement) {
   return parseFloat(t.split(" ")[1] ?? "0") || 0;
 }
 
-function playAtom(atom: Atom, phase: "in" | "out", dir: Dir, delay: number): Animation[] {
+function playAtom(atom: Atom, phase: "in" | "out", dir: Dir, delay: number, fast = false): Animation[] {
   const { el, kind } = atom;
   const dist = travelDistance(el, phase, dir);
   let startOut = 0;
@@ -134,6 +134,8 @@ function playAtom(atom: Atom, phase: "in" | "out", dir: Dir, delay: number): Ani
     startOut = currentY(el);
     el.getAnimations().forEach((an) => an.cancel());
   }
+  // Elementin eski animasyonundan kalan translate yeni harekete eklenmesin.
+  el.style.translate = "";
   const from = phase === "in" ? dist : startOut;
   const to = phase === "in" ? 0 : dist;
 
@@ -145,9 +147,9 @@ function playAtom(atom: Atom, phase: "in" | "out", dir: Dir, delay: number): Ani
 
   return [
     el.animate(frames, {
-      duration: phase === "in" ? ENTER_MS : EXIT_MS,
+      duration: fast ? 270 : (phase === "in" ? ENTER_MS : EXIT_MS),
       delay,
-      easing: phase === "in" ? EASE_OUT : EASE_IN,
+      easing: fast ? "linear" : (phase === "in" ? EASE_OUT : EASE_IN),
       fill: phase === "in" ? "backwards" : "forwards",
     }),
   ];
@@ -251,12 +253,12 @@ export function initStage(options: { persist?: boolean } = {}) {
     scene.classList.add("is-off");
     scene.classList.remove("is-leaving");
   };
-  const play = (scene: HTMLElement, phase: "in" | "out", dir: Dir) => {
+  const play = (scene: HTMLElement, phase: "in" | "out", dir: Dir, fast: boolean) => {
     const atoms = atomsOf(scene);
     const spread = phase === "in" ? ENTER_SPREAD : EXIT_SPREAD;
     const step = atoms.length > 1 ? spread / (atoms.length - 1) : 0;
     atoms.forEach((atom, index) => {
-      const animations = playAtom(atom, phase, dir, index * step);
+      const animations = playAtom(atom, phase, dir, index * step, fast);
       animations.forEach((animation) => activeAnimations.add(animation));
     });
   };
@@ -267,6 +269,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     if (target === cur && !transitioning) return;
 
     const dir: Dir = target > cur ? 1 : -1;
+    const fast = transitioning;
     desired = target;
     if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
     if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer);
@@ -280,10 +283,10 @@ export function initStage(options: { persist?: boolean } = {}) {
     cancelAnimations(from);
     from.classList.remove("is-off");
     from.classList.add("is-leaving");
-    play(from, "out", dir);
+    play(from, "out", dir, fast);
     cancelAnimations(to);
     to.classList.remove("is-off", "is-leaving");
-    play(to, "in", dir);
+    play(to, "in", dir, fast);
 
     cur = target; // hedef anında aktif olur: ikinci kaydırma landing'i beklemez
     root.style.setProperty("--nil-p", String(cur));
@@ -294,11 +297,11 @@ export function initStage(options: { persist?: boolean } = {}) {
     cleanupTimer = window.setTimeout(() => {
       if (finishedFrom !== scenes[cur]) clearScene(finishedFrom);
       cleanupTimer = undefined;
-    }, EXIT_MS + EXIT_SPREAD + 35);
+    }, (fast ? 270 : EXIT_MS) + EXIT_SPREAD + 35);
     transitionTimer = window.setTimeout(() => {
       transitioning = false;
       transitionTimer = undefined;
-    }, ENTER_MS + ENTER_SPREAD);
+    }, (fast ? 270 : ENTER_MS) + ENTER_SPREAD);
   };
   const step = (d: Dir) => goTo(Math.max(0, Math.min(scenes.length - 1, cur + d)));
 
