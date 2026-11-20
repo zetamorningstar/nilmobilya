@@ -4052,3 +4052,39 @@ html.nil-staged .nil-index { display: flex; }
   .nil-scene--hero .nil-hero2__text,
   .nil-scene--hero .nil-hero2__ctawrap { animation: none; }
 }
+
+
+/* Deneme: mermer yerine sıcak, yavaş hareketli bronz ışık dalgaları.
+   Ana sayfa hero fotoğrafı ve ürün görselleri korunur. */
+.nil-bg__scene--1,.nil-bg__scene--2,.nil-bg__scene--3,.nil-bg__scene--4,.nil-bg__scene--5 {
+  background-image:none !important;
+  background-color:#100c0a;
+  overflow:hidden;
+  isolation:isolate;
+}
+.nil-bg__scene--1::before,.nil-bg__scene--2::before,.nil-bg__scene--3::before,.nil-bg__scene--4::before,.nil-bg__scene--5::before {
+  content:"";
+  position:absolute;
+  inset:-32%;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 40% 24% at 24% 42%,rgba(126,75,36,.25),transparent 76%),
+    radial-gradient(ellipse 43% 28% at 76% 62%,rgba(155,104,50,.16),transparent 75%),
+    radial-gradient(ellipse 52% 20% at 49% 75%,rgba(85,55,32,.21),transparent 82%);
+  filter:blur(36px);
+  animation:nil-bronze-wave 24s ease-in-out infinite alternate;
+  will-change:transform;
+}
+.nil-bg__scene--1::after,.nil-bg__scene--2::after,.nil-bg__scene--3::after,.nil-bg__scene--4::after,.nil-bg__scene--5::after {
+  background:linear-gradient(115deg,rgba(9,7,6,.3),rgba(13,9,7,.08) 55%,rgba(8,6,5,.3));
+}
+.nil-bg__marble { opacity:0 !important; visibility:hidden !important; }
+@keyframes nil-bronze-wave {
+  0% {transform:translate3d(-3%,-2%,0) rotate(-3deg) scale(1);opacity:.75}
+  50% {transform:translate3d(3%,2%,0) rotate(2deg) scale(1.06);opacity:1}
+  100% {transform:translate3d(-1%,4%,0) rotate(-1deg) scale(1.02);opacity:.82}
+}
+@media(prefers-reduced-motion:reduce) {
+ .nil-bg__scene--1::before,.nil-bg__scene--2::before,.nil-bg__scene--3::before,.nil-bg__scene--4::before,.nil-bg__scene--5::before {animation:none;will-change:auto}
+}
