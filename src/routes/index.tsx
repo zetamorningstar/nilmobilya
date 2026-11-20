@@ -143,6 +143,7 @@ function Index() {
   <div className="nil-bg__scene nil-bg__scene--3" />
   <div className="nil-bg__scene nil-bg__scene--4" />
   <div className="nil-bg__scene nil-bg__scene--5" />
+  <div className="nil-bg__scene nil-bg__scene--6" />
   <div className="nil-bg__img" />
   <div className="nil-bg__shade" />
 </div>
