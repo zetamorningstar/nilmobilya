@@ -3670,3 +3670,57 @@ html.nil-staged .nil-index { display: flex; }
   object-position: center 46%;
   translate: 0 -5px;
 }
+
+/* Collection v8 — match reference composition rather than shrinking pictures.
+   Feature: full-bleed diagonal triptych. Small cards: single wide hero. */
+.nil-scene--col .kcr-card__visual { background: #13100e; }
+.nil-scene--col .kcr-card--feature .kcr-card__triptych { position:absolute; inset:0; display:block; }
+.nil-scene--col .kcr-card--feature .kcr-card__slice {
+  position:absolute; top:0; bottom:0; height:100%; overflow:hidden;
+  background:#151210;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__slice--0 {
+  left:0; width:49%;
+  clip-path:polygon(0 0,100% 0,77% 100%,0 100%);
+}
+.nil-scene--col .kcr-card--feature .kcr-card__slice--1 {
+  left:31%; width:49%;
+  clip-path:polygon(23% 0,100% 0,77% 100%,0 100%);
+}
+.nil-scene--col .kcr-card--feature .kcr-card__slice--2 {
+  left:62%; width:38%;
+  clip-path:polygon(30% 0,100% 0,100% 100%,0 100%);
+}
+.nil-scene--col .kcr-card--feature .kcr-card__slice img {
+  display:block; width:100%; height:100%; max-width:none; max-height:none;
+  object-fit:cover; object-position:center center;
+  translate:none; transform:none; filter:brightness(.86);
+}
+.nil-scene--col .kcr-card--feature .kcr-card__triptych::before,
+.nil-scene--col .kcr-card--feature .kcr-card__triptych::after {
+  width:1px; height:130%; top:-15%; transform:rotate(11deg);
+  background:rgba(168,133,94,.65); box-shadow:none;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__triptych::before { left:39%; }
+.nil-scene--col .kcr-card--feature .kcr-card__triptych::after { left:70%; }
+.nil-scene--col .kcr-card__hero {
+  display:block; position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center center;
+  filter:brightness(.87); transform:none;
+  transition:transform .65s cubic-bezier(.16,1,.3,1);
+}
+.nil-scene--col .kcr-card--small:hover .kcr-card__hero { transform:scale(1.025); }
+.nil-scene--col .kcr-card--small .kcr-card__gradient {
+  background:linear-gradient(90deg,rgba(7,6,6,.97) 0%,rgba(7,6,6,.88) 24%,rgba(7,6,6,.38) 49%,rgba(7,6,6,.02) 78%);
+}
+.nil-scene--col .kcr-card--feature .kcr-card__gradient {
+  background:linear-gradient(90deg,rgba(7,6,6,.90) 0%,rgba(7,6,6,.76) 17%,rgba(7,6,6,.18) 39%,transparent 64%);
+}
+.nil-scene--col .kcr-card--small .kcr-card__copy { max-width:56%; padding:clamp(14px,1.65vw,28px); }
+.nil-scene--col .kcr-card--small .kcr-card__copy h3 { font-size:clamp(20px,1.65vw,30px); }
+.nil-scene--col .kcr-card--small .kcr-card__copy p { font-size:clamp(10px,.76vw,12px); max-width:25ch; }
+.nil-scene--col .kcr-card--feature .kcr-card__copy { max-width:52%; }
+@media(max-width:640px) {
+  .nil-scene--col .kcr-card--small .kcr-card__copy { max-width:65%; }
+  .nil-scene--col .kcr-card--feature .kcr-card__copy { max-width:65%; }
+}

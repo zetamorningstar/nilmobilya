@@ -230,13 +230,17 @@ function Index() {
                     data-s="frame"
                   >
                     <div className="kcr-card__visual" aria-hidden="true">
-                      <div className="kcr-card__triptych">
-                        {[0, 1, 2].map((n) => (
-                          <div className={`kcr-card__slice kcr-card__slice--${n}`} key={n}>
-                            <img src={card.images[n] ?? card.fallback} alt="" loading="lazy" />
-                          </div>
-                        ))}
-                      </div>
+                      {i === 0 ? (
+                        <div className="kcr-card__triptych">
+                          {[0, 1, 2].map((n) => (
+                            <div className={`kcr-card__slice kcr-card__slice--${n}`} key={n}>
+                              <img src={card.images[n] ?? card.fallback} alt="" loading="lazy" />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <img className="kcr-card__hero" src={card.images[0] ?? card.fallback} alt="" loading="lazy" />
+                      )}
                       <span className="kcr-card__gradient" />
                     </div>
                     <div className="kcr-card__copy">
