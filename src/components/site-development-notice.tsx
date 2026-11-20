@@ -16,7 +16,7 @@ export function SiteDevelopmentNotice() {
         } catch {
           setOpen(true);
         }
-      }, 550);
+      }, 3200);
     };
 
     // The homepage now opens directly; schedule the existing notice independently.
