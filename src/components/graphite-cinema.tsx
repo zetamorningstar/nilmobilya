@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import "./graphite-cinema.css";
 
 const KEY = "nil-graphite-cinema-v5-seen";
@@ -34,7 +34,7 @@ export function GraphiteCinema() {
         <div className="nil-cinema__mark">N</div>
         <div className="nil-cinema__brand" aria-label="NİL MOBİLYA">
           {letters.map((letter, i) => letter === " " ? <span key={i} className="nil-cinema__space" /> :
-            <span key={i} aria-hidden="true" className="nil-cinema__letter" style={{"--spread": `${(i-4.5)*7}px`} as React.CSSProperties}>{letter}</span>)}
+            <span key={i} aria-hidden="true" className="nil-cinema__letter" style={{"--spread": `${(i-4.5)*7}px`} as CSSProperties}>{letter}</span>)}
         </div>
         <div className="nil-cinema__line" /><div className="nil-cinema__tag">FORM · MALZEME · ZAMANSIZLIK</div>
       </div>
