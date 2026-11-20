@@ -47,9 +47,9 @@ export function SiteMenu({
         tabIndex={-1}
         aria-label="Menüyü kapat"
         onClick={onClose}
-        className="absolute inset-0 cursor-default bg-black/55 backdrop-blur-sm"
+        className="absolute inset-0 cursor-default bg-[#080706]/65 backdrop-blur-[14px] transition-[backdrop-filter,background-color] duration-500"
       />
-      <aside className="absolute inset-y-0 right-0 flex w-[min(100vw,30rem)] flex-col overflow-y-auto border-l border-foreground/15 bg-background px-8 py-7 animate-in slide-in-from-right duration-500 md:px-12">
+      <aside className="nil-menu-panel absolute inset-y-0 right-0 flex w-[min(100vw,33rem)] flex-col overflow-y-auto bg-[#100e0d]/90 px-5 py-6 shadow-[-24px_0_70px_rgba(0,0,0,.32)] animate-in slide-in-from-right duration-500 md:px-9 md:py-8">
         <div className="flex items-center justify-between">
           <span className="font-display text-xl uppercase tracking-[0.08em] text-primary">Menü</span>
           <button
@@ -63,23 +63,23 @@ export function SiteMenu({
           </button>
         </div>
 
-        <nav className="mt-8 flex flex-1 flex-col justify-center" aria-label="Menü bağlantıları">
+        <nav className="mt-7 flex flex-1 flex-col justify-center gap-2.5 py-3" aria-label="Menü bağlantıları">
           {items.map(([id, label], index) => (
             <a
               key={id}
               href={`${base}#${id}`}
               onClick={onClose}
-              className="group flex items-baseline gap-5 border-b border-foreground/10 py-3"
+              className="nil-menu-tile group flex items-center gap-4 rounded-[18px] border border-[#54473e]/35 bg-[#1c1815]/85 px-5 py-3.5 transition-[background-color,border-color,transform] duration-300 hover:-translate-x-1 hover:border-[#86705c]/50 hover:bg-[#29211b]/90"
             >
               <span className="w-6 text-[10px] tabular-nums text-primary">{String(index + 1).padStart(2, "0")}</span>
-              <span className="font-display text-3xl text-foreground/85 transition-colors group-hover:text-primary md:text-4xl">
+              <span className="font-display text-[clamp(1.45rem,2.3vw,2rem)] text-[#e6dcd1] transition-colors group-hover:text-[#d1b18d]">
                 {label}
               </span>
             </a>
           ))}
         </nav>
 
-        <div className="space-y-3.5 border-t border-foreground/10 pt-6 text-xs text-foreground/75">
+        <div className="nil-menu-footer space-y-3.5 rounded-[18px] border border-[#54473e]/25 bg-[#1a1613]/70 px-5 py-5 text-xs text-foreground/75">
           <a href="/yasal/kurumsal-bilgiler" onClick={onClose} className="block transition-colors hover:text-primary">Yasal bilgiler ve satış koşulları</a>
           <Link
             to="/odanda-dene"
