@@ -3613,3 +3613,53 @@ html.nil-staged .nil-index { display: flex; }
     max-height: 88%;
   }
 }
+
+/* Collection v6: seamless three-image montage with clean diagonal separators */
+.nil-scene--col .kcr-card__triptych { background: #171310; }
+.nil-scene--col .kcr-card__slice,
+.nil-scene--col .kcr-card__slice--0,
+.nil-scene--col .kcr-card__slice--1,
+.nil-scene--col .kcr-card__slice--2 {
+  background: #171310;
+}
+.nil-scene--col .kcr-card__slice img,
+.nil-scene--col .kcr-card--feature .kcr-card__slice img {
+  width: 94%;
+  height: 94%;
+  max-width: 94%;
+  max-height: 94%;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+.nil-scene--col .kcr-card:hover .kcr-card__slice img { transform: none; }
+/* Overlay strokes follow the same angled geometry as the clipping edges. */
+.nil-scene--col .kcr-card__triptych::after,
+.nil-scene--col .kcr-card__triptych::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: -12%;
+  height: 125%;
+  width: 1px;
+  background: linear-gradient(to bottom,transparent,rgba(194,158,111,.75) 15%,rgba(194,158,111,.65) 85%,transparent);
+  box-shadow: 0 0 0 1px rgba(5,4,4,.25);
+  pointer-events: none;
+  transform-origin: center;
+}
+.nil-scene--col .kcr-card__triptych::before {
+  left: 34.5%;
+  transform: rotate(7deg);
+}
+.nil-scene--col .kcr-card__triptych::after {
+  left: 66.5%;
+  transform: rotate(7deg);
+}
+.nil-scene--col .kcr-card__slice--1::before,
+.nil-scene--col .kcr-card__slice--2::before { display: none; }
+@media (max-width:640px) {
+  .nil-scene--col .kcr-card__slice img,
+  .nil-scene--col .kcr-card--feature .kcr-card__slice img {
+    width: 96%; height: 96%; max-width: 96%; max-height: 96%;
+  }
+}
