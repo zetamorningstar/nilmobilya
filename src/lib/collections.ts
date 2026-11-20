@@ -20,8 +20,6 @@ export interface CollectionProduct {
   image: string;
   /** Soldaki kategori listesinde görünür. Aynı yazıyı yazan ürünler aynı kategoride toplanır. */
   category: string;
-  /** İsteğe bağlı. Örn. 48900 yaz, sayfada ₺48.900 görünür. Boşsa "Fiyat için teklif alın" yazar. */
-  price?: number;
   /** İsteğe bağlı. Kart fotoğrafı kırpılırken hangi kısım kalsın: "center", "50% 30%" gibi. */
   focus?: string;
 }
@@ -56,9 +54,9 @@ export const collections: Collection[] = [
     heroAlt: "Nil Mobilya TV üniteleri koleksiyonu",
     heroFocus: "50% center",
     products: [
-      { name: "Çekmeceli TV Ünitesi", material: "Doğal ahşap kaplama", image: tv1, category: "TV Üniteleri", price: 24900 }, // GEÇİCİ
-      { name: "Kapaklı TV Ünitesi", material: "Masif ahşap", image: tv2, category: "TV Üniteleri", price: 27500 }, // GEÇİCİ
-      { name: "Asma TV Ünitesi", material: "Ahşap kaplama · Gizli bağlantı", image: tv3, category: "TV Üniteleri", price: 19800 }, // GEÇİCİ
+      { name: "Çekmeceli TV Ünitesi", material: "Doğal ahşap kaplama", image: tv1, category: "TV Üniteleri" },
+      { name: "Kapaklı TV Ünitesi", material: "Masif ahşap", image: tv2, category: "TV Üniteleri" },
+      { name: "Asma TV Ünitesi", material: "Ahşap kaplama · Gizli bağlantı", image: tv3, category: "TV Üniteleri" },
     ],
   },
   {
@@ -127,9 +125,9 @@ export const collections: Collection[] = [
     heroAlt: "Nil Mobilya banko koleksiyonu",
     heroFocus: "50% center",
     products: [
-      { name: "Karşılama Bankosu", material: "Ahşap kaplama · Ledli detay", image: banko1, category: "Bankolar", price: 36900 }, // GEÇİCİ
-      { name: "Servis Bankosu", material: "Masif ahşap", image: banko2, category: "Bankolar", price: 28500 }, // GEÇİCİ
-      { name: "Servis Çekmecesi", material: "Ahşap · Metal detay", image: banko3, category: "Çekmeceler", price: 12900 }, // GEÇİCİ
+      { name: "Karşılama Bankosu", material: "Ahşap kaplama · Ledli detay", image: banko1, category: "Bankolar" },
+      { name: "Servis Bankosu", material: "Masif ahşap", image: banko2, category: "Bankolar" },
+      { name: "Servis Çekmecesi", material: "Ahşap · Metal detay", image: banko3, category: "Çekmeceler" },
     ],
   },
   {

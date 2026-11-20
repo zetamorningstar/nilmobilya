@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Phone, Sparkles, X } from "lucide-react";
+import { Instagram, Mail, Phone, Sparkles, X } from "lucide-react";
+import { whatsappOfferUrl } from "@/lib/sales";
 import { useEffect, type KeyboardEvent as ReactKeyboardEvent, type SyntheticEvent } from "react";
 
 const stop = (event: SyntheticEvent) => event.stopPropagation();
@@ -48,7 +49,7 @@ export function SiteMenu({
         onClick={onClose}
         className="absolute inset-0 cursor-default bg-black/55 backdrop-blur-sm"
       />
-      <aside className="absolute inset-y-0 right-0 flex w-[min(100vw,30rem)] flex-col border-l border-foreground/15 bg-background px-8 py-7 animate-in slide-in-from-right duration-500 md:px-12">
+      <aside className="absolute inset-y-0 right-0 flex w-[min(100vw,30rem)] flex-col overflow-y-auto border-l border-foreground/15 bg-background px-8 py-7 animate-in slide-in-from-right duration-500 md:px-12">
         <div className="flex items-center justify-between">
           <span className="font-display text-xl uppercase tracking-[0.08em] text-primary">Menü</span>
           <button
@@ -79,6 +80,7 @@ export function SiteMenu({
         </nav>
 
         <div className="space-y-3.5 border-t border-foreground/10 pt-6 text-xs text-foreground/75">
+          <a href="/yasal/kurumsal-bilgiler" onClick={onClose} className="block transition-colors hover:text-primary">Yasal bilgiler ve satış koşulları</a>
           <Link
             to="/odanda-dene"
             onClick={onClose}
@@ -94,8 +96,17 @@ export function SiteMenu({
           >
             <Instagram className="size-4" /> @nill.mobilya
           </a>
+          <a href="mailto:nilmobilyatasarim@gmail.com" className="flex items-center gap-2 transition-colors hover:text-primary">
+            <Mail className="size-4" /> nilmobilyatasarim@gmail.com
+          </a>
           <a href="tel:+905360236146" className="flex items-center gap-2 transition-colors hover:text-primary">
             <Phone className="size-4" /> 0 (536) 023 61 46
+          </a>
+          <a href="tel:+905012516134" className="flex items-center gap-2 transition-colors hover:text-primary">
+            <Phone className="size-4" /> +90 501 251 61 34
+          </a>
+          <a href={whatsappOfferUrl()} target="_blank" rel="noopener noreferrer" className="block text-primary hover:text-foreground">
+            WhatsApp'tan ölçü ve teklif al →
           </a>
         </div>
       </aside>

@@ -2,15 +2,17 @@ import { useState, type FormEvent } from "react";
 import { ArrowRight, ChevronDown, ChevronRight, Instagram, Mail, MapPin, Phone } from "lucide-react";
 
 import contactHero from "@/assets/nil-hero.jpg";
+import { whatsappOfferUrl } from "@/lib/sales";
 
 // ---- İletişim bilgileri: burayı kendi bilgilerinle güncelle ----
 const ILETISIM = {
-  adres: ["Örnek Mah. Mobilya Bulvarı No:12", "Kadıköy / İstanbul"], // TODO: gerçek adres
+  adres: ["580/3. Sk. 24-26A, Karayolları", "34255 Gaziosmanpaşa / İstanbul"],
   telefon: "0 (536) 023 61 46",
   telefonHref: "tel:+905360236146",
-  saatler: "Hafta içi 09:00 - 19:00", // TODO: gerçek çalışma saatleri
-  eposta: "nillmobilya@gmail.com",
-  yanit: "24 saat içinde yanıt veriyoruz.",
+  telefonIkinci: "+90 501 251 61 34",
+  telefonIkinciHref: "tel:+905012516134",
+  eposta: "nilmobilyatasarim@gmail.com",
+  yanit: "E-posta üzerinden de bizimle iletişime geçebilirsiniz.",
   instagram: "https://www.instagram.com/nill.mobilya/",
 } as const;
 
@@ -84,7 +86,16 @@ export function ContactSection() {
               <span className="ct-item__ico"><Phone strokeWidth={1.5} /></span>
               <div>
                 <p className="ct-item__t">Telefon</p>
-                <p className="ct-item__l"><a href={ILETISIM.telefonHref}>{ILETISIM.telefon}</a><br />{ILETISIM.saatler}</p>
+                <p className="ct-item__l">
+                  <a href={ILETISIM.telefonHref}>{ILETISIM.telefon}</a>
+                  <br />
+                  <a href={ILETISIM.telefonIkinciHref}>{ILETISIM.telefonIkinci}</a>
+                </p>
+                <p className="ct-item__s">
+                  <a href={whatsappOfferUrl()} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                    WhatsApp'tan ölçü ve fiyat teklifi alın →
+                  </a>
+                </p>
               </div>
             </div>
             <div data-s="fade" className="ct-item">
@@ -109,7 +120,7 @@ export function ContactSection() {
           {/* Form */}
           <div className="ct-form-cell">
             <h3 data-s="text" className="ct-form__title">Bize Yazın</h3>
-            <p data-s="text" className="ct-form__sub">Görüş, öneri veya taleplerinizi formu doldurarak bizimle iletişime geçebilirsiniz.</p>
+            <p data-s="text" className="ct-form__sub">Ölçü ve fiyat teklifi için WhatsApp üzerinden yazabilirsiniz. Diğer mesajlarınız için form e-posta uygulamanızı açar.</p>
             <form data-s="fade" onSubmit={onSubmit} className="ct-form">
               <input required type="text" value={form.ad} onChange={set("ad")} placeholder="Adınız Soyadınız *" autoComplete="name" aria-label="Adınız soyadınız" className="ct-field" />
               <input required type="email" value={form.eposta} onChange={set("eposta")} placeholder="E-posta Adresiniz *" autoComplete="email" aria-label="E-posta adresiniz" className="ct-field" />
@@ -168,9 +179,13 @@ export function ContactSection() {
             <span className="ct-foot__tag">Tasarım <em>/</em> Kalite <em>/</em> Zarafet</span>
           </div>
           <div className="ct-foot__r">
-            <span>Gizlilik Politikası</span>
+            <a href="/yasal/gizlilik-politikasi" className="hover:text-primary">Gizlilik Politikası</a>
             <i aria-hidden="true" />
-            <span>Kullanım Şartları</span>
+            <a href="/yasal/kullanim-kosullari" className="hover:text-primary">Kullanım Şartları</a>
+            <i aria-hidden="true" />
+            <a href="/yasal/kvkk-aydinlatma" className="hover:text-primary">KVKK</a>
+            <i aria-hidden="true" />
+            <a href="/yasal/teslimat-iade" className="hover:text-primary">Teslimat ve İade</a>
             <NLogo className="ct-foot__logo ct-foot__logo--r" />
           </div>
         </div>
