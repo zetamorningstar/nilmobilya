@@ -3583,3 +3583,33 @@ html.nil-staged .nil-index { display: flex; }
 .nil-showcase__eyebrow .nil-showcase__line { margin: 0; flex: none; }
 .nil-showcase__copy { min-width: 0; }
 .nil-showcase__copy h2, .nil-showcase__copy p { position: relative; }
+
+/* Collection v5: pull product photographs back inside each angled panel.
+   The angled panel geometry stays unchanged; no cropping or hover zoom. */
+.nil-scene--col .kcr-card__slice img {
+  width: 82%;
+  height: 82%;
+  max-width: 82%;
+  max-height: 82%;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+  filter: brightness(1.08) contrast(1.01);
+}
+.nil-scene--col .kcr-card:hover .kcr-card__slice img {
+  transform: none;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__slice img {
+  width: 86%;
+  height: 86%;
+  max-width: 86%;
+  max-height: 86%;
+}
+@media (max-width:640px) {
+  .nil-scene--col .kcr-card__slice img {
+    width: 88%;
+    height: 88%;
+    max-width: 88%;
+    max-height: 88%;
+  }
+}
