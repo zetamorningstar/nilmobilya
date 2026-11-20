@@ -276,8 +276,8 @@ function Index() {
         {/*5 · Sergimiz */}
 <section id="sergimiz" aria-label="Sergimiz" className="nil-scene">
   <div className="nil-scene__body nil-split nil-split--wide nil-showcase">
-    <div>
-      <p data-s="text" className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary"><span className="nil-showcase__dot" aria-hidden="true" /> Sergimiz <span className="nil-showcase__line" aria-hidden="true" /></p>
+    <div className="nil-showcase__copy">
+      <div data-s="fade" className="nil-showcase__eyebrow"><span className="nil-showcase__dot" aria-hidden="true" /> Sergimiz <span className="nil-showcase__line" aria-hidden="true" /></div>
       <h2 data-s="text" className="max-w-2xl font-display text-4xl leading-tight md:text-6xl">Yaptığımız her dönüşümle bir hayata dokunduk.</h2>
       <p data-s="text" className="mt-6 max-w-xl text-sm font-light leading-7 text-ink-soft md:text-base">
         Her proje, bir mekânın hikâyesini yeniden yazdı. Bugüne kadar hayata geçirdiğimiz çalışmaları sergimizde bir araya getirdik.
