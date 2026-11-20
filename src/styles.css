@@ -3917,3 +3917,37 @@ html.nil-staged .nil-index { display: flex; }
     align-self: end;
   }
 }
+
+/* Mobile baseline: natural vertical scrolling instead of clipped desktop scenes. */
+@media (max-width: 1099px) {
+  html, body { height: auto; overflow-x: clip; overflow-y: auto; }
+  .nil-stage { position: relative; inset: auto; height: auto; touch-action: pan-y; }
+  .nil-stage .nil-scene {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .nil-stage .nil-scene.is-off { visibility: visible; pointer-events: auto; }
+  .nil-scene--ct .ct { display: flex; flex-direction: column; }
+  .nil-scene--ct .ct-body { display: grid; grid-template-columns: minmax(0,1fr); }
+  .nil-scene--ct .ct-info { gap: 8px; padding-bottom: 28px; }
+  .nil-scene--ct .ct-item { flex: 0 0 auto; }
+  .nil-scene--ct .ct-foot { margin-top: 24px; padding-block: 22px; }
+  .nil-scene--ct .ct-foot__l, .nil-scene--ct .ct-foot__r { flex-wrap: wrap; row-gap: 12px; }
+  .nil-scene--ct .ct-foot__r { justify-content: flex-start; }
+  .nil-scene--ct .ct-social { min-height: 36px; align-items: center; }
+  .nil-scene--ct .ct-form-cell, .nil-scene--ct .ct-side { min-width: 0; }
+}
+@media (max-width: 767px) {
+  .nil-header .nil-nav { max-width: 100%; }
+  .nil-header .nil-brand__name { font-size: clamp(14px, 4vw, 20px); }
+  .nil-scene--hero .nil-hero2__content { width: calc(100% - 40px); max-width: 100%; left: 20px; }
+  .nil-scene--hero .nil-hero2__title { overflow-wrap: break-word; }
+  .nil-scene--hero .nil-hero2__ctawrap { max-width: 100%; }
+  .nil-scene--ct .ct-foot { gap: 18px; }
+  .nil-scene--ct .ct-foot__r { gap: 10px; letter-spacing: .08em; }
+}
