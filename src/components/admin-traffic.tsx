@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase-client";
-import { BarChart3,RefreshCw,ExternalLink } from "lucide-react";
+import { BarChart3,RefreshCw,ExternalLink,Download,CalendarDays } from "lucide-react";
 type Daily={day:string;views:number;whatsapp:number};
 type Report={daily:Daily[];top_pages:{path:string;views:number}[]};
 export function AdminTraffic(){
@@ -14,10 +14,22 @@ export function AdminTraffic(){
  const clicks=report?.daily.reduce((n,d)=>n+d.whatsapp,0)??0;
  const max=Math.max(1,...(report?.daily.flatMap(d=>[d.views,d.whatsapp])??[]));
  const rate=total>0?(clicks/total*100).toFixed(1):"0.0";
+
+ const downloadCSV=()=>{
+  if(!report)return;
+  const rows=[["Tarih","Sayfa görüntüleme","WhatsApp tıklaması"],...report.daily.map(d=>[d.day,d.views,d.whatsapp])];
+  const csv="\uFEFF"+rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\r\n");
+  const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
+  const a=document.createElement("a");a.href=url;a.download="nil-mobilya-analitik-"+days+"-gun.csv";document.body.appendChild(a);a.click();a.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+ };
  return <section className="admin-panel mb-6 rounded-xl border border-[#292b32] bg-[#15161b] p-6">
-  <div className="mb-6 flex flex-wrap items-center justify-between gap-4"><div><p className="text-[10px] uppercase tracking-[.2em] text-[#c9a46c]">Nil Mobilya · Gerçek olay verileri</p><h2 className="mt-2 text-xl font-bold">Ziyaretçi Analitiği</h2><p className="mt-2 text-xs text-[#9395a0]">Benzersiz kişi değil, izin verilmiş sayfa görüntüleme ve WhatsApp tıklama sayıları</p></div><div className="flex gap-2"><select aria-label="Tarih aralığı" value={days} onChange={e=>setDays(Number(e.target.value))} className="rounded-lg border border-[#393a42] bg-[#202127] px-3 py-2 text-sm"><option value={7}>7 gün</option><option value={14}>14 gün</option><option value={30}>30 gün</option></select><button onClick={()=>setRefresh(x=>x+1)} aria-label="Yenile" className="rounded-lg border border-[#393a42] p-2"><RefreshCw size={18}/></button></div></div>
+  <div className="mb-6 flex flex-wrap items-center justify-between gap-4"><div><p className="text-[10px] uppercase tracking-[.2em] text-[#c9a46c]">Nil Mobilya · Gerçek olay verileri</p><h2 className="mt-2 text-xl font-bold">Ziyaretçi Analitiği</h2><p className="mt-2 text-xs text-[#9395a0]">Benzersiz kişi değil, izin verilmiş sayfa görüntüleme ve WhatsApp tıklama sayıları</p></div><div className="flex flex-wrap gap-2"><button onClick={downloadCSV} disabled={!report||loading||!!error} className="inline-flex items-center gap-2 rounded-lg border border-[#393a42] px-3 py-2 text-xs text-[#d8bd8d] hover:bg-[#272830] disabled:opacity-40"><Download size={15}/> CSV İndir</button><select aria-label="Tarih aralığı" value={days} onChange={e=>setDays(Number(e.target.value))} className="rounded-lg border border-[#393a42] bg-[#202127] px-3 py-2 text-sm"><option value={7}>7 gün</option><option value={14}>14 gün</option><option value={30}>30 gün</option></select><button onClick={()=>setRefresh(x=>x+1)} aria-label="Yenile" className="rounded-lg border border-[#393a42] p-2"><RefreshCw size={18}/></button></div></div>
   {loading?<p className="py-16 text-center text-sm text-[#9b9da7]">Gerçek veriler yükleniyor…</p>:error?<p role="alert" className="rounded-lg border border-amber-600/40 p-5 text-sm text-amber-200">{error}</p>:<>
    <div className="mb-6 grid grid-cols-2 gap-3"><div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-5"><p className="text-xs text-[#a2a3ad]">Sayfa görüntüleme</p><p className="mt-3 text-3xl font-bold">{total}</p></div><div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-5"><p className="text-xs text-[#a2a3ad]">WhatsApp tıklaması</p><p className="mt-3 text-3xl font-bold">{clicks}</p></div></div>
+   <div className="mb-5 grid gap-3 sm:grid-cols-2">
+    <div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-4"><div className="flex items-center gap-2 text-xs text-[#a2a3ad]"><CalendarDays size={14}/> Günlük ortalama</div><p className="mt-2 text-2xl font-bold tabular-nums">{(total/days).toLocaleString("tr-TR",{maximumFractionDigits:1})}</p><p className="mt-1 text-[11px] text-[#858793]">Sayfa görüntüleme / gün</p></div>
+    <div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-4"><p className="text-xs text-[#a2a3ad]">En yoğun gün</p><p className="mt-2 text-xl font-bold tabular-nums">{report?.daily.length?report.daily.reduce((a,b)=>b.views>a.views?b:a).day:"—"}</p><p className="mt-1 text-[11px] text-[#858793]">En çok sayfa görüntülenen tarih</p></div>
+   </div>
    <div className="mb-4 flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-[#bfc0c8]">Günlük etkileşim grafiği</p><div className="flex items-center gap-4 text-xs text-[#aaa]"><span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm bg-[#c9a46c]"/> Sayfa</span><span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm bg-[#7194b6]"/> WhatsApp</span></div></div>
    <div className="admin-chart relative flex h-[260px] items-end justify-between gap-1 overflow-hidden rounded-xl border border-[#292b32] bg-[#0f1014] px-3 pb-9 pt-8 sm:gap-2" role="img" aria-label={`Son ${days} gün toplam ${total} sayfa görüntüleme`}>
     <div className="admin-chart-grid absolute inset-0" aria-hidden="true"/>
