@@ -314,20 +314,37 @@ function Index() {
 
         {/*5 · Sergimiz */}
 <section id="sergimiz" aria-label="Sergimiz" className="nil-scene">
-  <div className="nil-scene__body nil-split nil-split--wide nil-showcase">
-    <div className="nil-showcase__copy">
-      <div data-s="fade" className="nil-showcase__eyebrow"><span className="nil-showcase__dot" aria-hidden="true" /> Sergimiz <span className="nil-showcase__line" aria-hidden="true" /></div>
-      <h2 data-s="text" className="max-w-2xl font-display text-4xl leading-tight md:text-6xl">Yaptığımız her dönüşümle bir hayata dokunduk.</h2>
-      <p data-s="text" className="mt-6 max-w-xl text-sm font-light leading-7 text-ink-soft md:text-base">
-        Her proje, bir mekânın hikâyesini yeniden yazdı. Bugüne kadar hayata geçirdiğimiz çalışmaları sergimizde bir araya getirdik.
-      </p>
-    </div>
-    <div className="nil-showcase__action flex flex-col justify-end gap-4">
-      <div data-s="fade">
-        <Button asChild variant="goldOutline" size="lg" className="h-12 w-full justify-start px-5 text-xs uppercase">
-          <Link to="/sergimiz">Sergiyi gez <ArrowUpRight /></Link>
-        </Button>
+  {/* Mevcut Sergimiz arka planı aynen korunur; yalnızca ön plandaki içerik yenilenmiştir. */}
+  <div className="nil-scene__body relative z-10 mx-auto flex h-full w-full max-w-[1660px] flex-col justify-center gap-7 px-5 py-9 md:px-8 lg:px-12">
+    <div className="grid items-center gap-8 lg:grid-cols-[.9fr_1.1fr]">
+      <div className="max-w-[620px]">
+        <p data-s="fade" className="mb-5 text-[11px] uppercase tracking-[.32em] text-[#aaa29a]">NİL MOBİLYA / SERGİMİZ</p>
+        <h2 data-s="text" className="font-display text-[clamp(3.3rem,6vw,6rem)] leading-[1.03] text-[#e8e3df]">Sergimiz</h2>
+        <p data-s="text" className="mt-6 max-w-[510px] text-base leading-8 text-[#b5ada6]">Yeni projelerimizi, özel üretimlerimizi ve koleksiyonlarımıza ait seçili işleri yakında burada sergileyeceğiz.</p>
+        <div data-s="fade" className="mt-7 inline-flex items-center gap-3 rounded-xl border border-[#a58b6a]/40 bg-[#161411]/75 px-5 py-3 text-sm text-[#c9b294]">
+          <span className="relative flex size-2"><span className="absolute inset-0 rounded-full bg-[#b8a184]/50"/><span className="relative size-2 rounded-full bg-[#b8a184]"/></span>
+          Yakında yayında
+        </div>
       </div>
+      <div data-s="frame" className="flex min-h-[220px] items-center justify-center rounded-[24px] border border-white/10 bg-[#141414]/35 p-7 backdrop-blur-[2px] lg:min-h-[330px]">
+        <div className="max-w-[430px] text-center">
+          <Layers3 className="mx-auto size-12 text-[#aa9785]" strokeWidth={.9}/>
+          <p className="mt-6 font-display text-[clamp(1.5rem,2.4vw,2.3rem)] leading-snug text-[#ded6cf]">Yeni çalışmalarımız için hazırlık yapıyoruz.</p>
+          <p className="mt-4 text-sm leading-7 text-[#9e958d]">Tamamlanan projeler, üretim detayları ve yeni tasarımlar burada yerini alacak.</p>
+        </div>
+      </div>
+    </div>
+    <div className="grid gap-3 md:grid-cols-3 md:gap-4">
+      {[
+        {icon: Layers3, title:"Yeni Projeler", detail:"Yeni tasarım ve uygulamalar."},
+        {icon: Ruler, title:"Özel Üretimler", detail:"Projeye özel çözümler ve detaylar."},
+        {icon: Diamond, title:"Koleksiyon Gelişimleri", detail:"Yakında eklenecek yeni parçalar."}
+      ].map(({icon:Icon,title,detail})=>(
+        <div data-s="fade" key={title} className="flex min-h-[115px] items-center gap-4 rounded-[20px] border border-white/10 bg-[#151515]/75 px-5 py-5">
+          <div className="grid size-12 shrink-0 place-items-center rounded-xl border border-white/10"><Icon className="size-6 text-[#b19a83]" strokeWidth={1.2}/></div>
+          <div><h3 className="font-display text-xl text-[#e2dcd6]">{title}</h3><p className="mt-1 text-xs leading-6 text-[#a69c93]">{detail}</p></div>
+        </div>
+      ))}
     </div>
   </div>
 </section>
