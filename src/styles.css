@@ -4345,3 +4345,24 @@ html.nil-staged .nil-index { display: flex; }
 .nil-review-page__form {background:linear-gradient(130deg,rgba(23,19,17,.97),rgba(15,13,12,.97)) !important;border-color:rgba(107,85,70,.2) !important}
 .nil-review-page__results::before {opacity:.08 !important}
 .nil-review-page__results::after {opacity:.18 !important}
+
+
+/* İtme kaydırması: sahneler opak yüzeylerdir; yeni sayfa eskisinin üstüne binmez.
+   Panelin fotoğraf, yazı ve arka planı aynı transform ile taşınır. */
+@media (min-width:1100px) and (min-height:560px) and (pointer:fine) {
+ html.nil-staged .nil-stage .nil-scene {
+   background-color:#0b0908;
+   background-image:radial-gradient(ellipse at 20% 65%,rgba(45,34,28,.12),transparent 65%),linear-gradient(130deg,#090808,#120e0c 60%,#080807);
+   background-size:cover;
+   background-position:center;
+   will-change:transform;
+   backface-visibility:hidden;
+ }
+ html.nil-staged .nil-stage #top {background-image:linear-gradient(90deg,rgba(5,4,4,.2),rgba(5,4,4,.06)),url("/images/anasayfa/hero3.webp");background-position:center;background-size:cover}
+ html.nil-staged .nil-stage #koleksiyon {background-image:radial-gradient(ellipse at 83% 24%,rgba(48,36,29,.14),transparent 67%),linear-gradient(155deg,#090808,#120f0d 57%,#080807)}
+ html.nil-staged .nil-stage #ozel-uretim {background-image:radial-gradient(ellipse at 17% 77%,rgba(46,34,29,.14),transparent 67%),linear-gradient(125deg,#090808,#110e0c 57%,#080807)}
+ html.nil-staged .nil-stage #yorumlar {background-image:radial-gradient(ellipse at 18% 25%,rgba(49,34,28,.11),transparent 69%),linear-gradient(125deg,#090807,#110d0b 58%,#080807)}
+ html.nil-staged .nil-stage #sergimiz {background-image:radial-gradient(ellipse at 83% 77%,rgba(45,35,29,.13),transparent 70%),linear-gradient(135deg,#090808,#120f0d 60%,#080807)}
+ html.nil-staged .nil-stage #hikaye {background-image:radial-gradient(ellipse at 28% 79%,rgba(44,34,28,.12),transparent 66%),linear-gradient(150deg,#090808,#100e0c 55%,#080807)}
+ html.nil-staged .nil-stage #iletisim {background-image:radial-gradient(ellipse at 71% 17%,rgba(46,34,28,.12),transparent 66%),linear-gradient(120deg,#090808,#110e0c 58%,#080807)}
+}
