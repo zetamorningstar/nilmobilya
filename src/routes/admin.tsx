@@ -3,6 +3,8 @@ import { useEffect, useState, type FormEvent } from "react";
 import { ArrowLeft, BarChart3, Database, Images, LockKeyhole, LogOut, Package, LayoutDashboard, Settings2, ShieldCheck, ChevronRight, Menu, X, CircleHelp, Activity, ExternalLink } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { AdminProducts } from "@/components/admin-products";
+import { AdminInsights } from "@/components/admin-insights";
+import "@/styles/admin-polish.css";
 
 export const Route = createFileRoute("/admin")({ component: AdminPage });
 
@@ -86,12 +88,12 @@ function AdminPage() {
     {id:"database",label:"Veritabanı",icon:Database,enabled:false},
   ] as const;
   const selectSection=(id:"overview"|"products")=>{setSection(id);setSidebarOpen(false)};
-  const panel = "rounded-xl border border-[#34363d] bg-[#202127]";
+  const panel = "admin-panel rounded-xl border border-[#282a31] bg-[#17181d]";
   const smallLabel = "text-[11px] font-semibold uppercase tracking-[.15em] text-[#92949e]";
-  return <main className="min-h-screen bg-[#111216] text-[#f2f2f4]">
+  return <main className="min-h-screen bg-[#090a0d] text-[#f2f2f4]">
     {status==="admin" ? <div className="flex min-h-screen">
       {sidebarOpen&&<button aria-label="Menüyü kapat" className="fixed inset-0 z-30 bg-black/70 lg:hidden" onClick={()=>setSidebarOpen(false)}/>}
-      <aside className={`fixed inset-y-0 left-0 z-40 flex w-[258px] flex-col border-r border-[#303138] bg-[#191a20] transition-transform lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${sidebarOpen?"translate-x-0":"-translate-x-full"}`}>
+      <aside className={`fixed inset-y-0 left-0 z-40 flex w-[258px] flex-col border-r border-[#303138] bg-[#101115] transition-transform lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${sidebarOpen?"translate-x-0":"-translate-x-full"}`}>
         <div className="flex h-[82px] items-center justify-between border-b border-[#303138] px-5">
           <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#b89964]/45 bg-[#b89964]/10 text-[#e5bd7b]"><span className="font-serif text-2xl">N</span></div><div><p className="text-sm font-bold tracking-[.07em]">NİL MOBİLYA</p><p className="mt-1 text-[10px] uppercase tracking-[.18em] text-[#b89964]">Control Center</p></div></div>
           <button onClick={()=>setSidebarOpen(false)} className="lg:hidden"><X size={20}/></button>
@@ -108,10 +110,10 @@ function AdminPage() {
             <a href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-lg px-3 py-3 text-[13px] text-[#aeb0ba] hover:bg-[#292b33]"><Database size={18}/> Supabase <ExternalLink size={13} className="ml-auto"/></a>
           </div>
         </div>
-        <div className="border-t border-[#303138] p-4"><div className="flex items-center gap-3 rounded-lg bg-[#24252c] p-3"><div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#b89964]/20 text-sm font-bold text-[#e3bd81]">{account.slice(0,1).toUpperCase()}</div><div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold">Yönetici</p><p className="truncate text-[11px] text-[#999ba6]">{account}</p></div><button onClick={logout} aria-label="Çıkış yap" title="Çıkış yap" className="text-[#aaaeb8] hover:text-white"><LogOut size={17}/></button></div></div>
+        <div className="border-t border-[#303138] p-4"><div className="flex items-center gap-3 rounded-lg bg-[#1a1b21] p-3"><div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#b89964]/20 text-sm font-bold text-[#e3bd81]">{account.slice(0,1).toUpperCase()}</div><div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold">Yönetici</p><p className="truncate text-[11px] text-[#999ba6]">{account}</p></div><button onClick={logout} aria-label="Çıkış yap" title="Çıkış yap" className="text-[#aaaeb8] hover:text-white"><LogOut size={17}/></button></div></div>
       </aside>
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-20 flex h-[72px] items-center justify-between border-b border-[#303138] bg-[#17181e]/95 px-5 backdrop-blur-xl sm:px-8">
+        <header className="sticky top-0 z-20 flex h-[72px] items-center justify-between border-b border-[#303138] bg-[#111216]/95 px-5 backdrop-blur-xl sm:px-8">
           <div className="flex items-center gap-3"><button onClick={()=>setSidebarOpen(true)} aria-label="Menüyü aç" className="mr-1 lg:hidden"><Menu size={22}/></button><span className="text-xs text-[#777984]">Yönetim</span><ChevronRight size={14} className="text-[#666874]"/><span className="text-sm font-semibold">{section==="products"?"Ürün Yönetimi":"Genel Bakış"}</span></div>
           <div className="flex items-center gap-4"><span className="hidden items-center gap-2 rounded-full border border-[#3c5144] bg-[#1c3026] px-3 py-1.5 text-[11px] font-medium text-[#92d9aa] sm:inline-flex"><span className="h-1.5 w-1.5 rounded-full bg-[#71d99b]"/> Yönetici doğrulandı</span><Link to="/" className="inline-flex items-center gap-2 rounded-lg border border-[#383a43] px-3 py-2 text-xs text-[#c4c5cc] hover:bg-[#292b32]"><ArrowLeft size={15}/> <span className="hidden sm:inline">Siteye dön</span></Link></div>
         </header>
@@ -127,8 +129,9 @@ function AdminPage() {
               ].map(stat=><div key={stat.label} className={panel+" p-5"}><div className="mb-5 flex items-center justify-between"><span className={smallLabel}>{stat.label}</span><stat.icon size={19} className="text-[#c5a16d]"/></div><p className="text-3xl font-bold tabular-nums">{stat.value??"—"}</p><p className="mt-3 text-xs text-[#858894]">{stat.sub}</p></div>)}
               <div className={panel+" p-5"}><div className="mb-5 flex items-center justify-between"><span className={smallLabel}>Ziyaretçi Analitiği</span><Activity size={19} className="text-[#c5a16d]"/></div><p className="text-lg font-semibold text-[#a6a8b1]">Henüz bağlı değil</p><p className="mt-3 text-xs text-[#858894]">GA4 / Clarity entegrasyonu bekleniyor</p></div>
             </div>
+            <AdminInsights counts={counts}/>
             <div className="grid gap-5 xl:grid-cols-[1.65fr_1fr]">
-              <section className={panel+" overflow-hidden"}><div className="flex items-center justify-between border-b border-[#34363d] px-6 py-5"><div><h2 className="text-base font-semibold">Hızlı Erişim</h2><p className="mt-1 text-xs text-[#8e909a]">Yönetim araçları</p></div><LayoutDashboard size={18} className="text-[#9e825c]"/></div><div className="grid gap-3 p-5 sm:grid-cols-2">{modules.map(({title,description,icon:Icon})=><button key={title} disabled={title!=="Ürünler"} onClick={()=>title==="Ürünler"&&selectSection("products")} className={`rounded-xl border border-[#373942] bg-[#25262d] p-5 text-left transition ${title==="Ürünler"?"hover:border-[#c5a16d]/70 hover:bg-[#2c2b2b]":"cursor-not-allowed opacity-60"}`}><div className="mb-5 flex items-center justify-between"><Icon size={21} className="text-[#c5a16d]"/><span className="text-[10px] uppercase tracking-wider text-[#999ba6]">{title==="Ürünler"?"Aktif":"Yakında"}</span></div><h3 className="text-sm font-semibold">{title}</h3><p className="mt-2 text-xs leading-5 text-[#9c9ea8]">{description}</p></button>)}</div></section>
+              <section className={panel+" overflow-hidden"}><div className="flex items-center justify-between border-b border-[#34363d] px-6 py-5"><div><h2 className="text-base font-semibold">Hızlı Erişim</h2><p className="mt-1 text-xs text-[#8e909a]">Yönetim araçları</p></div><LayoutDashboard size={18} className="text-[#9e825c]"/></div><div className="grid gap-3 p-5 sm:grid-cols-2">{modules.map(({title,description,icon:Icon})=><button key={title} disabled={title!=="Ürünler"} onClick={()=>title==="Ürünler"&&selectSection("products")} className={`rounded-xl border border-[#373942] bg-[#1c1d23] p-5 text-left transition ${title==="Ürünler"?"hover:border-[#c5a16d]/70 hover:bg-[#2c2b2b]":"cursor-not-allowed opacity-60"}`}><div className="mb-5 flex items-center justify-between"><Icon size={21} className="text-[#c5a16d]"/><span className="text-[10px] uppercase tracking-wider text-[#999ba6]">{title==="Ürünler"?"Aktif":"Yakında"}</span></div><h3 className="text-sm font-semibold">{title}</h3><p className="mt-2 text-xs leading-5 text-[#9c9ea8]">{description}</p></button>)}</div></section>
               <div className="space-y-5"><section className={panel+" p-6"}><div className="mb-5 flex items-center gap-3"><ShieldCheck className="text-[#8ad0a4]" size={21}/><h2 className="text-base font-semibold">Sistem Durumu</h2></div><div className="space-y-4 text-sm"><div className="flex justify-between gap-3"><span className="text-[#a0a2ad]">Yönetici oturumu</span><span className="text-[#8ad0a4]">Aktif</span></div><div className="flex justify-between gap-3"><span className="text-[#a0a2ad]">Ürün veritabanı</span><span className="text-[#d8bd8d]">{counts?"Bağlı":"Kontrol ediliyor"}</span></div><div className="flex justify-between gap-3"><span className="text-[#a0a2ad]">Trafik analizi</span><span className="text-[#8c8e99]">Bekliyor</span></div></div></section><section className={panel+" p-6"}><div className="mb-3 flex items-center gap-3"><CircleHelp size={20} className="text-[#c5a16d]"/><h2 className="text-base font-semibold">Sonraki Adım</h2></div><p className="text-sm leading-6 text-[#a0a2ad]">Ürünleri yönetebilir, kategoriler oluşturabilir ve yayın durumunu değiştirebilirsin. Fotoğraf yükleme ve analitik bağlantıları sonraki geliştirmede eklenecek.</p></section></div>
             </div>
           </>}
