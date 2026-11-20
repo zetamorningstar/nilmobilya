@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Diamond, Layers3, Leaf, Ruler, ShieldCheck, Truck, Headset } from "lucide-react";
-import { useState, type PointerEvent } from "react";
+import { useEffect, useState, type PointerEvent } from "react";
 
 import diningImage from "@/assets/nil-dining.jpg";
 import { collections } from "@/lib/collections";
@@ -74,6 +74,44 @@ const COLLECTION_CARDS = [
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const preview = useHoverPreview();
+
+  // On mobile the page scrolls naturally, so the desktop stage controller
+  // no longer updates --nil-p. Keep the existing background crossfades in sync.
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1099px), (pointer: coarse)");
+    const root = document.documentElement;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!media.matches) return;
+      const scenes = Array.from(document.querySelectorAll<HTMLElement>(".nil-stage > .nil-scene"));
+      if (!scenes.length) return;
+      const center = window.innerHeight * 0.48;
+      let closest = 0;
+      let distance = Infinity;
+      scenes.forEach((scene, index) => {
+        const rect = scene.getBoundingClientRect();
+        const delta = center < rect.top ? rect.top - center : center > rect.bottom ? center - rect.bottom : 0;
+        if (delta < distance) { distance = delta; closest = index; }
+      });
+      // There are five photographic layers; later sections retain the final photo.
+      root.style.setProperty("--nil-p", String(Math.min(closest, 5)));
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const onMediaChange = () => { if (media.matches) schedule(); else root.style.removeProperty("--nil-p"); };
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    media.addEventListener("change", onMediaChange);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      media.removeEventListener("change", onMediaChange);
+      if (frame) cancelAnimationFrame(frame);
+      if (media.matches) root.style.removeProperty("--nil-p");
+    };
+  }, []);
+
 
   const handleDepth = (event: PointerEvent<HTMLElement>) => {
     if (event.pointerType === "touch") return;
