@@ -231,6 +231,46 @@ export function initStage(options: { persist?: boolean } = {}) {
   let transitioning = false;
   let transitionTimer: number | undefined;
   const panelAnimations = new Map<HTMLElement, Animation>();
+  // Her içerik öğesi panelden bağımsız kayar. Panelin sınırı hâlâ itme etkisini korur.
+  const elementAnimations = new Map<HTMLElement, Animation>();
+  const motionItems = (scene: HTMLElement) => {
+    // Metin satırlarını ayrı ayrı değil, bütün başlık/metin kutusunu hareket ettir.
+    const selected = Array.from(scene.querySelectorAll<HTMLElement>("[data-s]"));
+    return selected.filter(el => !selected.some(parent => parent !== el && parent.contains(el)));
+  };
+  const elementY = (el: HTMLElement) => {
+    const t = getComputedStyle(el).transform;
+    return !t || t === "none" ? 0 : new DOMMatrixReadOnly(t).m42;
+  };
+  const resetElements = (scene: HTMLElement) => {
+    motionItems(scene).forEach(el => {
+      elementAnimations.get(el)?.cancel();
+      elementAnimations.delete(el);
+      el.style.transform = "";
+    });
+  };
+  const moveElements = (scene: HTMLElement, phase: "in" | "out", dir: Dir, duration: number) => {
+    const list = motionItems(scene);
+    list.forEach((el, index) => {
+      const current = elementY(el);
+      elementAnimations.get(el)?.cancel();
+      elementAnimations.delete(el);
+      el.style.transform = "";
+      // Panelle beraber kayarken fotoğraf, metin ve çerçeve farklı mesafe kat eder.
+      // Başlangıçlar eşzamanlı; gecikme veya art arda landing yok.
+      const kind = el.dataset["s"];
+      const amount = kind === "frame" ? 110 : kind === "text" ? 74 : kind === "fade" ? 56 : 42;
+      const variation = 1 + (index % 3) * .13;
+      const offset = dir * amount * variation;
+      const from = phase === "in" ? (current || offset) : current;
+      const to = phase === "in" ? 0 : -offset;
+      const anim = el.animate(
+        [{transform:`translate3d(0,${from}px,0)`}, {transform:`translate3d(0,${to}px,0)`}],
+        {duration, easing:phase === "in" ? "cubic-bezier(.16,.82,.25,1)" : "cubic-bezier(.42,0,.62,1)",fill:"forwards"}
+      );
+      elementAnimations.set(el, anim);
+    });
+  };
   const positionOf = (scene: HTMLElement) => {
     const transform = getComputedStyle(scene).transform;
     return !transform || transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m42;
@@ -246,6 +286,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     panelAnimations.get(scene)?.cancel();
     panelAnimations.delete(scene);
     scene.style.transform = "";
+    resetElements(scene);
     scene.classList.add("is-off");
     scene.classList.remove("is-leaving");
   };
@@ -276,6 +317,8 @@ export function initStage(options: { persist?: boolean } = {}) {
     to.classList.remove("is-off", "is-leaving");
     animatePanel(from, fromY, -dir * window.innerHeight, duration);
     animatePanel(to, toY, 0, duration);
+    moveElements(from, "out", dir, duration);
+    moveElements(to, "in", dir, duration);
     cur = target;
     root.style.setProperty("--nil-bg-ms", `${duration}ms`);
     root.style.setProperty("--nil-p", String(cur));
@@ -284,6 +327,7 @@ export function initStage(options: { persist?: boolean } = {}) {
     transitioning = true;
     transitionTimer = window.setTimeout(() => {
       hidePanel(from);
+      resetElements(to);
       panelAnimations.get(to)?.cancel();
       panelAnimations.delete(to);
       to.style.transform = "";
@@ -393,6 +437,7 @@ export function initStage(options: { persist?: boolean } = {}) {
   return () => {
     if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
     panelAnimations.forEach((animation) => animation.cancel());
+    elementAnimations.forEach((animation) => animation.cancel());
     window.clearTimeout(rt);
     window.removeEventListener("wheel", onWheel);
     window.removeEventListener("touchstart", onTouchStart);
