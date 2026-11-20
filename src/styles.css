@@ -3951,3 +3951,29 @@ html.nil-staged .nil-index { display: flex; }
   .nil-scene--ct .ct-foot { gap: 18px; }
   .nil-scene--ct .ct-foot__r { gap: 10px; letter-spacing: .08em; }
 }
+
+/* Direct cinematic entrance: no video, overlay or page-blocking intro. */
+@keyframes nil-hero-cinematic-in {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); filter: blur(5px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes nil-hero-background-reveal {
+  from { opacity: .58; filter: brightness(.68); }
+  to { opacity: 1; filter: brightness(1); }
+}
+.nil-scene--hero .nil-hero2__eyebrow,
+.nil-scene--hero .nil-hero2__title,
+.nil-scene--hero .nil-hero2__text,
+.nil-scene--hero .nil-hero2__ctawrap {
+  animation: nil-hero-cinematic-in .85s cubic-bezier(.16,1,.3,1) both;
+}
+.nil-scene--hero .nil-hero2__eyebrow { animation-delay: .08s; }
+.nil-scene--hero .nil-hero2__title { animation-delay: .2s; }
+.nil-scene--hero .nil-hero2__text { animation-delay: .34s; }
+.nil-scene--hero .nil-hero2__ctawrap { animation-delay: .47s; }
+@media (prefers-reduced-motion: reduce) {
+  .nil-scene--hero .nil-hero2__eyebrow,
+  .nil-scene--hero .nil-hero2__title,
+  .nil-scene--hero .nil-hero2__text,
+  .nil-scene--hero .nil-hero2__ctawrap { animation: none; }
+}

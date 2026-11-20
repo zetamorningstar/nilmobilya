@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { useHoverPreview } from "@/components/hover-preview";
 import { StageScroll } from "@/components/stage-scroll";
 import { ReviewsMarquee } from "@/components/reviews-marquee";
-import { IntroSequence } from "@/components/intro-sequence";
 import { SiteDevelopmentNotice } from "@/components/site-development-notice";
 import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
@@ -131,7 +130,6 @@ function Index() {
 
   return (
     <main className="min-h-screen text-foreground">
-      <IntroSequence />
       <StageScroll />
       <SiteDevelopmentNotice />
 

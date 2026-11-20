@@ -3,7 +3,6 @@ import { X } from "lucide-react";
 
 /** Oturumda bir kez gösterilir; intro açılışından sonra aşağıdan yükselir. */
 const SESSION_KEY = "nil-development-notice-dismissed-v1";
-const INTRO_KEY = "nil-intro-seen";
 
 export function SiteDevelopmentNotice() {
   const [open, setOpen] = useState(false);
@@ -20,15 +19,9 @@ export function SiteDevelopmentNotice() {
       }, 550);
     };
 
-    // Önceki ziyarette intro tamamlandıysa kısa bir gecikmeyle göster.
-    try {
-      if (sessionStorage.getItem(INTRO_KEY)) show();
-      else window.addEventListener("nil:reveal", show, { once: true });
-    } catch {
-      window.addEventListener("nil:reveal", show, { once: true });
-    }
+    // The homepage now opens directly; schedule the existing notice independently.
+    show();
     return () => {
-      window.removeEventListener("nil:reveal", show);
       if (timer) clearTimeout(timer);
     };
   }, []);
