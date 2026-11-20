@@ -3724,3 +3724,35 @@ html.nil-staged .nil-index { display: flex; }
   .nil-scene--col .kcr-card--small .kcr-card__copy { max-width:65%; }
   .nil-scene--col .kcr-card--feature .kcr-card__copy { max-width:65%; }
 }
+
+/* Collection v9: product-first framing. Never enlarge narrow source images to
+   fill the wide category cards; keep the full furniture visible instead. */
+.nil-scene--col .kcr-card--small .kcr-card__visual {
+  background: radial-gradient(ellipse at 75% 55%,#29221d 0%,#171310 65%,#100e0c 100%);
+}
+.nil-scene--col .kcr-card--small .kcr-card__hero {
+  inset: 0 0 0 auto;
+  width: 70%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  filter: brightness(.96);
+  transform: none;
+}
+.nil-scene--col .kcr-card--small:hover .kcr-card__hero { transform: none; }
+.nil-scene--col .kcr-card--small .kcr-card__gradient {
+  background: linear-gradient(90deg,
+    #0c0a09 0%,rgba(12,10,9,.97) 25%,
+    rgba(12,10,9,.63) 39%,rgba(12,10,9,.12) 57%,transparent 73%);
+}
+.nil-scene--col .kcr-card--feature .kcr-card__slice img {
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  object-fit: contain; object-position: center center;
+  filter: brightness(.97); translate: none; transform: none;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__slice {
+  background: #181411;
+}
+@media (max-width: 640px) {
+  .nil-scene--col .kcr-card--small .kcr-card__hero { width: 76%; }
+}
