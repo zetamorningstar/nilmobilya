@@ -3,16 +3,16 @@ import { useEffect } from "react";
 /* ------------------------------------------------------------------ */
 /*  AYARLAR — hızı ve hissi buradan değiştirebilirsin (milisaniye)    */
 /* ------------------------------------------------------------------ */
-const EXIT_MS = 510; // bir öğenin ekran dışına çıkış süresi
+const EXIT_MS = 760; // bir öğenin ekran dışına çıkış süresi
 const EXIT_SPREAD = 0; // çıkarken öğeler arası toplam gecikme
-const ENTER_MS = 510; // bir öğenin ekranın altından gelme süresi
+const ENTER_MS = 760; // bir öğenin ekranın altından gelme süresi
 const ENTER_SPREAD = 0; // gelirken öğeler arası toplam gecikme
 const EDGE_PAD = 48; // öğe ekran kenarından bu kadar px daha uzağa gider
-const EASE_IN = "cubic-bezier(0.42, 0, 0.58, 1)";
-const EASE_OUT = "cubic-bezier(0.42, 0, 0.58, 1)";
+const EASE_IN = "cubic-bezier(0.55, 0, 0.2, 1)";
+const EASE_OUT = "cubic-bezier(0.2, 0.8, 0.25, 1)";
 const MIN_HEIGHT = 560; // bundan kısa ekranlarda normal kaydırmaya döner
 const STORE_KEY = "nil-scene-index";
-const STEP_GAP = 165; // tekerlekte iki sahne adımı arası en az süre (ms)
+const STEP_GAP = 155; // tekerlekte iki sahne adımı arası en az süre (ms)
 
 type Dir = 1 | -1;
 type Kind = "text" | "frame" | "fade" | "rule";
@@ -134,9 +134,10 @@ function playAtom(atom: Atom, phase: "in" | "out", dir: Dir, delay: number, fast
     startOut = currentY(el);
     el.getAnimations().forEach((an) => an.cancel());
   }
-  // Elementin eski animasyonundan kalan translate yeni harekete eklenmesin.
+  // Mevcut pozisyonu önce oku; sonra eski inline translate değerini temizle.
+  const incomingPosition = currentY(el);
   el.style.translate = "";
-  const from = phase === "in" ? dist : startOut;
+  const from = phase === "in" && incomingPosition !== 0 ? incomingPosition : (phase === "in" ? dist : startOut);
   const to = phase === "in" ? 0 : dist;
 
   const frames: Keyframe[] = [{ translate: `0 ${from}px` }, { translate: `0 ${to}px` }];
@@ -147,9 +148,9 @@ function playAtom(atom: Atom, phase: "in" | "out", dir: Dir, delay: number, fast
 
   return [
     el.animate(frames, {
-      duration: fast ? 340 : (phase === "in" ? ENTER_MS : EXIT_MS),
+      duration: fast ? 520 : (phase === "in" ? ENTER_MS : EXIT_MS),
       delay,
-      easing: fast ? "cubic-bezier(0.32, 0.08, 0.68, 0.92)" : (phase === "in" ? EASE_OUT : EASE_IN),
+      easing: fast ? "cubic-bezier(0.24, 0.68, 0.32, 1)" : (phase === "in" ? EASE_OUT : EASE_IN),
       fill: phase === "in" ? "backwards" : "forwards",
     }),
   ];
@@ -299,11 +300,11 @@ export function initStage(options: { persist?: boolean } = {}) {
     cleanupTimer = window.setTimeout(() => {
       if (finishedFrom !== scenes[cur]) clearScene(finishedFrom);
       cleanupTimer = undefined;
-    }, (fast ? 340 : EXIT_MS) + EXIT_SPREAD + 35);
+    }, (fast ? 520 : EXIT_MS) + EXIT_SPREAD + 35);
     transitionTimer = window.setTimeout(() => {
       transitioning = false;
       transitionTimer = undefined;
-    }, (fast ? 340 : ENTER_MS) + ENTER_SPREAD);
+    }, (fast ? 520 : ENTER_MS) + ENTER_SPREAD);
   };
   const step = (d: Dir) => goTo(Math.max(0, Math.min(scenes.length - 1, cur + d)));
 
