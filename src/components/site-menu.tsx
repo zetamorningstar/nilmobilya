@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Phone, Sparkles, X } from "lucide-react";
+import { Instagram, Mail, Phone, Sparkles, X } from "lucide-react";
 import { whatsappOfferUrl } from "@/lib/sales";
 import { useEffect, type KeyboardEvent as ReactKeyboardEvent, type SyntheticEvent } from "react";
 
@@ -95,6 +95,9 @@ export function SiteMenu({
             className="flex items-center gap-2 transition-colors hover:text-primary"
           >
             <Instagram className="size-4" /> @nill.mobilya
+          </a>
+          <a href="mailto:nilmobilyatasarim@gmail.com" className="flex items-center gap-2 transition-colors hover:text-primary">
+            <Mail className="size-4" /> nilmobilyatasarim@gmail.com
           </a>
           <a href="tel:+905360236146" className="flex items-center gap-2 transition-colors hover:text-primary">
             <Phone className="size-4" /> 0 (536) 023 61 46
