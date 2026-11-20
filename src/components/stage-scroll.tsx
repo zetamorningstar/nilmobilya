@@ -162,7 +162,7 @@ export function initStage(options: { persist?: boolean } = {}) {
   if (!stage) return undefined;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
   if (window.innerHeight < MIN_HEIGHT) return undefined;
-  // Hybrid touchscreen laptops often report a coarse pointer even while used\n  // with a mouse or trackpad. Keep cinematic scenes on wide laptop screens;\n  // reserve native scrolling for genuinely narrow/mobile layouts.\n  if (window.innerWidth < 1100) return undefined;
+  // Hybrid touchscreen laptops can report a coarse pointer even with a mouse.\n  // Keep cinematic transitions on desktop-sized viewports.\n  // Narrow layouts still use natural scrolling to avoid clipping content.\n  if (window.innerWidth < 1100) return undefined;
 
   const root = document.documentElement;
   const scenes = Array.from(stage.querySelectorAll<HTMLElement>(".nil-scene"));
