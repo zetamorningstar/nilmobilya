@@ -4313,3 +4313,35 @@ html.nil-staged .nil-index { display: flex; }
 .nil-review-page__results::after {opacity:.35}
 .nil-review-page__results h3 {text-shadow:none}
 .nil-review-page__first {box-shadow:none}
+
+
+/* 2026-11 — Tüm bölümler: daha koyu, mat ve düşük kontrastlı organik kıvrımlar.
+   Sürekli hareket/filtre yok; sahne çapraz geçişleri aynen korunur. */
+.nil-bg__scene {
+  background-color:#090807;
+}
+.nil-bg__scene::before,.nil-bg__scene::after {
+  background:linear-gradient(152deg,
+    rgba(48,37,31,.14) 0%,
+    rgba(28,23,20,.12) 24%,
+    rgba(9,8,7,.015) 46%,
+    rgba(61,46,36,.075) 49%,
+    rgba(10,9,8,.012) 55%,
+    rgba(26,21,18,.12) 79%,
+    transparent 100%) !important;
+  border-top-color:rgba(94,75,61,.095) !important;
+  box-shadow:inset 0 18px 38px rgba(55,43,35,.025),0 -7px 28px rgba(42,31,24,.025) !important;
+  opacity:.6 !important;
+}
+.nil-bg__scene::after {opacity:.36 !important}
+.nil-bg__scene--1 {background-image:radial-gradient(ellipse at 14% 74%,rgba(43,34,29,.12),transparent 67%),linear-gradient(135deg,#090808,#100e0c 57%,#080807) !important}
+.nil-bg__scene--2 {background-image:radial-gradient(ellipse at 84% 22%,rgba(46,35,29,.11),transparent 67%),linear-gradient(155deg,#090808,#110e0c 57%,#080807) !important}
+.nil-bg__scene--3 {background-image:radial-gradient(ellipse at 17% 23%,rgba(48,34,28,.1),transparent 69%),linear-gradient(125deg,#090807,#110d0b 58%,#080807) !important}
+.nil-bg__scene--4 {background-image:radial-gradient(ellipse at 83% 77%,rgba(45,35,29,.12),transparent 70%),linear-gradient(135deg,#090808,#120f0d 60%,#080807) !important}
+.nil-bg__scene--5 {background-image:radial-gradient(ellipse at 29% 79%,rgba(44,34,28,.11),transparent 66%),linear-gradient(150deg,#090808,#100e0c 55%,#080807) !important}
+.nil-bg__scene--6 {background-image:radial-gradient(ellipse at 71% 17%,rgba(46,34,28,.11),transparent 66%),linear-gradient(120deg,#090808,#110e0c 58%,#080807) !important}
+/* Yorum kartları da aynı mat palete uysun; parlama eklenmez. */
+.nil-review-page__results {background:linear-gradient(130deg,rgba(17,15,14,.97),rgba(12,11,10,.98)) !important;border-color:rgba(107,85,70,.19) !important}
+.nil-review-page__form {background:linear-gradient(130deg,rgba(23,19,17,.97),rgba(15,13,12,.97)) !important;border-color:rgba(107,85,70,.2) !important}
+.nil-review-page__results::before {opacity:.08 !important}
+.nil-review-page__results::after {opacity:.18 !important}
