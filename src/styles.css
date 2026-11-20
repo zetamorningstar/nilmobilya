@@ -3856,3 +3856,14 @@ html.nil-staged .nil-index { display: flex; }
 @media(max-width:767px) {
   .nil-bg__img {background-position:62% center !important}
 }
+
+/* Hero3: upscaled wide photo, no additional blur or zoom */
+.nil-bg__img {
+  background-image:url("/images/anasayfa/hero3.webp") !important;
+  background-size:cover !important;
+  background-position:50% 50% !important;
+  image-rendering:auto;
+}
+@media (max-width:767px) {
+  .nil-bg__img {background-position:63% center !important}
+}
