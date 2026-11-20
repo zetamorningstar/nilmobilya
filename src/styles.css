@@ -4408,3 +4408,25 @@ html.nil-staged .nil-index { display: flex; }
     transition: none !important;
   }
 }
+
+
+/* About + custom production: use the available desktop viewport rather than
+   inheriting the generous global scene side padding. */
+@media (min-width: 1100px) {
+  html.nil-staged .nil-stage .nil-scene--hk,
+  html.nil-staged .nil-stage .nil-scene--ou {
+    padding-inline: clamp(26px, 3.2vw, 62px) !important;
+  }
+  html.nil-staged .nil-stage .nil-scene--hk > .nil-scene__body,
+  html.nil-staged .nil-stage .nil-scene--ou > .nil-scene__body {
+    width: 100%;
+    max-width: none;
+    padding-inline: clamp(8px, 1vw, 20px);
+  }
+}
+@media (min-width: 1450px) and (min-height: 820px) {
+  html.nil-staged .nil-stage .nil-scene--hk > .nil-scene__body,
+  html.nil-staged .nil-stage .nil-scene--ou > .nil-scene__body {
+    gap: clamp(22px, 2.5vh, 30px);
+  }
+}
