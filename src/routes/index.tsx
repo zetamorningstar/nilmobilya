@@ -38,7 +38,6 @@ const SCENES = [
   ["koleksiyon", "Koleksiyon"],
   ["ozel-uretim", "Özel üretim"],
   ["yorumlar", "Yorumlar"],
-  ["sergimiz", "Sergimiz"],
   ["hikaye", "Hikâyemiz"],
   ["iletisim", "İletişim"],
 ] as const;
@@ -48,7 +47,6 @@ const NAV = [
   ["Koleksiyon", "#koleksiyon"],
   ["Özel üretim", "#ozel-uretim"],
   ["Yorumlar", "#yorumlar"],
-  ["Sergimiz", "#sergimiz"],
   ["Hakkımızda", "#hikaye"],
   ["İletişim", "#iletisim"],
 ] as const;
@@ -273,27 +271,7 @@ function Index() {
         {/* 4 · Yorumlar */}
         <ReviewsMarquee />
 
-        {/*5 · Sergimiz */}
-<section id="sergimiz" aria-label="Sergimiz" className="nil-scene">
-  <div className="nil-scene__body nil-split nil-split--wide nil-showcase">
-    <div className="nil-showcase__copy">
-      <div data-s="fade" className="nil-showcase__eyebrow"><span className="nil-showcase__dot" aria-hidden="true" /> Sergimiz <span className="nil-showcase__line" aria-hidden="true" /></div>
-      <h2 data-s="text" className="max-w-2xl font-display text-4xl leading-tight md:text-6xl">Yaptığımız her dönüşümle bir hayata dokunduk.</h2>
-      <p data-s="text" className="mt-6 max-w-xl text-sm font-light leading-7 text-ink-soft md:text-base">
-        Her proje, bir mekânın hikâyesini yeniden yazdı. Bugüne kadar hayata geçirdiğimiz çalışmaları sergimizde bir araya getirdik.
-      </p>
-    </div>
-    <div className="nil-showcase__action flex flex-col justify-end gap-4">
-      <div data-s="fade">
-        <Button asChild variant="goldOutline" size="lg" className="h-12 w-full justify-start px-5 text-xs uppercase">
-          <Link to="/sergimiz">Sergiyi gez <ArrowUpRight /></Link>
-        </Button>
-      </div>
-    </div>
-  </div>
-</section>
-
-                {/* 5 · Hikâye */}
+        {/* 5 · Hikâye */}
         <AboutSection />
 
                 {/* 7 · İletişim */}
