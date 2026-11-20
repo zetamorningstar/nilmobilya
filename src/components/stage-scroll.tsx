@@ -235,14 +235,14 @@ export function initStage(options: { persist?: boolean } = {}) {
   const elementAnimations = new Map<HTMLElement, Animation>();
   const motionItems = (scene: HTMLElement) => {
     // Metin satırlarını ayrı ayrı değil, bütün başlık/metin kutusunu hareket ettir.
-    const selected = Array.from(scene.querySelectorAll<HTMLElement>("[data-s]"));
+    const selected = Array.from(scene.querySelectorAll<HTMLElement>(`[data-s], .kcr-card, .kcr-heading__left, .kcr-heading__description, .nil-review-page__intro, .nil-review-page__form, .nil-review-page__results, .nil-showcase__copy, .nil-showcase__action, .nil-hero2__content, .nil-split__media, .nil-split__copy, .nil-scene__media, .nil-scene__copy`));
     return selected.filter(el => !selected.some(parent => parent !== el && parent.contains(el)));
   };
   // Translate ayrı CSS özelliği: var olan transform'ları ezmez.
   const elementY = (el: HTMLElement) => {
     const value = getComputedStyle(el).translate;
     if (!value || value === "none") return 0;
-    const parts = value.split(/\\s+/);
+    const parts = value.split(/\s+/);
     return Number.parseFloat(parts[1] ?? "0") || 0;
   };
   const resetElements = (scene: HTMLElement) => {
@@ -262,7 +262,7 @@ export function initStage(options: { persist?: boolean } = {}) {
       // Sayfa sınırları beraber ilerlerken iç öğeler daha büyük,
       // farklı mesafelerde hareket eder. Hepsi aynı karede başlar.
       const kind = el.dataset["s"];
-      const base = kind === "frame" ? 300 : kind === "text" ? 235 : kind === "fade" ? 185 : 155;
+      const base = kind === "frame" || el.matches(".kcr-card, .nil-review-page__form, .nil-review-page__results, .nil-split__media, .nil-scene__media") ? 360 : kind === "text" ? 295 : kind === "fade" ? 255 : 245;
       const amount = base * (1 + (index % 3) * .12);
       const offset = dir * amount;
       const from = phase === "in" ? (previous || offset) : previous;
