@@ -279,12 +279,10 @@ export function initStage(options: { persist?: boolean } = {}) {
     // 4) Giriş animasyonu bitince sonraki adımı başlat; sahneler üst üste binmez
     later(() => {
       busy = false;
-      if (queued !== null) {
-        const q = queued;
-        queued = null;
-        if (q !== cur) run(cur + (q > cur ? 1 : -1));
-        else desired = cur;
-      }
+      const next = queued ?? desired;
+      queued = null;
+      if (next !== cur) run(cur + (next > cur ? 1 : -1));
+      else desired = cur;
     }, enterAt + UNLOCK_AFTER);
   };
 
