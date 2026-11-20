@@ -4430,3 +4430,35 @@ html.nil-staged .nil-index { display: flex; }
     gap: clamp(22px, 2.5vh, 30px);
   }
 }
+
+
+/* Cross-device fallback: when cinematic stage is disabled (touch laptops,
+   reduced motion, short screens), don't leave the fixed hero image behind
+   every normally scrolling section. Each section owns its background. */
+html:not(.nil-staged) .nil-bg__img,
+html:not(.nil-staged) .nil-bg__scene,
+html:not(.nil-staged) .nil-bg__marble {
+  opacity: 0 !important;
+  visibility: hidden;
+}
+html:not(.nil-staged) .nil-stage #top {
+  background: linear-gradient(90deg,rgba(5,4,4,.25),rgba(5,4,4,.08)),url("/images/anasayfa/hero3.webp") center / cover no-repeat;
+}
+html:not(.nil-staged) .nil-stage #koleksiyon {
+  background: radial-gradient(ellipse at 83% 24%,rgba(48,36,29,.14),transparent 67%),linear-gradient(155deg,#090808,#120f0d 57%,#080807);
+}
+html:not(.nil-staged) .nil-stage #ozel-uretim {
+  background: radial-gradient(ellipse at 17% 77%,rgba(46,34,29,.14),transparent 67%),linear-gradient(125deg,#090808,#110e0c 57%,#080807);
+}
+html:not(.nil-staged) .nil-stage #yorumlar {
+  background: radial-gradient(ellipse at 18% 25%,rgba(49,34,28,.11),transparent 69%),linear-gradient(125deg,#090807,#110d0b 58%,#080807);
+}
+html:not(.nil-staged) .nil-stage #sergimiz {
+  background: radial-gradient(ellipse at 83% 77%,rgba(45,35,29,.13),transparent 70%),linear-gradient(135deg,#090808,#120f0d 60%,#080807);
+}
+html:not(.nil-staged) .nil-stage #hikaye {
+  background: radial-gradient(ellipse at 28% 79%,rgba(44,34,28,.12),transparent 66%),linear-gradient(150deg,#090808,#100e0c 55%,#080807);
+}
+html:not(.nil-staged) .nil-stage #iletisim {
+  background: radial-gradient(ellipse at 71% 17%,rgba(46,34,28,.12),transparent 66%),linear-gradient(120deg,#090808,#110e0c 58%,#080807);
+}
