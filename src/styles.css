@@ -4054,36 +4054,37 @@ html.nil-staged .nil-index { display: flex; }
 }
 
 
-/* Deneme: mermer yerine sıcak, yavaş hareketli bronz ışık dalgaları.
-   Ana sayfa hero fotoğrafı ve ürün görselleri korunur. */
+/* Deneme: aurora benzeri yumuşak, sıcak bronz-altın ışık perdeleri.
+   Sadece bölüm arka planları; ürün ve hero fotoğrafları korunur. */
 .nil-bg__scene--1,.nil-bg__scene--2,.nil-bg__scene--3,.nil-bg__scene--4,.nil-bg__scene--5 {
   background-image:none !important;
-  background-color:#100c0a;
+  background-color:#0e0b0a;
   overflow:hidden;
   isolation:isolate;
 }
 .nil-bg__scene--1::before,.nil-bg__scene--2::before,.nil-bg__scene--3::before,.nil-bg__scene--4::before,.nil-bg__scene--5::before {
   content:"";
   position:absolute;
-  inset:-32%;
-  z-index:0;
+  inset:-28%;
   pointer-events:none;
   background:
-    radial-gradient(ellipse 40% 24% at 24% 42%,rgba(126,75,36,.25),transparent 76%),
-    radial-gradient(ellipse 43% 28% at 76% 62%,rgba(155,104,50,.16),transparent 75%),
-    radial-gradient(ellipse 52% 20% at 49% 75%,rgba(85,55,32,.21),transparent 82%);
-  filter:blur(36px);
-  animation:nil-bronze-wave 24s ease-in-out infinite alternate;
-  will-change:transform;
+    linear-gradient(108deg,transparent 16%,rgba(130,78,34,.06) 25%,rgba(192,137,69,.24) 32%,rgba(226,181,109,.12) 37%,transparent 47%),
+    linear-gradient(76deg,transparent 39%,rgba(116,71,38,.07) 46%,rgba(173,116,56,.19) 53%,rgba(224,169,94,.09) 59%,transparent 69%),
+    radial-gradient(ellipse 65% 40% at 58% 68%,rgba(91,54,29,.16),transparent 78%);
+  filter:blur(43px);
+  opacity:.8;
+  transform-origin:50% 55%;
+  animation:nil-aurora-drift 23s ease-in-out infinite alternate;
+  will-change:transform,opacity;
 }
 .nil-bg__scene--1::after,.nil-bg__scene--2::after,.nil-bg__scene--3::after,.nil-bg__scene--4::after,.nil-bg__scene--5::after {
-  background:linear-gradient(115deg,rgba(9,7,6,.3),rgba(13,9,7,.08) 55%,rgba(8,6,5,.3));
+  background:linear-gradient(115deg,rgba(8,6,5,.34),rgba(11,8,6,.08) 55%,rgba(8,6,5,.36));
 }
-.nil-bg__marble { opacity:0 !important; visibility:hidden !important; }
-@keyframes nil-bronze-wave {
-  0% {transform:translate3d(-3%,-2%,0) rotate(-3deg) scale(1);opacity:.75}
-  50% {transform:translate3d(3%,2%,0) rotate(2deg) scale(1.06);opacity:1}
-  100% {transform:translate3d(-1%,4%,0) rotate(-1deg) scale(1.02);opacity:.82}
+.nil-bg__marble {opacity:0 !important;visibility:hidden !important;}
+@keyframes nil-aurora-drift {
+  0% {transform:translate3d(-8%,-3%,0) skewX(-8deg) rotate(-4deg) scale(1);opacity:.62}
+  50% {transform:translate3d(4%,2%,0) skewX(4deg) rotate(2deg) scale(1.13);opacity:.92}
+  100% {transform:translate3d(9%,-2%,0) skewX(-3deg) rotate(5deg) scale(1.04);opacity:.72}
 }
 @media(prefers-reduced-motion:reduce) {
  .nil-bg__scene--1::before,.nil-bg__scene--2::before,.nil-bg__scene--3::before,.nil-bg__scene--4::before,.nil-bg__scene--5::before {animation:none;will-change:auto}
