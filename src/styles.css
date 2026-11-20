@@ -3663,3 +3663,10 @@ html.nil-staged .nil-index { display: flex; }
     width: 96%; height: 96%; max-width: 96%; max-height: 96%;
   }
 }
+
+/* Collection v7: nudge photo contents up slightly without moving angled panels */
+.nil-scene--col .kcr-card__slice img,
+.nil-scene--col .kcr-card--feature .kcr-card__slice img {
+  object-position: center 46%;
+  translate: 0 -5px;
+}
