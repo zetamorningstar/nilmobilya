@@ -18,6 +18,12 @@ export interface CollectionProduct {
   name: string;
   material: string;
   image: string;
+  /** Aynı ürüne ait ilave fotoğraflar. Başka modellerin görsellerini burada kullanmayın. */
+  gallery?: string[];
+  /** Üretici tarafından doğrulanan ölçüler (ör. Genişlik × Derinlik × Yükseklik). */
+  dimensions?: { label: string; value: string }[];
+  /** Ürüne ait doğrulanmış teknik nitelikler. */
+  details?: { label: string; value: string }[];
   /** Soldaki kategori listesinde görünür. Aynı yazıyı yazan ürünler aynı kategoride toplanır. */
   category: string;
   /** İsteğe bağlı. Kart fotoğrafı kırpılırken hangi kısım kalsın: "center", "50% 30%" gibi. */
