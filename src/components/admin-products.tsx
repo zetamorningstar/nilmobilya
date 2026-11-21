@@ -58,8 +58,41 @@ export function AdminProducts() {
   const {error:e}=await db.from("categories").insert({name:newCategory.trim(),slug:slugify(newCategory)});
   if(e)setError(e.message);else{setNewCategory("");setSuccess("Kategori eklendi.");await load()}
  }
+ async function importExistingCatalog(){
+  const db=getSupabaseClient();if(!db)return;
+  const source=CATALOG_SLUGS.flatMap(slug=>(getCollection(slug)?.products??[]).map(product=>({slug,product})));
+  const missing=source.filter(({product})=>!products.some(p=>p.slug===productSlug(product.name)));
+  if(!missing.length){setSuccess("Mevcut katalog ürünleri zaten yönetim panelinde.");return}
+  if(!window.confirm(missing.length+" mevcut katalog ürünü Supabase'e aktarılacak. Var olan kayıtlar değiştirilmeyecek. Devam edilsin mi?"))return;
+  setImporting(true);setError("");setSuccess("");
+  try{
+    const known=[...categories];
+    for(const slug of CATALOG_SLUGS){
+      if(!missing.some(item=>item.slug===slug))continue;
+      if(known.some(category=>category.slug===slug))continue;
+      const collection=getCollection(slug);
+      if(!collection)continue;
+      const {data,error}=await db.from("categories").upsert({name:collection.title,slug},{onConflict:"slug"}).select("id,name,slug").single();
+      if(error)throw error;
+      known.push(data as Category);
+    }
+    for(const {slug,product} of missing){
+      const payload={
+        title:product.name,slug:productSlug(product.name),
+        category_id:known.find(category=>category.slug===slug)?.id??null,
+        description:encodeProductDescription({description:product.productInfo||"",material:product.material,standardDimensions:product.standardDimensions||"",details:product.details||[],dimensions:product.dimensions||[],options:product.options||[]}),
+        image_urls:[product.image,...(product.gallery||[])],published:true,sort_order:0
+      };
+      const {error}=await db.from("products").insert(payload);
+      if(error && error.code!=="23505")throw error;
+    }
+    await load();
+    setSuccess("Mevcut katalog ürünleri aktarılıp düzenlenebilir hale getirildi.");
+  }catch(e){setError(e instanceof Error?e.message:"Aktarım başarısız. Veritabanı izinlerini kontrol et.");}
+  finally{setImporting(false);}
+ }
  return <section className="space-y-6">
-  <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="font-serif text-3xl">Ürünlerim</h2><p className="mt-1 text-sm text-[#aaa8a5]">Supabase ürün kataloğu · {products.length} ürün</p></div><button onClick={create} className="inline-flex items-center gap-2 rounded-md bg-[#c9a46c] px-5 py-3 text-sm font-semibold text-[#191817] hover:bg-[#e0bc85]"><Plus size={17}/> Yeni ürün</button></div>
+  <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="font-serif text-3xl">Ürünlerim</h2><p className="mt-1 text-sm text-[#aaa8a5]">Supabase ürün kataloğu · {products.length} ürün</p></div><button type="button" disabled={importing||loading} onClick={()=>void importExistingCatalog()} className="rounded-md border border-[#c9a46c]/60 px-4 py-3 text-sm text-[#e5c08c] disabled:opacity-50">{importing?"Aktarılıyor…":"Mevcut katalogu içe aktar"}</button><button onClick={create} className="inline-flex items-center gap-2 rounded-md bg-[#c9a46c] px-5 py-3 text-sm font-semibold text-[#191817] hover:bg-[#e0bc85]"><Plus size={17}/> Yeni ürün</button></div>
   {error&&<p role="alert" className="rounded-md border border-red-500/40 bg-red-950/30 p-3 text-sm text-red-200">{error}</p>}
   {success&&<p role="status" className="rounded-md border border-emerald-500/30 bg-emerald-950/20 p-3 text-sm text-emerald-200">{success}</p>}
   <form onSubmit={addCategory} className="flex flex-wrap gap-2 rounded-lg border border-white/10 bg-[#1d1e20] p-4"><input aria-label="Yeni kategori adı" value={newCategory} onChange={e=>setNewCategory(e.target.value)} placeholder="Yeni kategori adı (ör. TV Üniteleri)" className={field+" min-w-[220px] flex-1"}/><button className="rounded-md border border-[#c9a46c]/60 px-4 py-2 text-sm text-[#e5c08c]">Kategori ekle</button></form>
