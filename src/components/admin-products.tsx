@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { Pencil, Plus, Trash2, X } from "lucide-react";
+import { Pencil, Plus, Trash2, X, Eye, ArrowUp, ArrowDown, ImageOff } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { CATALOG_SLUGS, getCollection, productSlug } from "@/lib/collections";
 import { decodeProductDescription, encodeProductDescription } from "@/lib/live-catalog";
@@ -21,6 +21,7 @@ export function AdminProducts() {
  const [newCategory,setNewCategory]=useState("");
  const [importing,setImporting]=useState(false);
  const [uploading,setUploading]=useState(false);
+ const [previewOpen,setPreviewOpen]=useState(false);
  const [loading,setLoading]=useState(true);
  const [saving,setSaving]=useState(false);
  const [error,setError]=useState("");
@@ -35,8 +36,24 @@ export function AdminProducts() {
   setLoading(false);
  },[]);
  useEffect(()=>{void load()},[load]);
- const edit=(p:Product)=>{const meta=decodeProductDescription(p.description);setEditing(p.id);setForm({title:p.title,slug:p.slug,description:meta.description,material:meta.material,standardDimensions:meta.standardDimensions,dimensions:meta.dimensions.map(x=>x.label+": "+x.value).join("\n"),details:meta.details.map(x=>x.label+": "+x.value).join("\n"),options:meta.options.map(x=>x.label+": "+x.values.join(", ")).join("\n"),image_urls:p.image_urls.join("\n"),published:p.published,category_id:p.category_id||"",sort_order:p.sort_order});setShowForm(true);setError("");setSuccess("")};
- const create=()=>{setEditing(null);setForm(empty);setShowForm(true);setError("");setSuccess("")};
+ const edit=(p:Product)=>{const meta=decodeProductDescription(p.description);setEditing(p.id);setForm({title:p.title,slug:p.slug,description:meta.description,material:meta.material,standardDimensions:meta.standardDimensions,dimensions:meta.dimensions.map(x=>x.label+": "+x.value).join("\n"),details:meta.details.map(x=>x.label+": "+x.value).join("\n"),options:meta.options.map(x=>x.label+": "+x.values.join(", ")).join("\n"),image_urls:p.image_urls.join("\n"),published:p.published,category_id:p.category_id||"",sort_order:p.sort_order});setShowForm(true);setPreviewOpen(false);setError("");setSuccess("")};
+ const create=()=>{setEditing(null);setForm(empty);setPreviewOpen(false);setShowForm(true);setError("");setSuccess("")};
+ const imageList=()=>form.image_urls.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+ const setImageList=(items:string[])=>setForm(current=>({...current,image_urls:items.join("\n")}));
+ const reorderImage=(index:number,direction:number)=>{
+   const items=imageList();const other=index+direction;
+   if(other<0||other>=items.length)return;
+   [items[index],items[other]]=[items[other],items[index]];
+   setImageList(items);
+ };
+ async function togglePublish(p:Product){
+   const db=getSupabaseClient();if(!db)return;
+   setError("");setSuccess("");
+   const {error:e}=await db.from("products").update({published:!p.published,updated_at:new Date().toISOString()}).eq("id",p.id);
+   if(e){setError("Yayın durumu değiştirilemedi: "+e.message);return;}
+   setProducts(current=>current.map(row=>row.id===p.id?{...row,published:!p.published}:row));
+   setSuccess(p.published?"Ürün taslağa alındı.":"Ürün yayına alındı.");
+ }
  async function uploadImages(files: FileList | null){
   if(!files?.length)return;
   const db=getSupabaseClient();if(!db){setError("Supabase bağlantısı bulunamadı.");return;}
@@ -150,10 +167,39 @@ export function AdminProducts() {
     {uploading&&<p className="mt-2 text-xs text-[#d4b685]">Fotoğraflar yükleniyor…</p>}
     {form.image_urls.trim()&&<div className="mt-3 flex flex-wrap gap-2">{form.image_urls.split(/\r?\n/).filter(Boolean).map((url,i)=><img key={i} src={url} alt={"Ürün görseli "+(i+1)} className="h-20 w-20 rounded-md border border-white/20 object-contain"/>)}</div>}
    </div>
+   {imageList().length>0&&<div className="rounded-lg border border-white/10 bg-[#17181b] p-4">
+     <p className="mb-3 text-sm font-semibold text-[#e1c59b]">Fotoğraf sırası (ilk görsel kapak fotoğrafıdır)</p>
+     <div className="space-y-2">{imageList().map((url,index)=><div key={index} className="flex flex-wrap items-center gap-3 rounded-md border border-white/10 p-2">
+       <img src={url} alt={index===0?"Kapak fotoğrafı":"Fotoğraf "+(index+1)} className="h-16 w-16 rounded-md bg-[#26201a] object-contain"/>
+       <span className="min-w-0 flex-1 truncate text-xs text-[#c2b6a5]">{index===0?"Kapak · ":"Görsel "+(index+1)+" · "}{url}</span>
+       <button type="button" disabled={index===0} onClick={()=>reorderImage(index,-1)} aria-label="Fotoğrafı öne taşı" className="rounded-md border border-white/15 p-2 disabled:opacity-30"><ArrowUp size={16}/></button>
+       <button type="button" disabled={index===imageList().length-1} onClick={()=>reorderImage(index,1)} aria-label="Fotoğrafı arkaya taşı" className="rounded-md border border-white/15 p-2 disabled:opacity-30"><ArrowDown size={16}/></button>
+       <button type="button" onClick={()=>setImageList(imageList().filter((_,i)=>i!==index))} aria-label="Fotoğrafı üründen kaldır" title="Yalnızca ürün kaydından kaldırılır" className="rounded-md border border-red-500/30 p-2 text-red-300"><X size={16}/></button>
+     </div>)}</div>
+   </div>}
    <div className="flex flex-wrap items-center gap-6"><label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={form.published} onChange={e=>setForm({...form,published:e.target.checked})} className="accent-[#c9a46c]"/> Yayında (veritabanında görünür)</label><label className="text-sm">Sıra <input type="number" value={form.sort_order} onChange={e=>setForm({...form,sort_order:Number(e.target.value)})} className={field+" ml-2 w-24"}/></label></div>
    <p className="text-xs text-[#bcb7b0]">Yayınlanan ürünler sitedeki koleksiyona aktarılır. Galeri için ilk satıra ana fotoğrafı, alt satırlara aynı ürüne ait diğer fotoğraf adreslerini yaz. Kesinleşmeyen ölçüleri boş bırak.</p>
-   <button disabled={saving} className="rounded-md bg-[#c9a46c] px-6 py-3 text-sm font-semibold text-[#171717] disabled:opacity-50">{saving?"Kaydediliyor…":"Ürünü kaydet"}</button>
+   <div className="flex flex-wrap gap-3">
+     <button type="button" onClick={()=>setPreviewOpen(true)} className="inline-flex items-center gap-2 rounded-md border border-[#c9a46c]/60 px-5 py-3 text-sm text-[#e5c08c]"><Eye size={16}/> Önizle</button>
+     <button disabled={saving||uploading} className="rounded-md bg-[#c9a46c] px-6 py-3 text-sm font-semibold text-[#171717] disabled:opacity-50">{saving?"Kaydediliyor…":"Ürünü kaydet"}</button>
+   </div>
   </form>}
-  {loading?<p className="text-sm text-[#bbb]">Ürünler yükleniyor…</p>:products.length===0?<div className="rounded-lg border border-dashed border-white/20 p-9 text-center text-sm text-[#aaa8a5]">Henüz ürün yok. “Yeni ürün” ile ilk ürünü ekle.</div>:<div className="space-y-3">{products.map(p=><div key={p.id} className="flex flex-wrap items-center gap-4 rounded-lg border border-white/10 bg-[#1d1e20] p-4">{p.image_urls[0]?<img src={p.image_urls[0]} alt="" className="h-16 w-16 rounded-md object-cover"/>:<div className="h-16 w-16 rounded-md bg-[#343537]"/>}<div className="min-w-[180px] flex-1"><h3 className="font-medium">{p.title}</h3><p className="mt-1 text-xs text-[#aaa8a5]">{categories.find(c=>c.id===p.category_id)?.name||"Kategorisiz"} · {p.published?"Yayında":"Taslak"}</p></div><button onClick={()=>edit(p)} className="inline-flex items-center gap-2 rounded-md border border-white/20 px-3 py-2 text-sm hover:border-[#c9a46c]"><Pencil size={15}/> Düzenle</button><button onClick={()=>void remove(p)} className="inline-flex items-center gap-2 rounded-md border border-red-500/30 px-3 py-2 text-sm text-red-300 hover:border-red-400"><Trash2 size={15}/> Sil</button></div>)}</div>}
+  {previewOpen&&<div role="dialog" aria-modal="true" aria-label="Ürün önizlemesi" className="fixed inset-0 z-[120] flex items-center justify-center overflow-y-auto bg-black/85 p-4" onClick={()=>setPreviewOpen(false)}>
+    <div className="relative w-full max-w-4xl rounded-xl border border-[#ac895b]/40 bg-[#171411] p-6 text-[#f0e6da] shadow-2xl md:p-9" onClick={event=>event.stopPropagation()}>
+      <button type="button" onClick={()=>setPreviewOpen(false)} aria-label="Önizlemeyi kapat" className="absolute right-4 top-4 p-2"><X size={20}/></button>
+      <p className="mb-6 text-xs uppercase tracking-widest text-[#c9a46c]">Nil Mobilya · Yayın öncesi önizleme</p>
+      <div className="grid gap-8 md:grid-cols-2">
+        {imageList()[0]?<img src={imageList()[0]} alt={form.title||"Ürün fotoğrafı"} className="max-h-[480px] w-full rounded-lg bg-[#24201b] object-contain"/>:<div className="flex min-h-64 items-center justify-center rounded-lg border border-dashed border-white/20"><ImageOff size={28}/></div>}
+        <div><p className="text-xs uppercase tracking-wider text-[#c9a46c]">{categories.find(c=>c.id===form.category_id)?.name||"Kategorisiz"}</p>
+          <h3 className="mt-3 font-serif text-3xl">{form.title||"Ürün adı"}</h3>
+          <p className="mt-3 text-sm text-[#d2bda5]">{form.material}</p>
+          <h4 className="mt-7 font-semibold">Ölçüler</h4><p className="mt-2 whitespace-pre-line text-sm text-[#aaa]">{form.dimensions||form.standardDimensions||"Ölçüler teklif sırasında belirlenir."}</p>
+          <h4 className="mt-6 font-semibold">Ürün Bilgisi</h4><p className="mt-2 whitespace-pre-line text-sm leading-6 text-[#bbb]">{form.description||"Henüz açıklama eklenmedi."}</p>
+          <p className="mt-7 text-xs text-[#d2bda5]">{form.published?"Yayına alınacak":"Taslak olarak kaydedilecek"}</p>
+        </div>
+      </div>
+    </div>
+  </div>}
+  {loading?<p className="text-sm text-[#bbb]">Ürünler yükleniyor…</p>:products.length===0?<div className="rounded-lg border border-dashed border-white/20 p-9 text-center text-sm text-[#aaa8a5]">Henüz ürün yok. “Yeni ürün” ile ilk ürünü ekle.</div>:<div className="space-y-3">{products.map(p=><div key={p.id} className="flex flex-wrap items-center gap-4 rounded-lg border border-white/10 bg-[#1d1e20] p-4">{p.image_urls[0]?<img src={p.image_urls[0]} alt="" className="h-16 w-16 rounded-md object-cover"/>:<div className="h-16 w-16 rounded-md bg-[#343537]"/>}<div className="min-w-[180px] flex-1"><h3 className="font-medium">{p.title}</h3><p className="mt-1 text-xs text-[#aaa8a5]">{categories.find(c=>c.id===p.category_id)?.name||"Kategorisiz"} · {p.published?"Yayında":"Taslak"}</p></div><button type="button" onClick={()=>void togglePublish(p)} className={"rounded-md border px-3 py-2 text-sm "+(p.published?"border-amber-400/40 text-amber-200":"border-emerald-400/40 text-emerald-200")}>{p.published?"Taslağa al":"Yayınla"}</button><button onClick={()=>edit(p)} className="inline-flex items-center gap-2 rounded-md border border-white/20 px-3 py-2 text-sm hover:border-[#c9a46c]"><Pencil size={15}/> Düzenle</button><button onClick={()=>void remove(p)} className="inline-flex items-center gap-2 rounded-md border border-red-500/30 px-3 py-2 text-sm text-red-300 hover:border-red-400"><Trash2 size={15}/> Sil</button></div>)}</div>}
  </section>;
 }
