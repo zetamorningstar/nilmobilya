@@ -94,8 +94,18 @@ export function AdminProducts() {
       if(known.some(category=>category.slug===slug))continue;
       const collection=getCollection(slug);
       if(!collection)continue;
-      const {data,error}=await db.from("categories").upsert({name:collection.title,slug},{onConflict:"slug"}).select("id,name,slug").single();
-      if(error)throw error;
+      // A missing category only needs INSERT. UPSERT also requires UPDATE privileges
+      // and caused an unclear failure for installations with insert-only policies.
+      const {data,error}=await db.from("categories").insert({name:collection.title,slug}).select("id,name,slug").single();
+      if(error){
+        if(error.code==="23505"){
+          const existing=await db.from("categories").select("id,name,slug").eq("slug",slug).single();
+          if(existing.error)throw new Error("Kategori okunamadı ("+slug+"): "+existing.error.message+" ["+existing.error.code+"]");
+          known.push(existing.data as Category);
+          continue;
+        }
+        throw new Error("Kategori oluşturulamadı ("+slug+"): "+error.message+" ["+error.code+"]");
+      }
       known.push(data as Category);
     }
     for(const {slug,product} of missing){
@@ -106,11 +116,11 @@ export function AdminProducts() {
         image_urls:[product.image,...(product.gallery||[])],published:true,sort_order:0
       };
       const {error}=await db.from("products").insert(payload);
-      if(error && error.code!=="23505")throw error;
+      if(error && error.code!=="23505")throw new Error("Ürün eklenemedi ("+product.name+"): "+error.message+" ["+error.code+"]");
     }
     await load();
     setSuccess("Mevcut katalog ürünleri aktarılıp düzenlenebilir hale getirildi.");
-  }catch(e){setError(e instanceof Error?e.message:"Aktarım başarısız. Veritabanı izinlerini kontrol et.");}
+  }catch(e){setError("Aktarım başarısız: "+(e instanceof Error?e.message:typeof e==="object"&&e!==null&&"message" in e?String(e.message):String(e))+". Hata sürerse Supabase products/categories yazma politikalarını kontrol et.");}
   finally{setImporting(false);}
  }
  return <section className="space-y-6">
