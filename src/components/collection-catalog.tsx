@@ -53,7 +53,8 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
   const [favorites, setFavorites] = useState<ReadonlySet<string>>(new Set());
   const [quick, setQuick] = useState<CollectionProduct | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
-  const openProduct = (product: CollectionProduct) => { setSelectedOptions({}); setQuick(product); };
+  const [customDimensions, setCustomDimensions] = useState("");
+  const openProduct = (product: CollectionProduct) => { setSelectedOptions({}); setCustomDimensions(""); setQuick(product); };
 
   const { products } = collection;
 
@@ -269,51 +270,82 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
         </section>
       </div>
 
-      {/* ---- Ürün detayı (Ürünü incele) ---- */}
+      {/* ---- Ürün detayı: görsel, varyant, bilgiler ve özel ölçü talebi ---- */}
       <Dialog open={quick !== null} onOpenChange={(open) => { if (!open) setQuick(null); }}>
-        <DialogContent className="max-w-3xl gap-0 overflow-hidden border-primary/30 bg-background p-0 sm:rounded-none">
+        <DialogContent className="flex max-h-[94dvh] w-[calc(100vw-24px)] max-w-[1050px] flex-col gap-0 overflow-hidden rounded-xl border border-primary/30 bg-[#131211] p-0 text-foreground shadow-[0_30px_100px_rgba(0,0,0,.72)] sm:rounded-xl lg:flex-row">
           {quick && (
-            <div className="grid md:grid-cols-[1.05fr_0.95fr]">
-              <img
-                src={quick.image}
-                alt={`${altBase} — ${quick.name}`}
-                className="max-h-[70svh] w-full bg-black object-contain"
-              />
-              <div className="flex max-h-[80svh] flex-col justify-between gap-6 overflow-y-auto p-6 sm:p-8">
-                <div>
-                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-primary">
-                    {collection.pageTitle} · {quick.category}
-                  </p>
-                  <DialogTitle className="mt-3 font-display text-3xl font-normal leading-tight">{quick.name}</DialogTitle>
-                  <DialogDescription className="mt-3 text-sm font-light text-foreground/70">{quick.material}</DialogDescription>
-                  {quick.options?.map((option) => (
-                    <fieldset key={option.label} className="mt-5">
-                      <legend className="mb-2 text-[11px] font-semibold uppercase tracking-[.12em] text-primary">{option.label}</legend>
-                      <div className="flex flex-wrap gap-2">
-                        {option.values.map((value) => {
-                          const active = selectedOptions[option.label] === value;
-                          return <button key={value} type="button" aria-pressed={active} onClick={() => setSelectedOptions((current) => ({ ...current, [option.label]: value }))} className={cn("rounded-md border px-3 py-2 text-xs transition-colors", active ? "border-primary bg-primary/15 text-foreground" : "border-foreground/20 text-foreground/75 hover:border-primary/70")}>{value}</button>;
-                        })}
-                      </div>
-                    </fieldset>
-                  ))}
-                  <div className="mt-5 space-y-4 border-t border-foreground/15 pt-5">
-                    <section>
-                      <h3 className="text-sm font-medium text-foreground">Standart Ölçüler</h3>
-                      <p className="mt-2 text-xs leading-6 text-foreground/65">{quick.standardDimensions || "Standart ölçüler yakında eklenecek. Özel ölçü için iletişime geçebilirsiniz."}</p>
-                    </section>
-                    <section>
-                      <h3 className="text-sm font-medium text-foreground">Ürün Bilgisi</h3>
-                      <p className="mt-2 whitespace-pre-line text-xs leading-6 text-foreground/65">{quick.productInfo || "Ürün detayları yakında eklenecek. Malzeme ve üretim seçenekleri için bilgi alabilirsiniz."}</p>
-                    </section>
-                  </div>
-                  <p className="mt-5 text-xs leading-6 text-foreground/65">Fiyat; ölçü, malzeme ve tasarım tercihinize göre WhatsApp üzerinden paylaşılır.</p>
+            <>
+              <div className="relative flex min-h-0 shrink-0 items-center justify-center bg-[#090909] lg:w-[52%]">
+                <div className="flex h-[min(35dvh,310px)] w-full items-center justify-center overflow-hidden sm:h-[min(42dvh,440px)] lg:h-full lg:max-h-[86dvh]">
+                  <img
+                    src={quick.image}
+                    alt={`${altBase} — ${quick.name}`}
+                    className="h-full w-full object-contain"
+                  />
                 </div>
-                <Button asChild variant="goldOutline" size="lg" className="h-12 px-6 text-xs uppercase">
-                  <a href={whatsappOfferUrl([quick.name, ...Object.entries(selectedOptions).map(([label, value]) => `${label}: ${value}`)].join(" · "))} target="_blank" rel="noopener noreferrer" onClick={() => setQuick(null)}>WhatsApp’tan teklif al <ArrowUpRight /></a>
+                <span className="pointer-events-none absolute bottom-3 left-4 rounded border border-white/15 bg-black/45 px-3 py-1.5 text-[10px] uppercase tracking-[.16em] text-white/75 backdrop-blur-md">Nil Mobilya · Koleksiyon</span>
+              </div>
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-5 pt-8 sm:px-8 sm:pb-8 sm:pt-10 lg:max-h-[86dvh]">
+                <p className="text-[10px] font-semibold uppercase tracking-[.23em] text-primary">{quick.category}</p>
+                <DialogTitle className="mt-3 pr-5 font-display text-3xl font-normal leading-[1.1] sm:text-4xl">{quick.name}</DialogTitle>
+                <DialogDescription className="mt-3 text-sm leading-6 text-foreground/65">{quick.material}</DialogDescription>
+
+                {quick.options && quick.options.length > 0 && (
+                  <div className="mt-7 space-y-5 border-t border-white/10 pt-6">
+                    {quick.options.map((option) => (
+                      <fieldset key={option.label}>
+                        <legend className="mb-3 text-[11px] font-semibold uppercase tracking-[.15em] text-primary">{option.label} seçimi</legend>
+                        <div className="flex flex-wrap gap-2">
+                          {option.values.map((value) => {
+                            const active = selectedOptions[option.label] === value;
+                            return (
+                              <button
+                                key={value}
+                                type="button"
+                                aria-pressed={active}
+                                onClick={() => setSelectedOptions((current) => ({ ...current, [option.label]: value }))}
+                                className={cn("rounded-lg border px-4 py-2.5 text-xs transition-all duration-200", active ? "border-primary bg-primary/15 text-foreground shadow-[inset_0_0_0_1px_rgba(184,146,96,.3)]" : "border-white/15 bg-white/[.025] text-foreground/75 hover:border-primary/65 hover:text-foreground")}
+                              >{value}</button>
+                            );
+                          })}
+                        </div>
+                      </fieldset>
+                    ))}
+                    <p className="text-[11px] leading-5 text-foreground/50">Seçenekler sipariş görüşmesi için tercih belirtir; fotoğraf yalnızca gösterilen modeli temsil eder.</p>
+                  </div>
+                )}
+
+                <div className="mt-7 space-y-5 border-t border-white/10 pt-6">
+                  <section>
+                    <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground"><span className="h-1.5 w-1.5 rounded-full bg-primary" />Standart Ölçüler</h3>
+                    <p className="mt-2 whitespace-pre-line text-xs leading-6 text-foreground/65">{quick.standardDimensions || "Standart ölçü bilgileri yakında eklenecek."}</p>
+                  </section>
+                  <section>
+                    <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground"><span className="h-1.5 w-1.5 rounded-full bg-primary" />Ürün Bilgisi</h3>
+                    <p className="mt-2 whitespace-pre-line text-xs leading-6 text-foreground/65">{quick.productInfo || "Ürün bilgileri yakında eklenecek. Malzeme ve üretim detaylarını WhatsApp üzerinden sorabilirsiniz."}</p>
+                  </section>
+                </div>
+
+                <label htmlFor="nil-custom-dimensions" className="mt-6 block text-xs font-medium text-foreground/85">Özel ölçü talebiniz <span className="font-normal text-foreground/45">(isteğe bağlı)</span></label>
+                <input
+                  id="nil-custom-dimensions"
+                  value={customDimensions}
+                  onChange={(event) => setCustomDimensions(event.target.value)}
+                  maxLength={120}
+                  placeholder="Örn. 140 × 60 × 90 cm"
+                  className="mt-2 h-11 w-full rounded-lg border border-white/20 bg-white/[.04] px-4 text-sm text-foreground outline-none transition focus:border-primary"
+                />
+                <p className="mt-5 text-xs leading-6 text-foreground/55">Fiyat; ölçü, malzeme ve üretim tercihlerinize göre paylaşılır.</p>
+                <Button asChild variant="goldOutline" size="lg" className="mt-4 min-h-12 w-full rounded-lg px-4 text-xs uppercase tracking-[.1em]">
+                  <a
+                    href={whatsappOfferUrl([quick.name, ...Object.entries(selectedOptions).map(([label, value]) => `${label}: ${value}`), ...(customDimensions.trim() ? [`Özel ölçü talebi: ${customDimensions.trim()}`] : [])].join(" · "))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setQuick(null)}
+                  >WhatsApp'tan teklif al <ArrowUpRight className="size-4" /></a>
                 </Button>
               </div>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
