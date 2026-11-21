@@ -20,6 +20,7 @@ export function AdminProducts() {
  const [showForm,setShowForm]=useState(false);
  const [newCategory,setNewCategory]=useState("");
  const [importing,setImporting]=useState(false);
+ const [uploading,setUploading]=useState(false);
  const [loading,setLoading]=useState(true);
  const [saving,setSaving]=useState(false);
  const [error,setError]=useState("");
@@ -36,6 +37,27 @@ export function AdminProducts() {
  useEffect(()=>{void load()},[load]);
  const edit=(p:Product)=>{const meta=decodeProductDescription(p.description);setEditing(p.id);setForm({title:p.title,slug:p.slug,description:meta.description,material:meta.material,standardDimensions:meta.standardDimensions,dimensions:meta.dimensions.map(x=>x.label+": "+x.value).join("\n"),details:meta.details.map(x=>x.label+": "+x.value).join("\n"),options:meta.options.map(x=>x.label+": "+x.values.join(", ")).join("\n"),image_urls:p.image_urls.join("\n"),published:p.published,category_id:p.category_id||"",sort_order:p.sort_order});setShowForm(true);setError("");setSuccess("")};
  const create=()=>{setEditing(null);setForm(empty);setShowForm(true);setError("");setSuccess("")};
+ async function uploadImages(files: FileList | null){
+  if(!files?.length)return;
+  const db=getSupabaseClient();if(!db){setError("Supabase bağlantısı bulunamadı.");return;}
+  setUploading(true);setError("");setSuccess("");
+  const uploaded: string[] = [];
+  try{
+    for(const file of Array.from(files)){
+      if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("JPG, PNG veya WebP fotoğraf seç.");
+      if(file.size>8*1024*1024)throw new Error("Fotoğraf 8 MB'den küçük olmalı.");
+      const extension=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+      const name=(globalThis.crypto?.randomUUID?.() ?? String(Date.now())+"-"+Math.random().toString(36).slice(2))+"."+extension;
+      const {error:storageError}=await db.storage.from("nil-product-images").upload(name,file,{contentType:file.type,upsert:false});
+      if(storageError)throw storageError;
+      const {data}=db.storage.from("nil-product-images").getPublicUrl(name);
+      uploaded.push(data.publicUrl);
+    }
+    setForm(current=>({...current,image_urls:[current.image_urls.trim(),...uploaded].filter(Boolean).join("\n")}));
+    setSuccess(uploaded.length+" fotoğraf yüklendi. Ürünü kaydederek yayına alabilirsin.");
+  }catch(e){setError((e instanceof Error?e.message:"Fotoğraf yüklenemedi.")+" Storage kurulumu için supabase/product-images.sql dosyasını kontrol et.");}
+  finally{setUploading(false);}
+ }
  async function save(e:FormEvent){
   e.preventDefault();const db=getSupabaseClient();if(!db)return;
   setSaving(true);setError("");setSuccess("");
@@ -111,6 +133,13 @@ export function AdminProducts() {
    </div>
    <label className={label}>Seçilebilir seçenekler (Etiket: Değer 1, Değer 2)<textarea rows={2} value={form.options} onChange={e=>setForm({...form,options:e.target.value})} placeholder={"Renk: Beyaz, Antrasit\\nModel: Demirli, Demirsiz"} className={field+" mt-2"}/></label>
    <label className={label}>Görsel URL'leri (her satıra bir adres)<textarea rows={3} value={form.image_urls} onChange={e=>setForm({...form,image_urls:e.target.value})} placeholder="https://... veya /images/urunler/ornek.webp" className={field+" mt-2"}/></label>
+   <div className="rounded-lg border border-dashed border-[#c9a46c]/35 bg-[#1a1b1d] p-4">
+    <label className={label}>Bilgisayardan fotoğraf yükle (JPG, PNG, WebP; en fazla 8 MB)
+      <input type="file" multiple accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={e=>{void uploadImages(e.target.files);e.target.value="";}} className="mt-2 block w-full text-xs text-[#cfc4b3] file:mr-4 file:rounded-md file:border-0 file:bg-[#c9a46c] file:px-4 file:py-2 file:text-[#1b1916]"/>
+    </label>
+    {uploading&&<p className="mt-2 text-xs text-[#d4b685]">Fotoğraflar yükleniyor…</p>}
+    {form.image_urls.trim()&&<div className="mt-3 flex flex-wrap gap-2">{form.image_urls.split(/\r?\n/).filter(Boolean).map((url,i)=><img key={i} src={url} alt={"Ürün görseli "+(i+1)} className="h-20 w-20 rounded-md border border-white/20 object-contain"/>)}</div>}
+   </div>
    <div className="flex flex-wrap items-center gap-6"><label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={form.published} onChange={e=>setForm({...form,published:e.target.checked})} className="accent-[#c9a46c]"/> Yayında (veritabanında görünür)</label><label className="text-sm">Sıra <input type="number" value={form.sort_order} onChange={e=>setForm({...form,sort_order:Number(e.target.value)})} className={field+" ml-2 w-24"}/></label></div>
    <p className="text-xs text-[#bcb7b0]">Yayınlanan ürünler sitedeki koleksiyona aktarılır. Galeri için ilk satıra ana fotoğrafı, alt satırlara aynı ürüne ait diğer fotoğraf adreslerini yaz. Kesinleşmeyen ölçüleri boş bırak.</p>
    <button disabled={saving} className="rounded-md bg-[#c9a46c] px-6 py-3 text-sm font-semibold text-[#171717] disabled:opacity-50">{saving?"Kaydediliyor…":"Ürünü kaydet"}</button>
