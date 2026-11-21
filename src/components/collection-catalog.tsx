@@ -84,6 +84,13 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
       return next;
     });
 
+  // Recommend only other real products from the same category, with no placeholders.
+  const relatedProducts = quick
+    ? CATALOG_SLUGS.flatMap((slug) => getCollection(slug)?.products ?? [])
+        .filter((product) => product.category === quick.category && product.name !== quick.name && product.image !== "/urunler/yakinda.svg")
+        .slice(0, 3)
+    : [];
+
   const altBase = `Nil Mobilya ${collection.title.toLocaleLowerCase("tr-TR")} koleksiyonu`;
 
   return (
@@ -285,7 +292,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                 </div>
                 <span className="pointer-events-none absolute bottom-3 left-4 rounded border border-white/15 bg-black/45 px-3 py-1.5 text-[10px] uppercase tracking-[.16em] text-white/75 backdrop-blur-md">Nil Mobilya · Koleksiyon</span>
               </div>
-              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-5 pt-8 sm:px-8 sm:pb-8 sm:pt-10 lg:max-h-[86dvh]">
+              <div key={quick.name} className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-5 pt-8 sm:px-8 sm:pb-8 sm:pt-10 lg:max-h-[86dvh]">
                 <p className="text-[10px] font-semibold uppercase tracking-[.23em] text-primary">{quick.category}</p>
                 <DialogTitle className="mt-3 pr-5 font-display text-3xl font-normal leading-[1.1] sm:text-4xl">{quick.name}</DialogTitle>
                 <DialogDescription className="mt-3 text-sm leading-6 text-foreground/65">{quick.material}</DialogDescription>
@@ -344,6 +351,33 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                     onClick={() => setQuick(null)}
                   >WhatsApp'tan teklif al <ArrowUpRight className="size-4" /></a>
                 </Button>
+                {relatedProducts.length > 0 && (
+                  <section className="mt-8 border-t border-white/10 pt-6" aria-label="Benzer ürünler">
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                      <h3 className="text-sm font-semibold text-foreground">Benzer Ürünler</h3>
+                      <span className="text-[10px] uppercase tracking-[.14em] text-foreground/45">Aynı kategori</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {relatedProducts.map((product) => (
+                        <button
+                          key={product.name}
+                          type="button"
+                          onClick={() => openProduct(product)}
+                          className="group overflow-hidden rounded-lg border border-white/10 bg-white/[.025] text-left transition-colors hover:border-primary/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                          aria-label={`${product.name} ürününü incele`}
+                        >
+                          <div className="aspect-[5/4] overflow-hidden bg-black/60">
+                            <img src={product.image} alt="" loading="lazy" className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.04]" />
+                          </div>
+                          <div className="flex items-center justify-between gap-2 px-3 py-3">
+                            <span className="text-xs leading-5 text-foreground/85">{product.name}</span>
+                            <ArrowRight aria-hidden="true" className="size-3 shrink-0 text-primary" />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                )}
               </div>
             </>
           )}
