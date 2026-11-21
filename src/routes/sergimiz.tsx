@@ -7,6 +7,7 @@ import { SiteSearch } from "@/components/site-search";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { works, type Work, type WorkCategory } from "@/lib/works";
+import { getSupabaseClient } from "@/lib/supabase-client";
 
 export const Route = createFileRoute("/sergimiz")({
   head: () => ({
@@ -160,10 +161,35 @@ function Sergimiz() {
   const [category, setCategory] = useState<"all" | WorkCategory>("all");
   const [sort, setSort] = useState<Sort>("yeni");
   const [open, setOpen] = useState<number | null>(null);
+  const [remoteWorks, setRemoteWorks] = useState<Work[]>([]);
+  const [remoteReady, setRemoteReady] = useState(false);
+  useEffect(() => {
+    const db = getSupabaseClient();
+    if (!db) return;
+    let active = true;
+    db.from("projects").select("id,title,description,image_urls,published,sort_order")
+      .eq("published", true).order("sort_order").then(({data,error}) => {
+        if (!active || error) return;
+        const decoded: Work[] = (data ?? []).flatMap(project => {
+          let meta: {place?:string;year?:string;category?:string} = {};
+          if (project.description?.startsWith("NIL_PROJECT_V1:")) {
+            try { meta=JSON.parse(project.description.slice("NIL_PROJECT_V1:".length)); } catch {}
+          }
+          const category: WorkCategory = (["tv","banko","dolap","yatak","diger"].includes(meta.category??"") ? meta.category : "diger") as WorkCategory;
+          return (project.image_urls ?? []).filter((url:string)=>Boolean(url)).map((image:string)=>({
+            title:project.title,place:meta.place||"",year:meta.year||"",category,
+            image,alt:project.title+" ürün veya proje fotoğrafı",
+          }));
+        });
+        setRemoteWorks(decoded);setRemoteReady(true);
+      });
+    return () => { active=false; };
+  }, []);
+
 
   const items = useMemo<Item[]>(
-    () => works.map((work, order) => ({ ...work, category: work.category ?? "diger", order })),
-    [],
+    () => (remoteReady ? remoteWorks : works).map((work, order) => ({ ...work, category: work.category ?? "diger", order })),
+    [remoteReady, remoteWorks],
   );
 
   // Yalnızca en az bir işi olan kategoriler gösterilir
@@ -300,7 +326,7 @@ function Sergimiz() {
 
       {/* ---- Galeri ---- */}
       <section aria-label="Çalışmalar" className="px-[clamp(1.25rem,4.9vw,7rem)] pb-16">
-        {works.length === 0 ? (
+        {items.length === 0 ? (
           <p className="py-16 text-center text-sm font-light uppercase tracking-[0.2em] text-foreground/60">
             Sergimiz çok yakında burada.
           </p>
