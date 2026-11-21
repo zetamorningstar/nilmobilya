@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, ChevronDown, Heart } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { SiteSearch } from "@/components/site-search";
 import { ALL_SLUG, CATALOG_SLUGS, getCollection, type Collection, type CollectionProduct } from "@/lib/collections";
 import { cn } from "@/lib/utils";
 import { whatsappOfferUrl } from "@/lib/sales";
+import "@/styles/collection-showroom.css";
 
 // Menü ve arama: ana sayfadaki bölümlerle aynı (id'ler ana sayfa sahneleriyle aynı olmalı)
 const SECTIONS = [
@@ -54,7 +55,9 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
   const [quick, setQuick] = useState<CollectionProduct | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [customDimensions, setCustomDimensions] = useState("");
-  const openProduct = (product: CollectionProduct) => { setSelectedOptions({}); setCustomDimensions(""); setQuick(product); };
+  const [activeInfoTab, setActiveInfoTab] = useState<"measure" | "info" | "material">("measure");
+  const [zoomed, setZoomed] = useState(false);
+  const openProduct = (product: CollectionProduct) => { setSelectedOptions({}); setCustomDimensions(""); setActiveInfoTab("measure"); setZoomed(false); setQuick(product); };
 
   const { products } = collection;
 
@@ -94,7 +97,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
   const altBase = `Nil Mobilya ${collection.title.toLocaleLowerCase("tr-TR")} koleksiyonu`;
 
   return (
-    <main className="relative isolate min-h-screen bg-background text-foreground">
+    <main className="nil-catalog relative isolate min-h-screen bg-background text-foreground">
     {/* Tam sayfa arka plan: dosya adını ve parlaklığı (opacity) buradan değiştir */}
 <div
   aria-hidden="true"
@@ -147,7 +150,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
       <SiteMenu open={menuOpen} onClose={() => setMenuOpen(false)} items={SECTIONS} base="/" />
 
       {/* ---- Başlık alanı ---- */}
-      <section className="relative overflow-hidden border-b border-primary/25 px-[clamp(1.25rem,4.9vw,7rem)] pb-12 pt-[calc(83px+3.25rem)] max-lg:pt-[calc(68px+2.5rem)]">
+      <section className="nil-catalog__heading relative overflow-hidden border-b border-primary/25 px-[clamp(1.25rem,4.9vw,7rem)] pb-12 pt-[calc(83px+3.25rem)] max-lg:pt-[calc(68px+2.5rem)]">
         
         <span aria-hidden="true" className="absolute bottom-10 right-[clamp(1.25rem,4.9vw,7rem)] hidden h-24 w-px bg-primary/50 lg:block" />
 
@@ -168,10 +171,10 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
       </section>
 
       {/* ---- Katalog: kategoriler + ürünler ---- */}
-      <div className="grid lg:grid-cols-[17rem_minmax(0,1fr)]">
+      <div className="nil-catalog__layout grid lg:grid-cols-[17rem_minmax(0,1fr)]">
         {/* Kategoriler */}
                 {/* Sayfa menüsü */}
-        <aside className="relative overflow-hidden border-foreground/10 px-[clamp(1.25rem,4.9vw,7rem)] py-6 lg:border-r lg:px-8 lg:py-8 lg:pl-[clamp(1.25rem,4.9vw,7rem)]">
+        <aside className="nil-catalog__sidebar relative overflow-hidden border-foreground/10 px-[clamp(1.25rem,4.9vw,7rem)] py-6 lg:border-r lg:px-8 lg:py-8 lg:pl-[clamp(1.25rem,4.9vw,7rem)]">
           <ul className="relative flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-0 lg:overflow-visible lg:pb-0" aria-label="Ürün sayfaları">
             {sideLinks.map(({ slug, label, count }) => {
               const active = collection.slug === slug;
@@ -198,8 +201,8 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
         </aside>
 
         {/* Ürünler */}
-        <section aria-label={`${collection.pageTitle} ürünleri`} className="px-[clamp(1.25rem,4.9vw,7rem)] py-6 lg:px-10 lg:py-8 lg:pr-[clamp(1.25rem,4.9vw,7rem)]">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <section aria-label={`${collection.pageTitle} ürünleri`} className="nil-catalog__products px-[clamp(1.25rem,4.9vw,7rem)] py-6 lg:px-10 lg:py-8 lg:pr-[clamp(1.25rem,4.9vw,7rem)]">
+          <div className="nil-catalog__toolbar mb-6 flex flex-wrap items-center justify-between gap-4">
             <div className="relative">
               <label htmlFor="siralama" className="sr-only">Sıralama</label>
               <select
@@ -217,16 +220,16 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
             <p className="text-xs text-foreground/60">{visible.length} ürün</p>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="nil-catalog__grid grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {visible.map((product) => {
               const liked = favorites.has(product.name);
               return (
-                <article key={product.name} className="group border border-foreground/12 bg-card/40 transition-colors duration-500 hover:border-primary/50">
+                <article key={product.name} className="nil-product-card group border border-foreground/12 bg-card/40 transition-colors duration-500 hover:border-primary/50">
                   <button
                     type="button"
                     onClick={() => openProduct(product)}
                     aria-label={`${product.name} ürününü incele`}
-                    className="block w-full overflow-hidden bg-black"
+                    className="nil-product-card__visual block w-full overflow-hidden bg-black"
                   >
                     <div className="aspect-[4/5] overflow-hidden">
                       <img
@@ -241,7 +244,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                       />
                     </div>
                   </button>
-                  <div className="flex items-start justify-between gap-3 px-5 pt-4">
+                  <div className="nil-product-card__title flex items-start justify-between gap-3 px-5 pt-4">
                     <h2 className="font-display text-xl leading-tight text-foreground md:text-2xl">{product.name}</h2>
                     <button
                       type="button"
@@ -253,7 +256,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                       <Heart className={cn("size-[18px]", liked && "fill-primary text-primary")} strokeWidth={1.4} />
                     </button>
                   </div>
-                  <div className="flex items-end justify-between gap-3 px-5 pb-5 pt-2">
+                  <div className="nil-product-card__bottom flex items-end justify-between gap-3 px-5 pb-5 pt-2">
                     <p className="text-sm text-foreground/90">
                       <span className="text-xs text-foreground/60">Ölçüye özel teklif · WhatsApp</span>
                     </p>
@@ -277,112 +280,105 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
         </section>
       </div>
 
-      {/* ---- Ürün detayı: görsel, varyant, bilgiler ve özel ölçü talebi ---- */}
-      <Dialog open={quick !== null} onOpenChange={(open) => { if (!open) setQuick(null); }}>
-        <DialogContent className="flex max-h-[94dvh] w-[calc(100vw-24px)] max-w-[1050px] flex-col gap-0 overflow-hidden rounded-xl border border-primary/30 bg-[#131211] p-0 text-foreground shadow-[0_30px_100px_rgba(0,0,0,.72)] sm:rounded-xl lg:flex-row">
+      {/* Shared product detail design: same experience for every catalogue product. */}
+      <Dialog open={quick !== null} onOpenChange={(open) => { if (!open) { setQuick(null); setZoomed(false); } }}>
+        <DialogContent className="nil-showroom-dialog max-h-[94dvh] w-[calc(100vw-24px)] max-w-[1120px] gap-0 overflow-y-auto border border-primary/35 bg-[#131211] p-0 text-foreground shadow-[0_30px_100px_rgba(0,0,0,.75)] sm:rounded-[22px] lg:overflow-hidden">
           {quick && (
-            <>
-              <div className="relative flex min-h-0 shrink-0 items-center justify-center bg-[#090909] lg:w-[52%]">
-                <div className="flex h-[min(35dvh,310px)] w-full items-center justify-center overflow-hidden sm:h-[min(42dvh,440px)] lg:h-full lg:max-h-[86dvh]">
+            <div className="nil-showroom">
+              <div className="nil-showroom__gallery">
+                <div className="nil-showroom__photo">
                   <img
                     src={quick.image}
-                    alt={`${altBase} — ${quick.name}`}
-                    className="h-full w-full object-contain"
+                    alt={`${quick.name} ürün fotoğrafı`}
+                    className="nil-showroom__photo-image"
+                    style={{ objectPosition: quick.focus ?? "center" }}
                   />
+                  <button type="button" className="nil-showroom__expand" aria-label="Ürün fotoğrafını büyüt" onClick={() => setZoomed(true)}><Expand size={17} /></button>
+                  <span className="nil-showroom__stamp">NİL MOBİLYA · KOLEKSİYON</span>
                 </div>
-                <span className="pointer-events-none absolute bottom-3 left-4 rounded border border-white/15 bg-black/45 px-3 py-1.5 text-[10px] uppercase tracking-[.16em] text-white/75 backdrop-blur-md">Nil Mobilya · Koleksiyon</span>
               </div>
-              <div key={quick.name} className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-5 pt-8 sm:px-8 sm:pb-8 sm:pt-10 lg:max-h-[86dvh]">
-                <p className="text-[10px] font-semibold uppercase tracking-[.23em] text-primary">{quick.category}</p>
-                <DialogTitle className="mt-3 pr-5 font-display text-3xl font-normal leading-[1.1] sm:text-4xl">{quick.name}</DialogTitle>
-                <DialogDescription className="mt-3 text-sm leading-6 text-foreground/65">{quick.material}</DialogDescription>
+              <div className="nil-showroom__panel" key={quick.name}>
+                <div className="nil-showroom__header">
+                  <span className="nil-showroom__eyebrow">{quick.category}</span>
+                  <DialogTitle className="nil-showroom__title">{quick.name}</DialogTitle>
+                  <DialogDescription className="nil-showroom__subtitle">{quick.material}</DialogDescription>
+                </div>
 
                 {quick.options && quick.options.length > 0 && (
-                  <div className="mt-7 space-y-5 border-t border-white/10 pt-6">
+                  <div className="nil-showroom__options">
                     {quick.options.map((option) => (
-                      <fieldset key={option.label}>
-                        <legend className="mb-3 text-[11px] font-semibold uppercase tracking-[.15em] text-primary">{option.label} seçimi</legend>
-                        <div className="flex flex-wrap gap-2">
-                          {option.values.map((value) => {
-                            const active = selectedOptions[option.label] === value;
-                            return (
-                              <button
-                                key={value}
-                                type="button"
-                                aria-pressed={active}
-                                onClick={() => setSelectedOptions((current) => ({ ...current, [option.label]: value }))}
-                                className={cn("rounded-lg border px-4 py-2.5 text-xs transition-all duration-200", active ? "border-primary bg-primary/15 text-foreground shadow-[inset_0_0_0_1px_rgba(184,146,96,.3)]" : "border-white/15 bg-white/[.025] text-foreground/75 hover:border-primary/65 hover:text-foreground")}
-                              >{value}</button>
-                            );
-                          })}
+                      <fieldset className="nil-showroom__option" key={option.label}>
+                        <legend className="nil-showroom__label">{option.label} Seçimi</legend>
+                        <div className="nil-showroom__chips">
+                          {option.values.map((value) => (
+                            <button
+                              key={value}
+                              type="button"
+                              aria-pressed={selectedOptions[option.label] === value}
+                              className={cn("nil-showroom__chip", selectedOptions[option.label] === value && "is-selected")}
+                              onClick={() => setSelectedOptions((current) => ({ ...current, [option.label]: value }))}
+                            >{value}</button>
+                          ))}
                         </div>
                       </fieldset>
                     ))}
-                    <p className="text-[11px] leading-5 text-foreground/50">Seçenekler sipariş görüşmesi için tercih belirtir; fotoğraf yalnızca gösterilen modeli temsil eder.</p>
+                    <p className="nil-showroom__option-note">Seçimler teklif içindir; görseldeki ürün değişmez.</p>
                   </div>
                 )}
 
-                <div className="mt-7 space-y-5 border-t border-white/10 pt-6">
-                  <section>
-                    <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground"><span className="h-1.5 w-1.5 rounded-full bg-primary" />Standart Ölçüler</h3>
-                    <p className="mt-2 whitespace-pre-line text-xs leading-6 text-foreground/65">{quick.standardDimensions || "Standart ölçü bilgileri yakında eklenecek."}</p>
-                  </section>
-                  <section>
-                    <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground"><span className="h-1.5 w-1.5 rounded-full bg-primary" />Ürün Bilgisi</h3>
-                    <p className="mt-2 whitespace-pre-line text-xs leading-6 text-foreground/65">{quick.productInfo || "Ürün bilgileri yakında eklenecek. Malzeme ve üretim detaylarını WhatsApp üzerinden sorabilirsiniz."}</p>
-                  </section>
+                <div className="nil-showroom__tabs" role="tablist" aria-label="Ürün detayları">
+                  <button type="button" role="tab" aria-selected={activeInfoTab === "measure"} className={cn("nil-showroom__tab", activeInfoTab === "measure" && "is-active")} onClick={() => setActiveInfoTab("measure")}><Ruler size={16} /> Ölçüler</button>
+                  <button type="button" role="tab" aria-selected={activeInfoTab === "info"} className={cn("nil-showroom__tab", activeInfoTab === "info" && "is-active")} onClick={() => setActiveInfoTab("info")}><Info size={16} /> Ürün Bilgisi</button>
+                  <button type="button" role="tab" aria-selected={activeInfoTab === "material"} className={cn("nil-showroom__tab", activeInfoTab === "material" && "is-active")} onClick={() => setActiveInfoTab("material")}><Layers3 size={16} /> Malzeme</button>
                 </div>
+                <section role="tabpanel" className="nil-showroom__infobox">
+                  {activeInfoTab === "measure" && <>
+                    <Ruler size={23} className="nil-showroom__infoicon" />
+                    <div><h3>Standart Ölçüler</h3><p className="whitespace-pre-line">{quick.standardDimensions || "Standart ölçü bilgileri yakında eklenecek. Özel ölçü ile üretim için teklif alabilirsiniz."}</p></div>
+                  </>}
+                  {activeInfoTab === "info" && <>
+                    <Info size={23} className="nil-showroom__infoicon" />
+                    <div><h3>Ürün Bilgisi</h3><p className="whitespace-pre-line">{quick.productInfo || "Ürün bilgileri yakında eklenecek. Detaylı bilgi için bize ulaşabilirsiniz."}</p></div>
+                  </>}
+                  {activeInfoTab === "material" && <>
+                    <Layers3 size={23} className="nil-showroom__infoicon" />
+                    <div><h3>Malzeme ve Yüzey</h3><p>{quick.material || "Malzeme detayları için iletişime geçebilirsiniz."}</p></div>
+                  </>}
+                </section>
 
-                <label htmlFor="nil-custom-dimensions" className="mt-6 block text-xs font-medium text-foreground/85">Özel ölçü talebiniz <span className="font-normal text-foreground/45">(isteğe bağlı)</span></label>
-                <input
-                  id="nil-custom-dimensions"
-                  value={customDimensions}
-                  onChange={(event) => setCustomDimensions(event.target.value)}
-                  maxLength={120}
-                  placeholder="Örn. 140 × 60 × 90 cm"
-                  className="mt-2 h-11 w-full rounded-lg border border-white/20 bg-white/[.04] px-4 text-sm text-foreground outline-none transition focus:border-primary"
-                />
-                <p className="mt-5 text-xs leading-6 text-foreground/55">Fiyat; ölçü, malzeme ve üretim tercihlerinize göre paylaşılır.</p>
-                <Button asChild variant="goldOutline" size="lg" className="mt-4 min-h-12 w-full rounded-lg px-4 text-xs uppercase tracking-[.1em]">
-                  <a
-                    href={whatsappOfferUrl([quick.name, ...Object.entries(selectedOptions).map(([label, value]) => `${label}: ${value}`), ...(customDimensions.trim() ? [`Özel ölçü talebi: ${customDimensions.trim()}`] : [])].join(" · "))}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setQuick(null)}
-                  >WhatsApp'tan teklif al <ArrowUpRight className="size-4" /></a>
-                </Button>
+                <label className="nil-showroom__label nil-showroom__size-label" htmlFor="nil-custom-dimensions">Özel Ölçü Talebiniz <span>(İsteğe bağlı)</span></label>
+                <input id="nil-custom-dimensions" className="nil-showroom__input" maxLength={120} value={customDimensions} onChange={(event) => setCustomDimensions(event.target.value)} placeholder="Örn. 140 × 60 × 90 cm" />
+                <a
+                  className="nil-showroom__cta"
+                  href={whatsappOfferUrl([quick.name, ...Object.entries(selectedOptions).map(([label, value]) => `${label}: ${value}`), ...(customDimensions.trim() ? [`Özel ölçü talebi: ${customDimensions.trim()}`] : [])].join(" · "))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setQuick(null)}
+                ><MessageCircle size={18} /> WHATSAPP'TAN TEKLİF AL <ArrowUpRight size={17} /></a>
                 {relatedProducts.length > 0 && (
-                  <section className="mt-8 border-t border-white/10 pt-6" aria-label="Benzer ürünler">
-                    <div className="mb-4 flex items-center justify-between gap-3">
-                      <h3 className="text-sm font-semibold text-foreground">Benzer Ürünler</h3>
-                      <span className="text-[10px] uppercase tracking-[.14em] text-foreground/45">Aynı kategori</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
+                  <section className="nil-showroom__related" aria-label="Benzer ürünler">
+                    <h3>Benzer Ürünler</h3>
+                    <div className="nil-showroom__related-grid">
                       {relatedProducts.map((product) => (
-                        <button
-                          key={product.name}
-                          type="button"
-                          onClick={() => openProduct(product)}
-                          className="group overflow-hidden rounded-lg border border-white/10 bg-white/[.025] text-left transition-colors hover:border-primary/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-                          aria-label={`${product.name} ürününü incele`}
-                        >
-                          <div className="aspect-[5/4] overflow-hidden bg-black/60">
-                            <img src={product.image} alt="" loading="lazy" className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.04]" />
-                          </div>
-                          <div className="flex items-center justify-between gap-2 px-3 py-3">
-                            <span className="text-xs leading-5 text-foreground/85">{product.name}</span>
-                            <ArrowRight aria-hidden="true" className="size-3 shrink-0 text-primary" />
-                          </div>
+                        <button key={product.name} type="button" onClick={() => openProduct(product)} aria-label={`${product.name} ürününü incele`} className="nil-showroom__related-item">
+                          <img src={product.image} alt="" loading="lazy" />
+                          <span>{product.name}</span><ArrowRight size={14} />
                         </button>
                       ))}
                     </div>
                   </section>
                 )}
               </div>
-            </>
+            </div>
           )}
         </DialogContent>
       </Dialog>
+      {zoomed && quick && (
+        <div className="nil-showroom-zoom" role="dialog" aria-modal="true" aria-label={`${quick.name} büyütülmüş fotoğrafı`} onClick={() => setZoomed(false)}>
+          <button className="nil-showroom-zoom__close" type="button" aria-label="Büyütülmüş fotoğrafı kapat" onClick={() => setZoomed(false)}>Kapat ×</button>
+          <img src={quick.image} alt={`${quick.name} büyük ürün fotoğrafı`} onClick={(event) => event.stopPropagation()} />
+        </div>
+      )}
     </main>
   );
 }
