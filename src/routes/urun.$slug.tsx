@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight, Ruler, Info, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Ruler, Info, ArrowRight, Layers3, MessageCircle } from "lucide-react";
+import { ProductPhotoGallery } from "@/components/product-photo-gallery";
 import { useState } from "react";
 import { getProductBySlug } from "@/lib/collections";
 import { whatsappOfferUrl } from "@/lib/sales";
@@ -49,9 +50,7 @@ function ProductPage() {
     <div className="mx-auto max-w-[1350px] px-5 py-12 md:px-10 md:py-16">
       <nav aria-label="Sayfa yolu" className="mb-7 flex flex-wrap items-center gap-2 text-xs text-[#baa581]"><Link to="/">Ana Sayfa</Link><span>/</span><Link to="/koleksiyon/$slug" params={{slug:collection.slug}}>{collection.pageTitle}</Link><span>/</span><span aria-current="page" className="text-[#e6dacb]">{product.name}</span></nav>
       <div className="grid gap-7 lg:grid-cols-[1.05fr_.95fr] lg:gap-12">
-        <div className="overflow-hidden rounded-2xl border border-[#b59261]/25 bg-[#1a1714]">
-          <img src={product.image} alt={`Nil Mobilya ${product.name} ürün fotoğrafı`} className="h-auto max-h-[760px] w-full object-contain" width={1024} height={1280}/>
-        </div>
+        <ProductPhotoGallery product={product} />
         <div className="rounded-2xl border border-[#b59261]/25 bg-[#181512] p-6 md:p-9">
           <p className="text-xs font-semibold uppercase tracking-[.2em] text-[#c8a36b]">{product.category}</p>
           <h1 className="mt-4 font-serif text-[clamp(2.4rem,4vw,4rem)] leading-[1.06]">{product.name}</h1>
@@ -61,11 +60,26 @@ function ProductPage() {
             <h2 className="mb-3 text-sm font-medium text-[#ddc9ab]">{option.label} seçimi</h2>
             <div className="flex flex-wrap gap-2">{option.values.map((v)=><button key={v} type="button" aria-pressed={options[option.label]===v} onClick={()=>setOptions(prev=>({...prev,[option.label]:v}))} className={`rounded-lg border px-4 py-2.5 text-xs transition-colors ${options[option.label]===v?"border-[#d4a76b] bg-[#6e4c2e]/30 text-[#f4d39c]":"border-white/20 text-[#d0c2b1] hover:border-[#b59261]"}`}>{v}</button>)}</div>
           </fieldset>)}
-          <section className="mt-8 border-t border-white/10 pt-6"><h2 className="flex items-center gap-2 text-base font-semibold"><Ruler size={17} className="text-[#ce9e60]"/> Standart Ölçüler</h2><p className="mt-3 whitespace-pre-line text-sm leading-7 text-[#b9aa9b]">{product.standardDimensions || "Standart ölçü bilgileri yakında eklenecek."}</p></section>
-          <section className="mt-6 border-t border-white/10 pt-6"><h2 className="flex items-center gap-2 text-base font-semibold"><Info size={17} className="text-[#ce9e60]"/> Ürün Bilgisi</h2><p className="mt-3 whitespace-pre-line text-sm leading-7 text-[#b9aa9b]">{product.productInfo || "Ürün bilgileri yakında eklenecek. Detaylı bilgi için iletişime geçebilirsiniz."}</p></section>
+          <div className="mt-8 grid gap-4 border-t border-white/10 pt-6 sm:grid-cols-2">
+            <section className="rounded-xl border border-[#ae8d60]/25 bg-[#110f0d] p-5">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#e9d7bd]"><Ruler size={18} className="text-[#ce9e60]"/> Ölçü Bilgileri</h2>
+              {product.dimensions?.length ? <dl className="mt-4 space-y-3">{product.dimensions.map(item => <div key={item.label} className="flex justify-between gap-4 border-b border-white/10 pb-2 text-xs"><dt className="text-[#a89a89]">{item.label}</dt><dd className="text-right font-medium text-[#ead8bf]">{item.value}</dd></div>)}</dl> : <p className="mt-4 whitespace-pre-line text-sm leading-6 text-[#b9aa9b]">{product.standardDimensions || "Kesin ölçüler üretim tercihine göre teklif aşamasında netleştirilir."}</p>}
+            </section>
+            <section className="rounded-xl border border-[#ae8d60]/25 bg-[#110f0d] p-5">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#e9d7bd]"><Layers3 size={18} className="text-[#ce9e60]"/> Malzeme ve Özellikler</h2>
+              <p className="mt-4 text-sm leading-6 text-[#b9aa9b]">{product.material}</p>
+              {product.details?.length ? <dl className="mt-4 space-y-3">{product.details.map(item => <div key={item.label} className="flex justify-between gap-3 border-t border-white/10 pt-2 text-xs"><dt className="text-[#a89a89]">{item.label}</dt><dd className="text-right text-[#ead8bf]">{item.value}</dd></div>)}</dl> : <p className="mt-3 text-xs leading-6 text-[#998c7e]">Ek malzeme ve uygulama detayları teklif sırasında paylaşılır.</p>}
+            </section>
+          </div>
+          <section className="mt-6 rounded-xl border border-[#ae8d60]/25 bg-[#110f0d] p-5">
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-[#e9d7bd]"><Info size={18} className="text-[#ce9e60]"/> Ürün Hakkında</h2>
+            <p className="mt-3 whitespace-pre-line text-sm leading-7 text-[#b9aa9b]">{product.productInfo || collection.description}</p>
+          </section>
           <label htmlFor="product-size" className="mt-7 block text-sm font-medium">Özel ölçü talebiniz (isteğe bağlı)</label>
+          <p className="mt-1 text-xs text-[#a79988]">Genişlik × derinlik × yükseklik yazabilirsiniz; kesin ölçü görüşmede onaylanır.</p>
           <input id="product-size" maxLength={120} value={size} onChange={e=>setSize(e.target.value)} className="mt-3 w-full rounded-lg border border-[#8d714f]/40 bg-[#100f0d] px-4 py-3 text-sm outline-none focus:border-[#cca16b]" placeholder="Örn. 140 × 60 × 90 cm"/>
           <a href={whatsappOfferUrl([product.name,...Object.entries(options).map(([key,v])=>`${key}: ${v}`),...(size.trim() ? [`Özel ölçü: ${size.trim()}`]:[])].join(" · "))} target="_blank" rel="noopener noreferrer" className="mt-6 flex items-center justify-center gap-3 rounded-lg border border-[#c39862] bg-[#8d6636]/15 px-5 py-4 text-sm font-semibold text-[#e8bf86] hover:bg-[#8d6636]/25">WhatsApp'tan teklif al <ArrowUpRight size={17}/></a>
+          <p className="mt-4 flex items-start gap-2 text-xs leading-5 text-[#a99b88]"><MessageCircle size={15} className="mt-0.5 shrink-0 text-[#c39862]"/> Ürün adı, seçilen seçenekler ve özel ölçü notu teklif mesajına eklenir.</p>
           <Link to="/siparis-ve-teslimat" className="mt-5 flex items-center justify-center gap-2 text-xs text-[#bba583] hover:text-white">Sipariş ve teslimat sürecini öğren <ArrowRight size={14}/></Link>
         </div>
       </div>
