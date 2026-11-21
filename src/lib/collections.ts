@@ -67,12 +67,12 @@ export const collections: Collection[] = [
     lead: "Ölçünüze ve renk tercihinize göre üretilen etajerler için bizimle iletişime geçin.",
     note: "Size özel üretim",
     description: "Etajerlerimiz sipariş üzerine üretilir. Detay ve fiyat için bizimle iletişime geçebilirsiniz.",
-    hero: YAKINDA,
+    hero: "/01_iki_cekmeceli_etajer.jpg",
     heroAlt: "Nil Mobilya etajerler",
     heroFocus: "center",
     products: [
-      { name: "Çift Çekmeceli Etajer", material: "Seçenek: Demirli", image: YAKINDA, category: "Etajerler" },
-      { name: "40–45 cm Etajer", material: "Özel üretim", image: YAKINDA, category: "Etajerler" },
+      { name: "İki Çekmeceli Etajer", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/01_iki_cekmeceli_etajer.jpg", category: "Etajerler" },
+      { name: "Üç Çekmeceli Etajer", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/02_uc_cekmeceli_etajer.jpg", category: "Etajerler" },
       { name: "Demirsiz Etajer", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Etajerler" },
     ],
   },
@@ -84,13 +84,13 @@ export const collections: Collection[] = [
     lead: "Makyaj ve manikür masaları ile komodin için ölçüye özel üretim.",
     note: "Size özel üretim",
     description: "Masalarımız sipariş üzerine üretilir. Detay ve fiyat için bizimle iletişime geçebilirsiniz.",
-    hero: YAKINDA,
+    hero: "/04_makyaj_masasi_kahverengi.jpg",
     heroAlt: "Nil Mobilya masalar",
     heroFocus: "center",
     products: [
-      { name: "2 Çekmeceli Makyaj Masası", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
-      { name: "Aynalı Işıklı Masa", material: "Seçenekler: Boyalı / Renkli", image: YAKINDA, category: "Masalar" },
-      { name: "Manikür Masası", material: "Seçenekler: Demirli / Demirsiz", image: YAKINDA, category: "Masalar" },
+      { name: "Kahverengi Makyaj Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/04_makyaj_masasi_kahverengi.jpg", category: "Masalar" },
+      { name: "Tek Çekmeceli Makyaj Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/05_tek_cekmeceli_makyaj_masasi.jpg", category: "Masalar" },
+      { name: "Manikür Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/06_manikur_masasi.jpg", category: "Masalar" },
       { name: "Demirsiz Manikür Masası", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
       { name: "3 Çekmeceli Komodin", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
     ],
@@ -125,6 +125,7 @@ export const collections: Collection[] = [
     heroAlt: "Nil Mobilya banko koleksiyonu",
     heroFocus: "50% center",
     products: [
+      { name: "Antrasit Banko", material: "Özel ölçü üretim", image: "/03_antrasit_banko.jpg", category: "Bankolar" },
       { name: "Karşılama Bankosu", material: "Ahşap kaplama · Ledli detay", image: banko1, category: "Bankolar" },
       { name: "Servis Bankosu", material: "Masif ahşap", image: banko2, category: "Bankolar" },
       { name: "Servis Çekmecesi", material: "Ahşap · Metal detay", image: banko3, category: "Çekmeceler" },
@@ -142,8 +143,9 @@ export const collections: Collection[] = [
     hero: dolap1,
     heroAlt: "Nil Mobilya dolap sistemleri",
     heroFocus: "50% center",
-    // Ürünleri sonra ekleyeceğiz (dolap2 ... dolap5 görselleri hazır duruyor)
-    products: [],
+    products: [
+      { name: "Safir Meşe Portmanto ve Ayakkabılık", material: "Ölçüye özel üretim", image: "/07_portmanto_ayakkabilik_safir_mese.jpg", category: "Dolap Sistemleri" },
+    ],
   },
 ];
 
@@ -152,7 +154,7 @@ export function getCollection(slug: string | undefined): Collection | undefined 
 }
 
 // Sol menüde görünen sayfalar (sıra burada belirlenir)
-export const CATALOG_SLUGS = ["tv-uniteleri", "etajerler", "masalar", "platformlar"] as const;
+export const CATALOG_SLUGS = ["tv-uniteleri", "etajerler", "masalar", "platformlar", "banko", "dolap"] as const;
 export const ALL_SLUG = "tum-urunler";
 
 // "Tüm ürünler" sayfası: yukarıdaki koleksiyonların ürünlerini birleştirir
