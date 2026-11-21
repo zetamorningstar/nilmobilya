@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
-import { ALL_SLUG, CATALOG_SLUGS, getCollection, type Collection, type CollectionProduct } from "@/lib/collections";
+import { ALL_SLUG, CATALOG_SLUGS, getCollection, productSlug, type Collection, type CollectionProduct } from "@/lib/collections";
 import { cn } from "@/lib/utils";
 import { whatsappOfferUrl } from "@/lib/sales";
 import "@/styles/collection-showroom.css";
@@ -217,7 +217,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
               </select>
               <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-primary" strokeWidth={1.4} />
             </div>
-            <p className="text-xs text-foreground/60">{visible.length} ürün</p>
+            <div className="flex flex-wrap items-center gap-4"><p className="text-xs text-foreground/60">{visible.length} ürün</p><Link to="/siparis-ve-teslimat" className="text-xs text-[#d3ad79] underline-offset-4 hover:underline">Sipariş ve Teslimat <ArrowRight className="inline size-3"/></Link></div>
           </div>
 
           <div className="nil-catalog__grid grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -267,6 +267,11 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                     >
                       Ürünü incele <ArrowRight className="size-3" />
                     </button>
+                  </div>
+                  <div className="border-t border-white/10 px-5 pb-4 pt-3">
+                    <Link to="/urun/$slug" params={{ slug: productSlug(product.name) }} className="inline-flex items-center gap-2 text-[11px] text-[#c6a16d] hover:text-white">
+                      Ürün sayfası ve detaylar <ArrowRight className="size-3"/>
+                    </Link>
                   </div>
                 </article>
               );
@@ -355,6 +360,8 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                   rel="noopener noreferrer"
                   onClick={() => setQuick(null)}
                 ><MessageCircle size={18} /> WHATSAPP'TAN TEKLİF AL <ArrowUpRight size={17} /></a>
+                <Link to="/urun/$slug" params={{ slug: productSlug(quick.name) }} onClick={() => setQuick(null)} className="mt-4 inline-flex items-center gap-2 text-xs text-[#c5a579] hover:text-white">Ürünün detay sayfası <ArrowRight size={14}/></Link>
+                <Link to="/siparis-ve-teslimat" onClick={() => setQuick(null)} className="mt-3 text-xs text-[#aaa095] hover:text-[#e6c493]">Sipariş ve teslimat süreci hakkında bilgi</Link>
                 {relatedProducts.length > 0 && (
                   <section className="nil-showroom__related" aria-label="Benzer ürünler">
                     <h3>Benzer Ürünler</h3>
