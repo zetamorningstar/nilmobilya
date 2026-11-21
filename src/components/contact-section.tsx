@@ -185,6 +185,8 @@ export function ContactSection() {
             <i aria-hidden="true" />
             <a href="/yasal/kvkk-aydinlatma" className="hover:text-primary">KVKK</a>
             <i aria-hidden="true" />
+            <a href="/siparis-ve-teslimat" className="hover:text-primary">Sipariş ve Teslimat</a>
+            <i aria-hidden="true" />
             <a href="/yasal/teslimat-iade" className="hover:text-primary">Teslimat ve İade</a>
             <NLogo className="ct-foot__logo ct-foot__logo--r" />
           </div>
