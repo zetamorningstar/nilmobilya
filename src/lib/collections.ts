@@ -22,6 +22,12 @@ export interface CollectionProduct {
   category: string;
   /** İsteğe bağlı. Kart fotoğrafı kırpılırken hangi kısım kalsın: "center", "50% 30%" gibi. */
   focus?: string;
+  /** Varyantlar tek ürün kartında seçilir; ayrı fotoğraf gerekmez. */
+  options?: { label: string; values: string[] }[];
+  /** Daha sonra gerçek ölçüler girildiğinde gösterilir. */
+  standardDimensions?: string;
+  /** Daha sonra doldurulacak gerçek ürün açıklaması. */
+  productInfo?: string;
 }
 
 export interface Collection {
@@ -71,9 +77,8 @@ export const collections: Collection[] = [
     heroAlt: "Nil Mobilya etajerler",
     heroFocus: "center",
     products: [
-      { name: "İki Çekmeceli Etajer", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/01_iki_cekmeceli_etajer.jpg", category: "Etajerler" },
-      { name: "Üç Çekmeceli Etajer", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/02_uc_cekmeceli_etajer.jpg", category: "Etajerler" },
-      { name: "Demirsiz Etajer", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Etajerler" },
+      { name: "İki Çekmeceli Etajer", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/01_iki_cekmeceli_etajer.jpg", category: "Etajerler", options: [{ label: "Ayak / Gövde", values: ["Demirli", "Demirsiz"] }, { label: "Renk", values: ["Beyaz", "Renkli"] }] },
+      { name: "Üç Çekmeceli Etajer", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/02_uc_cekmeceli_etajer.jpg", category: "Etajerler", options: [{ label: "Ayak / Gövde", values: ["Demirli", "Demirsiz"] }, { label: "Renk", values: ["Beyaz", "Renkli"] }] },
     ],
   },
   {
@@ -88,11 +93,9 @@ export const collections: Collection[] = [
     heroAlt: "Nil Mobilya masalar",
     heroFocus: "center",
     products: [
-      { name: "Kahverengi Makyaj Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/04_makyaj_masasi_kahverengi.jpg", category: "Masalar" },
-      { name: "Tek Çekmeceli Makyaj Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/05_tek_cekmeceli_makyaj_masasi.jpg", category: "Masalar" },
-      { name: "Manikür Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/06_manikur_masasi.jpg", category: "Masalar" },
-      { name: "Demirsiz Manikür Masası", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
-      { name: "3 Çekmeceli Komodin", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Masalar" },
+      { name: "Makyaj Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/04_makyaj_masasi_kahverengi.jpg", category: "Masalar", options: [{ label: "Renk", values: ["Kahverengi (fotoğraftaki)", "Beyaz", "Diğer renkler"] }] },
+      { name: "Tek Çekmeceli Makyaj Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/05_tek_cekmeceli_makyaj_masasi.jpg", category: "Masalar", options: [{ label: "Renk", values: ["Beyaz", "Renkli"] }] },
+      { name: "Manikür Masası", material: "Ölçü ve renk seçenekleri için teklif alın", image: "/06_manikur_masasi.jpg", category: "Masalar", options: [{ label: "Model", values: ["Demirli", "Demirsiz"] }, { label: "Renk", values: ["Beyaz", "Renkli"] }] },
     ],
   },
   {
@@ -107,9 +110,6 @@ export const collections: Collection[] = [
     heroAlt: "Nil Mobilya platformlar",
     heroFocus: "center",
     products: [
-      { name: "Platform", material: "Seçenekler: Beyaz / Renkli", image: YAKINDA, category: "Platformlar" },
-      { name: "Banko Yanlı", material: "Özel üretim", image: YAKINDA, category: "Platformlar" },
-      { name: "Banko Yansız", material: "Özel üretim", image: YAKINDA, category: "Platformlar" },
     ],
   },
   {
@@ -125,7 +125,7 @@ export const collections: Collection[] = [
     heroAlt: "Nil Mobilya banko koleksiyonu",
     heroFocus: "50% center",
     products: [
-      { name: "Antrasit Banko", material: "Özel ölçü üretim", image: "/03_antrasit_banko.jpg", category: "Bankolar" },
+      { name: "Antrasit Banko", material: "Özel ölçü üretim", image: "/03_antrasit_banko.jpg", category: "Bankolar", options: [{ label: "Model", values: ["Yanlı", "Yansız"] }, { label: "Renk", values: ["Antrasit (fotoğraftaki)", "Diğer renkler"] }] },
       { name: "Karşılama Bankosu", material: "Ahşap kaplama · Ledli detay", image: banko1, category: "Bankolar" },
       { name: "Servis Bankosu", material: "Masif ahşap", image: banko2, category: "Bankolar" },
       { name: "Servis Çekmecesi", material: "Ahşap · Metal detay", image: banko3, category: "Çekmeceler" },
@@ -154,7 +154,7 @@ export function getCollection(slug: string | undefined): Collection | undefined 
 }
 
 // Sol menüde görünen sayfalar (sıra burada belirlenir)
-export const CATALOG_SLUGS = ["tv-uniteleri", "etajerler", "masalar", "platformlar", "banko", "dolap"] as const;
+export const CATALOG_SLUGS = ["tv-uniteleri", "etajerler", "masalar", "banko", "dolap"] as const;
 export const ALL_SLUG = "tum-urunler";
 
 // "Tüm ürünler" sayfası: yukarıdaki koleksiyonların ürünlerini birleştirir
