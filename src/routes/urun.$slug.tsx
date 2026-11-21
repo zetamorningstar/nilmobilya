@@ -1,7 +1,9 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight, Ruler, Info, ArrowRight, Layers3, MessageCircle } from "lucide-react";
 import { ProductPhotoGallery } from "@/components/product-photo-gallery";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchPublishedProducts } from "@/lib/live-catalog";
+import type { Collection, CollectionProduct } from "@/lib/collections";
 import { getProductBySlug } from "@/lib/collections";
 import { whatsappOfferUrl } from "@/lib/sales";
 
@@ -10,8 +12,7 @@ const HOST = "https://nilmobilyatasarim.com";
 export const Route = createFileRoute("/urun/$slug")({
   loader: ({ params }) => {
     const result = getProductBySlug(params.slug);
-    if (!result) throw notFound();
-    return result;
+    return result ?? null;
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Ürün bulunamadı | Nil Mobilya" }, { name: "robots", content: "noindex" }] };
@@ -37,7 +38,38 @@ export const Route = createFileRoute("/urun/$slug")({
 });
 
 function ProductPage() {
-  const { product, collection } = Route.useLoaderData();
+  const initial = Route.useLoaderData();
+  const { slug } = Route.useParams();
+  const [remote, setRemote] = useState<{product: CollectionProduct; collection: Collection} | null>(null);
+  const [checking, setChecking] = useState(true);
+  useEffect(() => {
+    let active = true;
+    setChecking(true);
+    fetchPublishedProducts().then(({products,categories}) => {
+      if (!active) return;
+      const item = products.find(p => p.slug === slug);
+      if (item) {
+        const category = categories.find(c => c.name === item.category);
+        const match = initial?.collection.slug === category?.slug
+          ? initial.collection
+          : ({
+            slug: category?.slug || "tum-urunler",
+            title: item.category, pageTitle: item.category,
+            number: "", lead: "", note: "", description: item.productInfo || "",
+            hero: item.image, heroAlt: item.name, heroFocus: "center", products: [],
+          } as Collection);
+        setRemote({product:item, collection:match});
+      } else setRemote(null);
+      setChecking(false);
+    }).catch(() => { if (active) setChecking(false); });
+    return () => { active = false; };
+  }, [slug]);
+  const selected = remote ?? initial;
+  if (!selected) return <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-[#0d0b0a] px-5 text-[#ede5db]"><h1 className="font-serif text-3xl">{checking ? "Ürün yükleniyor…" : "Ürün bulunamadı"}</h1><Link to="/koleksiyon/$slug" params={{slug:"tum-urunler"}} className="text-[#d4ad77]">Tüm ürünlere dön</Link></main>;
+  return <ProductPageContent key={slug} product={selected.product} collection={selected.collection} />;
+}
+
+function ProductPageContent({product, collection}: {product:CollectionProduct;collection:Collection}) {
   const [options, setOptions] = useState<Record<string,string>>({});
   const [size, setSize] = useState("");
   return <main lang="tr" className="min-h-screen bg-[#0d0b0a] text-[#ede5db]">
