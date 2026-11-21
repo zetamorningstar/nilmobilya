@@ -33,6 +33,7 @@ export function SiteDevelopmentNotice() {
 
   return (
     <div className="nil-dev-notice-layer fixed inset-0 z-[85] flex items-center justify-center px-4 pointer-events-none">
+      <div aria-hidden="true" className="nil-dev-notice-scrim absolute inset-0 pointer-events-none" />
       <aside
         role="status"
         aria-label="Site yapım aşaması bilgilendirmesi"
