@@ -21,13 +21,16 @@ import { ContactSection } from "@/components/contact-section";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nil Mobilya | Modern ve Yüksek Kaliteli Mobilya" },
-      { name: "description", content: "Nil Mobilya ile modern çizgiler, seçkin malzemeler ve yüksek kaliteli işçilik yaşam alanlarınıza değer katsın." },
+      { title: "Nil Mobilya | Özel Ölçü Mobilya ve Ahşap Tasarım" },
+      { name: "description", content: "Nil Mobilya ile özel ölçü mobilya, TV ünitesi, banko, etajer ve dolap modellerini keşfedin. Ölçü ve üretim tercihlerinize göre WhatsApp üzerinden teklif alın." },
       { property: "og:title", content: "Nil Mobilya | Zamansız Yaşam Alanları" },
       { property: "og:description", content: "Modern çizgileri yüksek kaliteli işçilikle buluşturan seçkin mobilya koleksiyonu." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://nilmobilyatasarim.com/" },
+      { property: "og:image", content: "https://nilmobilyatasarim.com/images/anasayfa/hero3.webp" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://nilmobilyatasarim.com/" }],
   }),
   component: Index,
 });
