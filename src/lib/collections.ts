@@ -175,3 +175,18 @@ export function getCatalogCollection(slug: string | undefined): Collection | und
     products,
   };
 }
+/** Stable, readable product routes. No made-up price or availability. */
+export function productSlug(name: string): string {
+  return name.toLocaleLowerCase("tr-TR").normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "").replace(/ı/g, "i")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+export function getProductBySlug(slug: string) {
+  for (const categorySlug of CATALOG_SLUGS) {
+    const collection = getCollection(categorySlug);
+    const product = collection?.products.find((item) => productSlug(item.name) === slug);
+    if (product && collection) return { product, collection };
+  }
+  return undefined;
+}
