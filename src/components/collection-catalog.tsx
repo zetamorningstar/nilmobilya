@@ -8,7 +8,7 @@ import { SiteMenu } from "@/components/site-menu";
 import { SiteSearch } from "@/components/site-search";
 import { ALL_SLUG, CATALOG_SLUGS, getCollection, productSlug, type Collection, type CollectionProduct } from "@/lib/collections";
 import { cn } from "@/lib/utils";
-import { whatsappOfferUrl } from "@/lib/sales";
+import { whatsappOfferUrl, whatsappProductOfferUrl } from "@/lib/sales";
 import { fetchPublishedProducts, mergeCatalogProducts, type CategoryRow } from "@/lib/live-catalog";
 import "@/styles/collection-showroom.css";
 
@@ -365,7 +365,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                 <input id="nil-custom-dimensions" className="nil-showroom__input" maxLength={120} value={customDimensions} onChange={(event) => setCustomDimensions(event.target.value)} placeholder="Örn. 140 × 60 × 90 cm" />
                 <a
                   className="nil-showroom__cta"
-                  href={whatsappOfferUrl([quick.name, ...Object.entries(selectedOptions).map(([label, value]) => `${label}: ${value}`), ...(customDimensions.trim() ? [`Özel ölçü talebi: ${customDimensions.trim()}`] : [])].join(" · "))}
+                  href={whatsappProductOfferUrl({product:quick.name,choices:selectedOptions,dimensions:customDimensions,productUrl:typeof window!=="undefined"?window.location.origin+"/urun/"+("slug" in quick&&typeof quick.slug==="string"?quick.slug:productSlug(quick.name)):undefined})}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setQuick(null)}
