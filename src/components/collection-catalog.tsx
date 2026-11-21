@@ -52,6 +52,8 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
   const [sort, setSort] = useState<Sort>("oner");
   const [favorites, setFavorites] = useState<ReadonlySet<string>>(new Set());
   const [quick, setQuick] = useState<CollectionProduct | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const openProduct = (product: CollectionProduct) => { setSelectedOptions({}); setQuick(product); };
 
   const { products } = collection;
 
@@ -214,7 +216,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                 <article key={product.name} className="group border border-foreground/12 bg-card/40 transition-colors duration-500 hover:border-primary/50">
                   <button
                     type="button"
-                    onClick={() => setQuick(product)}
+                    onClick={() => openProduct(product)}
                     aria-label={`${product.name} ürününü incele`}
                     className="block w-full overflow-hidden bg-black"
                   >
@@ -249,7 +251,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                     </p>
                     <button
                       type="button"
-                      onClick={() => setQuick(product)}
+                      onClick={() => openProduct(product)}
                       className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-primary transition-colors hover:text-foreground"
                     >
                       Ürünü incele <ArrowRight className="size-3" />
@@ -277,19 +279,38 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                 alt={`${altBase} — ${quick.name}`}
                 className="max-h-[70svh] w-full bg-black object-contain"
               />
-              <div className="flex flex-col justify-between gap-8 p-8">
+              <div className="flex max-h-[80svh] flex-col justify-between gap-6 overflow-y-auto p-6 sm:p-8">
                 <div>
                   <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-primary">
                     {collection.pageTitle} · {quick.category}
                   </p>
                   <DialogTitle className="mt-3 font-display text-3xl font-normal leading-tight">{quick.name}</DialogTitle>
                   <DialogDescription className="mt-3 text-sm font-light text-foreground/70">{quick.material}</DialogDescription>
-                  <p className="mt-6 text-lg text-foreground">
-                    <span className="text-sm leading-6 text-foreground/70">Fiyat; ölçü, malzeme ve tasarım tercihinize göre WhatsApp üzerinden paylaşılır.</span>
-                  </p>
+                  {quick.options?.map((option) => (
+                    <fieldset key={option.label} className="mt-5">
+                      <legend className="mb-2 text-[11px] font-semibold uppercase tracking-[.12em] text-primary">{option.label}</legend>
+                      <div className="flex flex-wrap gap-2">
+                        {option.values.map((value) => {
+                          const active = selectedOptions[option.label] === value;
+                          return <button key={value} type="button" aria-pressed={active} onClick={() => setSelectedOptions((current) => ({ ...current, [option.label]: value }))} className={cn("rounded-md border px-3 py-2 text-xs transition-colors", active ? "border-primary bg-primary/15 text-foreground" : "border-foreground/20 text-foreground/75 hover:border-primary/70")}>{value}</button>;
+                        })}
+                      </div>
+                    </fieldset>
+                  ))}
+                  <div className="mt-5 space-y-4 border-t border-foreground/15 pt-5">
+                    <section>
+                      <h3 className="text-sm font-medium text-foreground">Standart Ölçüler</h3>
+                      <p className="mt-2 text-xs leading-6 text-foreground/65">{quick.standardDimensions || "Standart ölçüler yakında eklenecek. Özel ölçü için iletişime geçebilirsiniz."}</p>
+                    </section>
+                    <section>
+                      <h3 className="text-sm font-medium text-foreground">Ürün Bilgisi</h3>
+                      <p className="mt-2 whitespace-pre-line text-xs leading-6 text-foreground/65">{quick.productInfo || "Ürün detayları yakında eklenecek. Malzeme ve üretim seçenekleri için bilgi alabilirsiniz."}</p>
+                    </section>
+                  </div>
+                  <p className="mt-5 text-xs leading-6 text-foreground/65">Fiyat; ölçü, malzeme ve tasarım tercihinize göre WhatsApp üzerinden paylaşılır.</p>
                 </div>
                 <Button asChild variant="goldOutline" size="lg" className="h-12 px-6 text-xs uppercase">
-                  <a href={whatsappOfferUrl(quick.name)} target="_blank" rel="noopener noreferrer" onClick={() => setQuick(null)}>WhatsApp’tan teklif al <ArrowUpRight /></a>
+                  <a href={whatsappOfferUrl([quick.name, ...Object.entries(selectedOptions).map(([label, value]) => `${label}: ${value}`)].join(" · "))} target="_blank" rel="noopener noreferrer" onClick={() => setQuick(null)}>WhatsApp’tan teklif al <ArrowUpRight /></a>
                 </Button>
               </div>
             </div>
