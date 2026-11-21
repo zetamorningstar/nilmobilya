@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
@@ -9,6 +9,7 @@ import { SiteSearch } from "@/components/site-search";
 import { ALL_SLUG, CATALOG_SLUGS, getCollection, productSlug, type Collection, type CollectionProduct } from "@/lib/collections";
 import { cn } from "@/lib/utils";
 import { whatsappOfferUrl } from "@/lib/sales";
+import { fetchPublishedProducts, mergeCatalogProducts, type CategoryRow } from "@/lib/live-catalog";
 import "@/styles/collection-showroom.css";
 
 // Menü ve arama: ana sayfadaki bölümlerle aynı (id'ler ana sayfa sahneleriyle aynı olmalı)
@@ -59,18 +60,27 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
   const [zoomed, setZoomed] = useState(false);
   const openProduct = (product: CollectionProduct) => { setSelectedOptions({}); setCustomDimensions(""); setActiveInfoTab("measure"); setZoomed(false); setQuick(product); };
 
-  const { products } = collection;
+  const [liveProducts, setLiveProducts] = useState<Awaited<ReturnType<typeof fetchPublishedProducts>>["products"]>([]);
+  const [liveCategories, setLiveCategories] = useState<CategoryRow[]>([]);
+  useEffect(() => {
+    let active = true;
+    fetchPublishedProducts().then(({ products, categories }) => {
+      if (active) { setLiveProducts(products); setLiveCategories(categories); }
+    }).catch(() => {});
+    return () => { active = false; };
+  }, []);
+  const products = useMemo(() => mergeCatalogProducts(collection.slug, liveProducts, liveCategories), [collection.slug, liveProducts, liveCategories]);
 
     // Soldaki sayfa menüsü
   const sideLinks: { slug: string; label: string; count: number }[] = [
     {
       slug: ALL_SLUG,
       label: "Tüm ürünler",
-      count: CATALOG_SLUGS.reduce((total, s) => total + (getCollection(s)?.products.length ?? 0), 0),
+      count: mergeCatalogProducts(ALL_SLUG, liveProducts, liveCategories).length,
     },
     ...CATALOG_SLUGS.flatMap((s) => {
       const item = getCollection(s);
-      return item ? [{ slug: s as string, label: item.title, count: item.products.length }] : [];
+      return item ? [{ slug: s as string, label: item.title, count: mergeCatalogProducts(s, liveProducts, liveCategories).length }] : [];
     }),
   ];
 
@@ -89,7 +99,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
 
   // Recommend only other real products from the same category, with no placeholders.
   const relatedProducts = quick
-    ? CATALOG_SLUGS.flatMap((slug) => getCollection(slug)?.products ?? [])
+    ? products
         .filter((product) => product.category === quick.category && product.name !== quick.name && product.image !== "/urunler/yakinda.svg")
         .slice(0, 3)
     : [];
@@ -269,7 +279,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                     </button>
                   </div>
                   <div className="border-t border-white/10 px-5 pb-4 pt-3">
-                    <Link to="/urun/$slug" params={{ slug: productSlug(product.name) }} className="inline-flex items-center gap-2 text-[11px] text-[#c6a16d] hover:text-white">
+                    <Link to="/urun/$slug" params={{ slug: "slug" in product && typeof product.slug === "string" ? product.slug : productSlug(product.name) }} className="inline-flex items-center gap-2 text-[11px] text-[#c6a16d] hover:text-white">
                       Ürün sayfası ve detaylar <ArrowRight className="size-3"/>
                     </Link>
                   </div>
@@ -360,7 +370,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
                   rel="noopener noreferrer"
                   onClick={() => setQuick(null)}
                 ><MessageCircle size={18} /> WHATSAPP'TAN TEKLİF AL <ArrowUpRight size={17} /></a>
-                <Link to="/urun/$slug" params={{ slug: productSlug(quick.name) }} onClick={() => setQuick(null)} className="mt-4 inline-flex items-center gap-2 text-xs text-[#c5a579] hover:text-white">Ürünün detay sayfası <ArrowRight size={14}/></Link>
+                <Link to="/urun/$slug" params={{ slug: "slug" in quick && typeof quick.slug === "string" ? quick.slug : productSlug(quick.name) }} onClick={() => setQuick(null)} className="mt-4 inline-flex items-center gap-2 text-xs text-[#c5a579] hover:text-white">Ürünün detay sayfası <ArrowRight size={14}/></Link>
                 <Link to="/siparis-ve-teslimat" onClick={() => setQuick(null)} className="mt-3 text-xs text-[#aaa095] hover:text-[#e6c493]">Sipariş ve teslimat süreci hakkında bilgi</Link>
                 {relatedProducts.length > 0 && (
                   <section className="nil-showroom__related" aria-label="Benzer ürünler">
