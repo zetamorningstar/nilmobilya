@@ -4518,3 +4518,21 @@ html:not(.nil-staged) .nil-stage #iletisim {
         rgba(5, 5, 6, 0) 100%) !important;
   }
 }
+
+
+/* Collection scene on the homepage — unify with the new catalogue showroom. */
+.nil-scene--col .kcr-card {
+  border-radius: clamp(13px,1.35vw,21px);
+  border-color: rgba(194,154,104,.32);
+  box-shadow: 0 12px 38px rgba(0,0,0,.2);
+}
+.nil-scene--col .kcr-card:hover {
+  border-color: rgba(202,164,111,.73);
+  box-shadow: 0 20px 48px rgba(0,0,0,.34);
+}
+.nil-scene--col .kcr-values {
+  border-color: rgba(193,153,103,.22);
+}
+.nil-scene--col .kcr-benefits > div {
+  border-radius: 10px;
+}
