@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { fetchPublishedProducts } from "@/lib/live-catalog";
 import type { Collection, CollectionProduct } from "@/lib/collections";
 import { getProductBySlug } from "@/lib/collections";
-import { whatsappOfferUrl } from "@/lib/sales";
+import { whatsappProductOfferUrl } from "@/lib/sales";
 
 const HOST = "https://nilmobilyatasarim.com";
 
@@ -42,11 +42,14 @@ function ProductPage() {
   const { slug } = Route.useParams();
   const [remote, setRemote] = useState<{product: CollectionProduct; collection: Collection} | null>(null);
   const [checking, setChecking] = useState(true);
+  const [catalogReady, setCatalogReady] = useState(false);
   useEffect(() => {
     let active = true;
     setChecking(true);
+    setCatalogReady(false);
     fetchPublishedProducts().then(({products,categories}) => {
       if (!active) return;
+      setCatalogReady(categories.length > 0);
       const item = products.find(p => p.slug === slug);
       if (item) {
         const category = categories.find(c => c.name === item.category);
@@ -64,7 +67,7 @@ function ProductPage() {
     }).catch(() => { if (active) setChecking(false); });
     return () => { active = false; };
   }, [slug]);
-  const selected = remote ?? initial;
+  const selected = catalogReady ? remote : initial;
   if (!selected) return <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-[#0d0b0a] px-5 text-[#ede5db]"><h1 className="font-serif text-3xl">{checking ? "Ürün yükleniyor…" : "Ürün bulunamadı"}</h1><Link to="/koleksiyon/$slug" params={{slug:"tum-urunler"}} className="text-[#d4ad77]">Tüm ürünlere dön</Link></main>;
   return <ProductPageContent key={slug} product={selected.product} collection={selected.collection} />;
 }
@@ -72,6 +75,8 @@ function ProductPage() {
 function ProductPageContent({product, collection}: {product:CollectionProduct;collection:Collection}) {
   const [options, setOptions] = useState<Record<string,string>>({});
   const [size, setSize] = useState("");
+  const [city, setCity] = useState("");
+  const [note, setNote] = useState("");
   return <main lang="tr" className="min-h-screen bg-[#0d0b0a] text-[#ede5db]">
     <header className="border-b border-[#b59261]/20 bg-[#100e0c]">
       <div className="mx-auto flex max-w-[1350px] flex-wrap items-center justify-between gap-4 px-5 py-6 md:px-10">
@@ -110,7 +115,11 @@ function ProductPageContent({product, collection}: {product:CollectionProduct;co
           <label htmlFor="product-size" className="mt-7 block text-sm font-medium">Özel ölçü talebiniz (isteğe bağlı)</label>
           <p className="mt-1 text-xs text-[#a79988]">Genişlik × derinlik × yükseklik yazabilirsiniz; kesin ölçü görüşmede onaylanır.</p>
           <input id="product-size" maxLength={120} value={size} onChange={e=>setSize(e.target.value)} className="mt-3 w-full rounded-lg border border-[#8d714f]/40 bg-[#100f0d] px-4 py-3 text-sm outline-none focus:border-[#cca16b]" placeholder="Örn. 140 × 60 × 90 cm"/>
-          <a href={whatsappOfferUrl([product.name,...Object.entries(options).map(([key,v])=>`${key}: ${v}`),...(size.trim() ? [`Özel ölçü: ${size.trim()}`]:[])].join(" · "))} target="_blank" rel="noopener noreferrer" className="mt-6 flex items-center justify-center gap-3 rounded-lg border border-[#c39862] bg-[#8d6636]/15 px-5 py-4 text-sm font-semibold text-[#e8bf86] hover:bg-[#8d6636]/25">WhatsApp'tan teklif al <ArrowUpRight size={17}/></a>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <label className="block text-xs text-[#d3c1a7]">Teslimat ili / ilçesi (isteğe bağlı)<input value={city} onChange={event=>setCity(event.target.value)} maxLength={100} placeholder="Örn. İstanbul / Kadıköy" className="mt-2 w-full rounded-lg border border-[#8d714f]/40 bg-[#100f0d] px-4 py-3 text-sm text-[#ede5db] outline-none focus:border-[#cca16b]"/></label>
+            <label className="block text-xs text-[#d3c1a7]">Ek not (isteğe bağlı)<input value={note} onChange={event=>setNote(event.target.value)} maxLength={240} placeholder="Örn. Renk, montaj, kullanım detayı" className="mt-2 w-full rounded-lg border border-[#8d714f]/40 bg-[#100f0d] px-4 py-3 text-sm text-[#ede5db] outline-none focus:border-[#cca16b]"/></label>
+          </div>
+          <a href={whatsappProductOfferUrl({product:product.name,choices:options,dimensions:size,city,note,productUrl:typeof window!=="undefined"?window.location.href:undefined})} target="_blank" rel="noopener noreferrer" className="mt-6 flex items-center justify-center gap-3 rounded-lg border border-[#c39862] bg-[#8d6636]/15 px-5 py-4 text-sm font-semibold text-[#e8bf86] hover:bg-[#8d6636]/25">WhatsApp'tan teklif al <ArrowUpRight size={17}/></a>
           <p className="mt-4 flex items-start gap-2 text-xs leading-5 text-[#a99b88]"><MessageCircle size={15} className="mt-0.5 shrink-0 text-[#c39862]"/> Ürün adı, seçilen seçenekler ve özel ölçü notu teklif mesajına eklenir.</p>
           <Link to="/siparis-ve-teslimat" className="mt-5 flex items-center justify-center gap-2 text-xs text-[#bba583] hover:text-white">Sipariş ve teslimat sürecini öğren <ArrowRight size={14}/></Link>
         </div>
