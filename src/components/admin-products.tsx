@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
+import { CATALOG_SLUGS, getCollection, productSlug } from "@/lib/collections";
+import { decodeProductDescription, encodeProductDescription } from "@/lib/live-catalog";
 
 type Product = { id:string; title:string; slug:string; description:string; image_urls:string[]; published:boolean; category_id:string|null; sort_order:number };
 type Category = { id:string; name:string; slug:string };
-type FormData = { title:string; slug:string; description:string; image_urls:string; published:boolean; category_id:string; sort_order:number };
-const empty:FormData = {title:"",slug:"",description:"",image_urls:"",published:false,category_id:"",sort_order:0};
+type FormData = { title:string; slug:string; description:string; material:string; standardDimensions:string; details:string; dimensions:string; options:string; image_urls:string; published:boolean; category_id:string; sort_order:number };
+const empty:FormData = {title:"",slug:"",description:"",material:"",standardDimensions:"",details:"",dimensions:"",options:"",image_urls:"",published:false,category_id:"",sort_order:0};
 const slugify=(s:string)=>s.toLocaleLowerCase("tr-TR").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ı/g,"i").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 const field="w-full rounded-md border border-white/20 bg-[#151618] px-4 py-3 text-sm text-white outline-none focus:border-[#c9a46c]";
 const label="block text-sm text-[#d7cfc4]";
@@ -17,6 +19,7 @@ export function AdminProducts() {
  const [form,setForm]=useState<FormData>(empty);
  const [showForm,setShowForm]=useState(false);
  const [newCategory,setNewCategory]=useState("");
+ const [importing,setImporting]=useState(false);
  const [loading,setLoading]=useState(true);
  const [saving,setSaving]=useState(false);
  const [error,setError]=useState("");
@@ -31,12 +34,13 @@ export function AdminProducts() {
   setLoading(false);
  },[]);
  useEffect(()=>{void load()},[load]);
- const edit=(p:Product)=>{setEditing(p.id);setForm({title:p.title,slug:p.slug,description:p.description,image_urls:p.image_urls.join("\n"),published:p.published,category_id:p.category_id||"",sort_order:p.sort_order});setShowForm(true);setError("");setSuccess("")};
+ const edit=(p:Product)=>{const meta=decodeProductDescription(p.description);setEditing(p.id);setForm({title:p.title,slug:p.slug,description:meta.description,material:meta.material,standardDimensions:meta.standardDimensions,dimensions:meta.dimensions.map(x=>x.label+": "+x.value).join("\\n"),details:meta.details.map(x=>x.label+": "+x.value).join("\\n"),options:meta.options.map(x=>x.label+": "+x.values.join(", ")).join("\\n"),image_urls:p.image_urls.join("\\n"),published:p.published,category_id:p.category_id||"",sort_order:p.sort_order});setShowForm(true);setError("");setSuccess("")};
  const create=()=>{setEditing(null);setForm(empty);setShowForm(true);setError("");setSuccess("")};
  async function save(e:FormEvent){
   e.preventDefault();const db=getSupabaseClient();if(!db)return;
   setSaving(true);setError("");setSuccess("");
-  const payload={title:form.title.trim(),slug:slugify(form.slug||form.title),description:form.description.trim(),image_urls:form.image_urls.split(/\r?\n/).map(s=>s.trim()).filter(Boolean),published:form.published,category_id:form.category_id||null,sort_order:Number(form.sort_order)||0,updated_at:new Date().toISOString()};
+  const parsePairs=(raw:string)=>raw.split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>{const at=line.indexOf(":");return at>0?{label:line.slice(0,at).trim(),value:line.slice(at+1).trim()}:null}).filter((p):p is {label:string;value:string}=>!!p && !!p.label && !!p.value);
+  const payload={title:form.title.trim(),slug:slugify(form.slug||form.title),description:encodeProductDescription({description:form.description.trim(),material:form.material.trim(),standardDimensions:form.standardDimensions.trim(),dimensions:parsePairs(form.dimensions),details:parsePairs(form.details),options:parsePairs(form.options).map(p=>({label:p.label,values:p.value.split(",").map(v=>v.trim()).filter(Boolean)}))}),image_urls:form.image_urls.split(/\r?\n/).map(s=>s.trim()).filter(Boolean),published:form.published,category_id:form.category_id||null,sort_order:Number(form.sort_order)||0,updated_at:new Date().toISOString()};
   if(!payload.title||!payload.slug){setError("Ürün adı ve bağlantı adı gerekli.");setSaving(false);return}
   const result=editing?await db.from("products").update(payload).eq("id",editing):await db.from("products").insert(payload);
   setSaving(false);
