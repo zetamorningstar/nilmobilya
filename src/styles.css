@@ -4536,3 +4536,60 @@ html:not(.nil-staged) .nil-stage #iletisim {
 .nil-scene--col .kcr-benefits > div {
   border-radius: 10px;
 }
+
+
+/* Short notice: temporary soft-focus backdrop. Unmounting the notice removes it. */
+.nil-dev-notice-scrim {
+  background: rgba(7, 6, 6, .25);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  animation: nil-dev-scrim-enter .35s ease-out both;
+}
+@keyframes nil-dev-scrim-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nil-dev-notice-scrim { animation: none; }
+}
+
+/* Hero copy legibility: a feathered shadow directly behind words and controls,
+   without dimming the perimeter of the photograph. */
+.nil-scene--hero .nil-hero2__content::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  left: -12%;
+  right: -12%;
+  top: -18%;
+  bottom: -16%;
+  background: radial-gradient(ellipse 67% 62% at 50% 47%,
+    rgba(0, 0, 0, .48) 0%,
+    rgba(0, 0, 0, .31) 39%,
+    rgba(0, 0, 0, .10) 68%,
+    transparent 100%);
+}
+.nil-scene--hero .nil-hero2__eyebrow,
+.nil-scene--hero .nil-hero2__title,
+.nil-scene--hero .nil-hero2__text {
+  text-shadow: 0 2px 15px rgba(0, 0, 0, .82), 0 5px 30px rgba(0, 0, 0, .46);
+}
+.nil-scene--hero .nil-hero2__cta {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .55), 0 2px 12px rgba(0, 0, 0, .3);
+  text-shadow: 0 1px 7px rgba(0, 0, 0, .46);
+}
+.nil-scene--hero .nil-hero2__cue,
+.nil-scene--hero .nil-hero2__tags {
+  text-shadow: 0 2px 11px rgba(0, 0, 0, .85);
+}
+@media (max-width: 767px) {
+  .nil-scene--hero .nil-hero2__content::before {
+    left: -12px;
+    right: -12px;
+    top: -10%;
+    bottom: -12%;
+    background: radial-gradient(ellipse 83% 67% at 50% 46%,
+      rgba(0, 0, 0, .48), rgba(0, 0, 0, .20) 60%, transparent 100%);
+  }
+}
