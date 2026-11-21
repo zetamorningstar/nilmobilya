@@ -323,17 +323,16 @@ function Index() {
       <div className="max-w-[620px]">
         <p data-s="fade" className="mb-5 text-[11px] uppercase tracking-[.32em] text-[#aaa29a]">NİL MOBİLYA / SERGİMİZ</p>
         <h2 data-s="text" className="font-display text-[clamp(3.3rem,6vw,6rem)] leading-[1.03] text-[#e8e3df]">Sergimiz</h2>
-        <p data-s="text" className="mt-6 max-w-[510px] text-base leading-8 text-[#b5ada6]">Yeni projelerimizi, özel üretimlerimizi ve koleksiyonlarımıza ait seçili işleri yakında burada sergileyeceğiz.</p>
-        <div data-s="fade" className="mt-7 inline-flex items-center gap-3 rounded-xl border border-[#a58b6a]/40 bg-[#161411]/75 px-5 py-3 text-sm text-[#c9b294]">
-          <span className="relative flex size-2"><span className="absolute inset-0 rounded-full bg-[#b8a184]/50"/><span className="relative size-2 rounded-full bg-[#b8a184]"/></span>
-          Yakında yayında
-        </div>
+        <p data-s="text" className="mt-6 max-w-[510px] text-base leading-8 text-[#b5ada6]">Üretim ve tasarım çalışmalarımızı Sergimiz sayfasında keşfedin. Yeni projeler eklendikçe galeri güncellenir.</p>
+        <Link to="/sergimiz" data-s="fade" className="mt-7 inline-flex items-center gap-3 rounded-xl border border-[#a58b6a]/40 bg-[#161411]/75 px-5 py-3 text-sm text-[#c9b294] hover:border-[#d1a66c] hover:text-white">
+          Sergimizi incele <ArrowRight size={17}/>
+        </Link>
       </div>
       <div data-s="frame" className="flex min-h-[220px] items-center justify-center rounded-[24px] border border-white/10 bg-[#141414]/35 p-7 backdrop-blur-[2px] lg:min-h-[330px]">
         <div className="max-w-[430px] text-center">
           <Layers3 className="mx-auto size-12 text-[#aa9785]" strokeWidth={.9}/>
-          <p className="mt-6 font-display text-[clamp(1.5rem,2.4vw,2.3rem)] leading-snug text-[#ded6cf]">Yeni çalışmalarımız için hazırlık yapıyoruz.</p>
-          <p className="mt-4 text-sm leading-7 text-[#9e958d]">Tamamlanan projeler, üretim detayları ve yeni tasarımlar burada yerini alacak.</p>
+          <p className="mt-6 font-display text-[clamp(1.5rem,2.4vw,2.3rem)] leading-snug text-[#ded6cf]">Tamamlanan projelerimiz</p>
+          <p className="mt-4 text-sm leading-7 text-[#9e958d]">Atölye üretimlerimiz ve seçili uygulamalarımızdan fotoğraflar için galeriye göz atın.</p>
         </div>
       </div>
     </div>
