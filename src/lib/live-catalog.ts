@@ -1,5 +1,5 @@
 import { getSupabaseClient } from "@/lib/supabase-client";
-import { CATALOG_SLUGS, collections, getCatalogCollection, productSlug, type CollectionProduct } from "@/lib/collections";
+import { getCatalogCollection, type CollectionProduct } from "@/lib/collections";
 
 const PREFIX = "NIL_PRODUCT_V1:";
 export type ProductMetadata = {
@@ -65,16 +65,15 @@ export async function fetchPublishedProducts(): Promise<{products: (CollectionPr
   const categories = (c.data || []) as CategoryRow[];
   return { categories, products: ((p.data || []) as CatalogRow[]).map(row => mapLiveProduct(row,categories.find(cat => cat.id === row.category_id))) };
 }
+/** Once Supabase categories exist, published database products are the source of truth.
+ * This prevents unpublished imported items from leaking through the old static catalog.
+ * The old catalog remains a fallback only before Supabase is configured or migrated.
+ */
 export function mergeCatalogProducts(collectionSlug: string, liveProducts: (CollectionProduct & {slug:string})[], categories: CategoryRow[]): CollectionProduct[] {
-  const categorySlugs = collectionSlug === "tum-urunler" ? [...CATALOG_SLUGS] : [collectionSlug];
-  const allowedNames = new Set(categorySlugs.map(slug => collections.find(c => c.slug === slug)?.title).filter(Boolean));
-  const matching = liveProducts.filter(p => {
-    const cat = categories.find(c => c.name === p.category);
-    return collectionSlug === "tum-urunler" || (!!cat && (categorySlugs.includes(cat.slug) || allowedNames.has(cat.name)));
+  if (!categories.length) return getCatalogCollection(collectionSlug)?.products ?? [];
+  return liveProducts.filter(product => {
+    if (collectionSlug === "tum-urunler") return true;
+    const category = categories.find(item => item.name === product.category);
+    return category?.slug === collectionSlug;
   });
-  const original = getCatalogCollection(collectionSlug)?.products ?? [];
-  const override = new Map(matching.map(p => [p.slug, p]));
-  const existing = original.map(p => override.get(productSlug(p.name)) ?? p);
-  const staticSlugs = new Set(original.map(p => productSlug(p.name)));
-  return [...existing, ...matching.filter(p => !staticSlugs.has(p.slug))];
 }
