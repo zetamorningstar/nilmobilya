@@ -19,6 +19,7 @@ export const Route = createFileRoute("/koleksiyon/$slug")({
       };
     }
     const { collection } = loaderData;
+    const canonical = `https://nilmobilyatasarim.com/koleksiyon/${collection.slug}`;
     return {
       meta: [
         { title: `Nil Mobilya | ${collection.pageTitle}` },
@@ -26,8 +27,11 @@ export const Route = createFileRoute("/koleksiyon/$slug")({
         { property: "og:title", content: `Nil Mobilya | ${collection.pageTitle}` },
         { property: "og:description", content: collection.lead },
         { property: "og:type", content: "website" },
+        { property: "og:url", content: canonical },
+        { property: "og:image", content: "https://nilmobilyatasarim.com/images/koleksiyon/tum-urunler.webp" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
+      links: [{ rel: "canonical", href: canonical }],
     };
   },
   component: CollectionRoute,
