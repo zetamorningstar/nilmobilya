@@ -7,7 +7,10 @@ import { AdminInsights } from "@/components/admin-insights";
 import { AdminTraffic } from "@/components/admin-traffic";
 import "@/styles/admin-polish.css";
 
-export const Route = createFileRoute("/admin")({\n  head: () => ({ meta: [{ title: "Yönetim Paneli | Nil Mobilya" }, { name: "robots", content: "noindex, nofollow" }] }),\n  component: AdminPage,\n});
+export const Route = createFileRoute("/admin")({
+  head: () => ({ meta: [{ title: "Yönetim Paneli | Nil Mobilya" }, { name: "robots", content: "noindex, nofollow" }] }),
+  component: AdminPage,
+});
 
 const modules = [
   { title: "Ürünler", description: "Ürün ekleme, düzenleme ve yayınlama", icon: Package },
