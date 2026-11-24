@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Activity, ArrowRight, BarChart3, CheckCircle2, ChevronRight, ExternalLink, FileText, Images, LayoutGrid, Package, Plus, Search, ShieldCheck, TrendingUp } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
+import { AdminCloudflareTraffic } from "@/components/admin-cloudflare-traffic";
 
 type Counts = { total: number; published: number; categories: number } | null;
 type Product = { id: string; title: string; slug: string; published: boolean; image_urls: string[]; updated_at: string; category_id: string | null };
@@ -57,6 +58,8 @@ export function AdminDashboard({ counts, navigate }: { counts: Counts; navigate:
       </div>
       <div aria-hidden="true" className="nil-admin-hero-art"><i/><i/><i/><i/><i/></div>
     </section>
+
+    <AdminCloudflareTraffic compact />
 
     <section aria-label="Katalog istatistikleri" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
       {stats.map(stat => <div key={stat.label} className={`nil-admin-stat nil-admin-stat--${stat.tone}`}>
