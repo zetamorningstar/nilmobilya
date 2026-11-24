@@ -174,7 +174,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
 
       <div className="nil-collection-content relative mx-auto max-w-[1800px] px-[clamp(1.25rem,4.9vw,7rem)] pb-16">
         {/* Real filters and an integrated quote entry, not a separate billboard. */}
-        <div className="nil-collection-filters relative z-10 -mt-7 mb-9 grid items-center gap-3 rounded-2xl border border-[#50545a] bg-[#191b1e]/95 p-3 shadow-[0_18px_55px_rgba(0,0,0,.32)] backdrop-blur-lg lg:grid-cols-[minmax(0,1fr)_auto] lg:p-4">
+        <div className="nil-collection-filters relative z-10 -mt-7 mb-9 grid items-center gap-3 rounded-2xl border border-[#62533e] bg-[#191714]/95 p-3 shadow-[0_18px_55px_rgba(0,0,0,.32)] backdrop-blur-lg lg:grid-cols-[minmax(0,1fr)_auto] lg:p-4">
           <div className="grid min-w-0 gap-2 sm:grid-cols-2 xl:grid-cols-[1.05fr_1.1fr_1.1fr]">
             <div className="relative">
               <label htmlFor="nil-category" className="sr-only">Ürün kategorisi</label>
@@ -208,7 +208,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
         <section aria-label="Koleksiyon kategorileri" className="mb-11">
           <div className="mb-5 flex items-baseline justify-between gap-3"><h2 className="font-display text-2xl text-[#e8e1d7] md:text-3xl">Kategorileri Keşfedin</h2><span className="text-[11px] text-[#b4aea4]">{categoryCards.length} kategori</span></div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {categoryCards.map(category=><Link key={category.slug} to="/koleksiyon/$slug" params={{slug:category.slug}} className="nil-category-tile group relative isolate min-h-[190px] overflow-hidden rounded-[15px] border border-[#4d4640] bg-[#191a1c] sm:min-h-[225px]">
+            {categoryCards.map(category=><Link key={category.slug} to="/koleksiyon/$slug" params={{slug:category.slug}} className="nil-category-tile group relative isolate min-h-[190px] overflow-hidden rounded-[15px] border border-[#66533a] bg-[#191a1c] sm:min-h-[225px]">
               <img src={category.hero} alt="" loading="lazy" className="absolute inset-0 -z-20 size-full object-cover transition-transform duration-700 group-hover:scale-[1.035]" style={{objectPosition:category.heroFocus}}/>
               <span aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/25 to-transparent"/>
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5"><div><h3 className="font-display text-[25px] leading-none text-[#f2ece5]">{category.pageTitle}</h3><p className="mt-2 text-[12px] text-[#ddd0bb]">{category.count} ürün</p></div><span className="grid size-9 place-items-center rounded-full border border-[#bca077] text-[#ead6b5] transition-colors group-hover:bg-[#bca077] group-hover:text-[#111]"><ArrowRight size={16}/></span></div>
@@ -217,12 +217,12 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
         </section>}
         <section aria-label={`${collection.pageTitle} ürünleri`}>
           <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <p className="text-[13px] text-[#d4c8b4]"><strong className="text-[19px] text-[#c5a371]">{visible.length}</strong> ürün</p>
+            <p className="text-[13px] text-[#d2bb96]"><strong className="text-[19px] text-[#c5a371]">{visible.length}</strong> ürün</p>
             <div className="flex items-center gap-3"><label htmlFor="siralama" className="text-xs text-[#aaa39b]">Sıralama</label><div className="relative">
               <select id="siralama" value={sort} onChange={e=>setSort(e.target.value as Sort)} className="nil-filter-control min-w-[165px] appearance-none pr-9"><option value="oner">Öne Çıkanlar</option><option value="isim">İsim (A–Z)</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#bda277]"/>
             </div></div>
           </div>
-          {visible.length===0&&<div className="rounded-xl border border-[#464a50] bg-[#191b1f] px-6 py-10 text-center text-sm text-[#bfc0c2]">Bu filtrelere uygun ürün bulunamadı. Arama veya malzeme filtresini değiştirebilirsin.</div>}
+          {visible.length===0&&<div className="rounded-xl border border-[#574a38] bg-[#191b1f] px-6 py-10 text-center text-sm text-[#d6c4aa]">Bu filtrelere uygun ürün bulunamadı. Arama veya malzeme filtresini değiştirebilirsin.</div>}
           <div className="nil-catalog__grid grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {visible.map((product) => {
               const liked = favorites.has(product.name);
