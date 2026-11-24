@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Activity, ArrowUpRight, Cloud, RefreshCw, ShieldCheck } from "lucide-react";
+import { Activity, Cloud, RefreshCw, ShieldCheck } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
 
 type CloudflareReport = {
