@@ -4714,7 +4714,7 @@ html:not(.nil-staged) .nil-stage #iletisim {
 
 /* === Nil Mobilya 2026 · Project-led immersive home hero === */
 .nil-scene.nil-project-hero{position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100svh;padding:0!important;overflow:hidden;background:#0e0b09}
-.nil-project-hero__photo{position:absolute;inset:0;z-index:-3;background-image:url("/hero-project.webp"),url("/images/anasayfa/hero.webp");background-size:cover,cover;background-position:center center,center center;background-repeat:no-repeat;transform:none}
+.nil-project-hero__photo{position:absolute;inset:0;z-index:-3;background-image:url("/Alacakaranl%C4%B1kta%20L%C3%BCks%20Modern%20Salon.webp"),url("/images/anasayfa/hero.webp");background-size:cover,cover;background-position:center center,center center;background-repeat:no-repeat;transform:none}
 .nil-project-hero__shade{position:absolute;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(90deg,rgba(7,6,5,.87) 0%,rgba(8,7,6,.72) 27%,rgba(10,8,7,.33) 57%,rgba(8,6,5,.76) 100%),linear-gradient(0deg,rgba(8,7,6,.93) 0%,transparent 25%,rgba(0,0,0,.18) 100%)}
 .nil-project-hero__shell{position:relative;z-index:2;display:flex;flex:1;flex-direction:column;justify-content:space-between;gap:2rem;width:100%;max-width:1680px;min-height:100svh;margin:0 auto;padding:clamp(112px,15svh,170px) clamp(24px,6vw,112px) clamp(20px,3svh,32px)}
 .nil-project-hero__main{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,320px);gap:clamp(30px,4vw,80px);align-items:center;flex:1}
