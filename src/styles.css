@@ -4968,3 +4968,36 @@ html:not(.nil-staged) .nil-stage #iletisim {
 .nil-scene--col .kcr-card:not(.kcr-card--feature) .kcr-card__copy p{
  max-width:180px;
 }
+
+
+/* Collection cards: no visible outline or external shadow; stronger left-side darkening. */
+.nil-scene--col .kcr-card,
+.nil-scene--col .kcr-card--small,
+.nil-scene--col .kcr-card:hover,
+.nil-scene--col .kcr-card--small:hover{
+ border:0 !important;
+ outline:none;
+ box-shadow:none !important;
+ background:#100e0d;
+}
+.nil-scene--col .kcr-card:focus-visible{
+ outline:2px solid #c4a36b;
+ outline-offset:3px;
+}
+.nil-scene--col .kcr-card .kcr-card__gradient,
+.nil-scene--col .kcr-card--small .kcr-card__gradient{
+ background:linear-gradient(90deg,
+  rgba(7,6,6,.97) 0%,
+  rgba(7,6,6,.89) 24%,
+  rgba(7,6,6,.63) 42%,
+  rgba(7,6,6,.22) 67%,
+  rgba(7,6,6,0) 100%) !important;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__gradient{
+ background:linear-gradient(90deg,
+  rgba(7,6,6,.98) 0%,
+  rgba(7,6,6,.91) 23%,
+  rgba(7,6,6,.66) 42%,
+  rgba(7,6,6,.23) 70%,
+  rgba(7,6,6,0) 100%) !important;
+}
