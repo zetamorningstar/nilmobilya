@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Diamond, Layers3, Leaf, Ruler, ShieldCheck, Truck, Headset, Building2, Handshake, KeyRound, Sofa, DraftingCompass, Gem } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Diamond, Layers3, Leaf, Ruler, ShieldCheck, Truck, Headset, Building2, Handshake, KeyRound, Sofa, DraftingCompass, Gem, ClipboardList } from "lucide-react";
 import { useEffect, useState, type PointerEvent } from "react";
 
 import diningImage from "@/assets/nil-dining.jpg";
@@ -248,6 +248,7 @@ function Index() {
                 <h2 data-s="text" className="kcr-title">Yeni Koleksiyon</h2>
               </div>
               <div className="kcr-heading__description" data-s="fade">
+                <Link to="/teklif" className="mb-3 inline-flex items-center gap-2.5 rounded-xl border border-[#717984] bg-[#30363f] px-4 py-2.5 text-[12px] font-semibold text-[#edf0f5] transition-colors hover:bg-[#46505c]"><ClipboardList className="size-4"/> Akıllı Teklif Oluştur <ArrowUpRight className="size-4"/></Link>
                 <span aria-hidden="true" className="kcr-heading__divider" />
                 <p>Zamansız tasarımlar, modern yaşam alanları için.<br />Nil Mobilya'nın yeni koleksiyonunu keşfedin.</p>
               </div>
