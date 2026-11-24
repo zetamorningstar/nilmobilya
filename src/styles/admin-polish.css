@@ -12,3 +12,85 @@
 .admin-orbit{animation:admin-float 5s ease-in-out infinite}
 @keyframes admin-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @media(prefers-reduced-motion:reduce){.admin-panel,.admin-3d-bar{transition:none}.admin-panel:hover{transform:none}.admin-orbit{animation:none}}
+
+
+/* Nil Mobilya / subdued bronze dark control center */
+.nil-admin-shell{--na-bg:#0b0c0e;--na-card:#141417;--na-line:#332b25;--na-gold:#a48a6b;--na-text:#ebe5dc;--na-muted:#928d89;background:radial-gradient(ellipse at 60% -10%,#201914 0%,transparent 46%),#0b0c0e;color:var(--na-text)}
+.nil-admin-shell .nil-admin-sidebar{background:linear-gradient(155deg,#161416,#101113 46%,#0d0e10);border-right:1px solid #302720}
+.nil-admin-shell .nil-admin-topbar{background:rgba(14,14,16,.94);border-bottom:1px solid #342b24}
+.nil-admin-shell .nil-admin-sidebar-logo{font-family:Georgia,serif;font-size:37px;font-weight:400;line-height:1;letter-spacing:-.12em;color:#b69a78;text-shadow:0 0 26px rgba(164,138,107,.10)}
+.nil-admin-shell .nil-admin-navitem{border:1px solid transparent;border-radius:11px;margin-bottom:5px;transition:background .2s,border-color .2s,color .2s}
+.nil-admin-shell .nil-admin-navitem.is-active{background:linear-gradient(100deg,rgba(137,105,76,.23),rgba(72,57,44,.22));border-color:#5b4637;color:#d7b995}
+.nil-admin-shell .nil-admin-navitem:not(.is-active):not(:disabled):hover{background:#25201d;color:#e8dacb}
+.nil-admin-shell .nil-admin-subtle{color:var(--na-muted)}
+.nil-admin-shell .nil-admin-content{max-width:1800px}
+.nil-admin-shell .admin-panel{border-color:#352c25;background:linear-gradient(145deg,#171719,#111214);box-shadow:0 10px 40px rgba(0,0,0,.16)}
+.nil-admin-shell .admin-panel:hover{border-color:#564435;box-shadow:0 12px 42px rgba(0,0,0,.21)}
+.nil-admin-home{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#e8e1d8}
+.nil-admin-home button,.nil-admin-home a{transition:background .2s ease,border-color .2s ease,color .2s ease}
+.nil-admin-hero{position:relative;isolation:isolate;overflow:hidden;min-height:235px;display:flex;align-items:center;border:1px solid #403025;border-radius:20px;padding:31px 36px;background:radial-gradient(ellipse at 85% 55%,rgba(100,71,46,.17),transparent 52%),linear-gradient(120deg,#171416 15%,#141315 68%,#1b1614);box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.nil-admin-eyebrow,.nil-admin-section-kicker{display:flex;align-items:center;gap:9px;color:#a89175;font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+.nil-admin-line{width:25px;height:1px;background:#a89175}
+.nil-admin-hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(32px,3.15vw,54px);font-weight:400;letter-spacing:-.035em;line-height:1.12;margin:13px 0 10px}
+.nil-admin-hero h1 em{font-style:normal;color:#c0a689}
+.nil-admin-hero p{font-size:13px;color:#a9a2a0;line-height:1.7;max-width:440px}
+.nil-admin-hero-art{position:absolute;z-index:-1;inset:0;overflow:hidden;pointer-events:none}
+.nil-admin-hero-art:before{content:"";position:absolute;width:530px;height:530px;border:1px solid rgba(181,140,95,.23);border-radius:50%;right:-120px;top:35px;transform:rotate(-24deg);box-shadow:0 0 70px rgba(130,90,48,.045)}
+.nil-admin-hero-art:after{content:"";position:absolute;width:630px;height:280px;border-top:1px solid rgba(158,115,69,.21);border-radius:50%;right:-140px;top:65px;transform:rotate(-22deg)}
+.nil-admin-hero-art i{position:absolute;width:720px;height:300px;border-top:1px solid rgba(167,120,71,.13);border-radius:50%;right:-200px;top:65px;transform:rotate(-22deg)}
+.nil-admin-hero-art i:nth-child(2){top:80px;right:-195px}.nil-admin-hero-art i:nth-child(3){top:95px;right:-190px}.nil-admin-hero-art i:nth-child(4){top:110px;right:-185px}.nil-admin-hero-art i:nth-child(5){top:125px;right:-180px}
+.nil-admin-main-action,.nil-admin-outline-action{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:10px;padding:10px 15px;font-weight:600;font-size:12px}
+.nil-admin-main-action{color:#1c1917;background:#a99173;border:1px solid #b69d7e}
+.nil-admin-main-action:hover{background:#c2ab90}
+.nil-admin-outline-action{border:1px solid #504033;color:#bca88e;background:rgba(25,22,19,.6)}
+.nil-admin-outline-action:hover{border-color:#91775d}
+.nil-admin-stat{position:relative;display:flex;align-items:center;gap:18px;min-height:113px;overflow:hidden;border:1px solid #48392d;border-radius:15px;background:linear-gradient(120deg,#2c211b,#181617 85%);padding:22px}
+.nil-admin-stat:before{content:"";position:absolute;width:160px;height:90px;border-top:1px solid rgba(184,137,92,.22);border-radius:50%;right:-37px;bottom:-54px;transform:rotate(-23deg)}
+.nil-admin-stat--olive{background:linear-gradient(120deg,#23251d,#161815 85%);border-color:#444333}
+.nil-admin-stat--slate{background:linear-gradient(120deg,#242020,#181719 85%)}
+.nil-admin-stat--copper{background:linear-gradient(120deg,#2b211b,#181618 85%)}
+.nil-admin-stat-icon{width:43px;height:43px;border-radius:13px;background:rgba(188,151,108,.07);display:flex;align-items:center;justify-content:center;color:#b9a080;flex-shrink:0}
+.nil-admin-stat p{color:#bfb2a6;font-size:12px;margin-bottom:3px}.nil-admin-stat strong{font-family:Georgia,serif;font-size:36px;font-weight:400;line-height:1.1;color:#eee5da}
+.nil-admin-surface{border:1px solid #3b3028;border-radius:16px;background:linear-gradient(146deg,#191718,#131315 75%);box-shadow:0 12px 34px rgba(0,0,0,.12);min-width:0;padding:22px}
+.nil-admin-surface-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:20px}
+.nil-admin-surface h2{font-family:Georgia,serif;font-size:21px;line-height:1.2;font-weight:400;margin-top:7px;color:#eee1d3}
+.nil-admin-surface-head p{color:#898583;font-size:11px;margin-top:5px;line-height:1.5}
+.nil-admin-text-link{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:#b79d7d;font-size:11px;font-weight:600;padding:5px}.nil-admin-text-link:hover{color:#e0c3a1}
+.nil-admin-graph{height:200px;position:relative;border:1px solid #2d2927;border-radius:10px;background:#101113;overflow:hidden}
+.nil-admin-graph-grid{position:absolute;inset:0;opacity:.32;background-image:linear-gradient(#403732 1px,transparent 1px);background-size:100% 25%}
+.nil-admin-graph-bars{position:relative;height:100%;display:flex;align-items:end;justify-content:space-around;padding:14px 12px 22px;gap:4px}
+.nil-admin-graph-day{height:100%;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.nil-admin-graph-pair{height:100%;display:flex;align-items:end;justify-content:center;gap:3px;width:100%;max-width:44px}
+.nil-admin-view-bar{display:block;width:38%;border-radius:3px 3px 0 0;background:linear-gradient(0deg,#594535,#b19979)}
+.nil-admin-wa-bar{display:block;width:27%;border-radius:3px 3px 0 0;background:linear-gradient(0deg,#35464c,#819494)}
+.nil-admin-graph-day small{position:absolute;bottom:4px;font-size:9px;color:#89827e}
+.nil-admin-chart-empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:15px;color:#8f8884;font-size:12px;height:200px;border:1px dashed #3a3029;border-radius:12px}
+.nil-admin-chart-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;color:#9c9691;font-size:10px}
+.nil-admin-dot-gold,.nil-admin-dot-blue{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;background:#b19979}.nil-admin-dot-blue{background:#819494}
+.nil-admin-traffic-card{background:radial-gradient(circle at 100% 0%,rgba(139,98,54,.13),transparent 52%),linear-gradient(146deg,#191718,#131315 75%)}
+.nil-admin-big-number{font-family:Georgia,serif;font-weight:400;font-size:clamp(38px,3.5vw,56px);letter-spacing:-.04em;color:#e8dfd5;margin-top:25px;line-height:1}
+.nil-admin-number-subtitle{font-size:12px;color:#a9a09b;margin-top:8px}.nil-admin-traffic-rows{margin-top:24px;border-top:1px solid #40342b}
+.nil-admin-traffic-rows>div{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #3a3029;gap:12px;color:#aaa09a;font-size:12px}
+.nil-admin-traffic-rows strong{font-size:15px;color:#e0d3c6}.nil-admin-traffic-note{font-size:10px;color:#827b75;margin-top:17px;line-height:1.5}
+.nil-admin-timeline{position:relative;padding-left:8px}.nil-admin-timeline:before{content:"";position:absolute;left:13px;top:13px;bottom:13px;width:1px;background:#5b4536}
+.nil-admin-timeline-item{position:relative;display:flex;gap:16px;padding:9px 0;min-width:0}
+.nil-admin-timeline-mark{position:relative;width:11px;height:11px;border:2px solid #ab8d6b;border-radius:50%;background:#26201b;flex-shrink:0;margin-top:3px}
+.nil-admin-timeline-item strong{display:block;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#ddd0c0}
+.nil-admin-timeline-item>div{min-width:0}.nil-admin-timeline-item span:last-child{display:block;margin-top:5px;color:#88817c;font-size:10px}
+.nil-admin-empty-mini{font-size:12px;color:#8a837e;padding:16px 0}
+.nil-admin-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.nil-admin-shortcut{display:flex;flex-direction:column;align-items:flex-start;gap:16px;min-width:0;min-height:140px;border:1px solid #4b392d;border-radius:12px;padding:13px 10px;background:radial-gradient(circle at 100% 100%,rgba(135,96,63,.13),transparent 65%),linear-gradient(#29211d,#191718);color:#bca181;text-align:left}
+.nil-admin-shortcut span{flex:1;color:#e3d9ce;font-size:11px;font-weight:500;line-height:1.45}.nil-admin-shortcut:hover{border-color:#897054;background:#30251e}
+.nil-admin-search{height:37px;display:flex;align-items:center;gap:8px;background:#111113;border:1px solid #302a26;padding:0 11px;border-radius:8px;color:#968d84;margin-bottom:8px}
+.nil-admin-search input{width:100%;outline:0;background:transparent;color:#e8e1d8;font-size:12px}
+.nil-admin-products-list{max-height:278px;overflow:auto}
+.nil-admin-product-row{display:flex;align-items:center;gap:11px;min-height:56px;border-bottom:1px solid #322b27;padding:7px 0}
+.nil-admin-product-row:last-child{border-bottom:none}.nil-admin-product-thumb{height:39px;width:43px;border-radius:7px;overflow:hidden;background:#282321;color:#a68e72;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nil-admin-product-thumb img{height:100%;width:100%;object-fit:cover}
+.nil-admin-product-name{min-width:0;flex:1}.nil-admin-product-name strong{display:block;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}.nil-admin-product-name span{font-size:10px;color:#89827c}
+.nil-admin-status{font-size:10px;padding:5px 8px;border:1px solid;border-radius:20px;white-space:nowrap}.nil-admin-status.is-live{color:#9ebba2;border-color:#385340;background:#1a2b21}.nil-admin-status.is-draft{color:#c5a785;border-color:#5d4631;background:#30261e}
+.nil-admin-notes{display:flex;flex-direction:column}.nil-admin-note-inner{border:1px solid #514032;background:linear-gradient(120deg,#33281f,#24201c);border-radius:11px;padding:18px;margin-bottom:14px;flex:1}
+.nil-admin-note-inner p{font-size:12px;line-height:1.85;color:#c9bdaf}
+@media(max-width:1150px){.nil-admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.nil-admin-shortcut{min-height:110px}}
+@media(max-width:640px){.nil-admin-hero{padding:23px;min-height:230px}.nil-admin-hero-art{opacity:.42}.nil-admin-stat{padding:15px;gap:9px;min-height:95px}.nil-admin-stat-icon{width:32px;height:32px}.nil-admin-stat strong{font-size:27px}.nil-admin-stat p{font-size:10px}.nil-admin-surface{padding:17px}.nil-admin-home{gap:12px}}
+@media(prefers-reduced-motion:reduce){.nil-admin-home button,.nil-admin-home a,.nil-admin-shell .nil-admin-navitem{transition:none}}
