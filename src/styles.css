@@ -4938,3 +4938,33 @@ html:not(.nil-staged) .nil-stage #iletisim {
 @media(prefers-reduced-motion:reduce){
  .nil-scene--col .kcr-heading__quote{transition:none}
 }
+
+
+/* Collection cards — preserve readable captions, remove overly dark edge vignette.
+   Scoped to the homepage collection scene; no other sections affected. */
+.nil-scene--col .kcr-card .kcr-card__gradient{
+ background:linear-gradient(90deg,
+  rgba(8,7,7,.80) 0%,
+  rgba(8,7,7,.48) 23%,
+  rgba(8,7,7,.12) 44%,
+  rgba(8,7,7,0) 66%) !important;
+}
+.nil-scene--col .kcr-card--feature .kcr-card__gradient{
+ background:linear-gradient(90deg,
+  rgba(8,7,7,.77) 0%,
+  rgba(8,7,7,.42) 20%,
+  rgba(8,7,7,.10) 39%,
+  rgba(8,7,7,0) 62%) !important;
+}
+.nil-scene--col .kcr-card .kcr-card__hero{
+ filter:none;
+ box-shadow:none;
+}
+.nil-scene--col .kcr-card{
+ overflow:hidden;
+ border-color:rgba(196,163,107,.42);
+ background:#0f0f10;
+}
+.nil-scene--col .kcr-card:not(.kcr-card--feature) .kcr-card__copy p{
+ max-width:180px;
+}
