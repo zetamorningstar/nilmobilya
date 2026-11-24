@@ -58,6 +58,27 @@ const SORTS: readonly (readonly [Sort, string])[] = [
 ];
 
 type Item = Work & { category: WorkCategory; order: number };
+type InstagramEntry={url:string;title:string};
+function safeInstagramPost(url:string):string|null {
+ try{
+  const parsed=new URL(url);
+  if(parsed.protocol!=="https:"||!["instagram.com","www.instagram.com"].includes(parsed.hostname))return null;
+  const match=parsed.pathname.match(/^\/(p|reel)\/([A-Za-z0-9_-]+)\/?$/);
+  return match?"https://www.instagram.com/"+match[1]+"/"+match[2]+"/":null;
+ }catch{return null}
+}
+function InstagramPost({entry}:{entry:InstagramEntry}){
+ const [allowed,setAllowed]=useState(false);
+ const embed=entry.url.replace(/\/$/,"")+"/embed/";
+ return <article className="min-w-0 overflow-hidden rounded-[20px] border border-[#655039]/45 bg-[#1b1715]">
+  <div className="flex items-center justify-between gap-2 border-b border-[#695138]/30 px-4 py-3"><span className="truncate text-sm text-[#d8c2a3]">{entry.title}</span><a href={entry.url} target="_blank" rel="noopener noreferrer" className="shrink-0 text-xs text-[#c29c69] hover:text-white">Instagram’da aç ↗</a></div>
+  {allowed?<iframe title={entry.title+" Instagram gönderisi"} src={embed} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="h-[460px] w-full bg-white sm:h-[500px]"/>:<div className="flex min-h-[245px] flex-col items-center justify-center gap-4 px-6 py-8 text-center">
+   <p className="text-sm leading-6 text-[#c1b09d]">Gönderi Instagram üzerinden görüntülenir. Açtığınızda tarayıcınız Instagram’a bağlanır.</p>
+   <button type="button" onClick={()=>setAllowed(true)} className="rounded-xl border border-[#a5845d] bg-[#392c21] px-5 py-3 text-sm font-medium text-[#f2d7ad] hover:bg-[#4d3724]">Gönderiyi burada göster</button>
+  </div>}
+ </article>;
+}
+
 
 const DEFAULT_RATIO = 1.9; // fotoğraf yüklenene kadar kullanılan en/boy oranı
 
@@ -162,6 +183,7 @@ function Sergimiz() {
   const [sort, setSort] = useState<Sort>("yeni");
   const [open, setOpen] = useState<number | null>(null);
   const [remoteWorks, setRemoteWorks] = useState<Work[]>([]);
+  const [instagramEntries,setInstagramEntries]=useState<InstagramEntry[]>([]);
   const [remoteReady, setRemoteReady] = useState(false);
   useEffect(() => {
     const db = getSupabaseClient();
@@ -181,7 +203,10 @@ function Sergimiz() {
             image,alt:project.title+" ürün veya proje fotoğrafı",
           }));
         });
-        setRemoteWorks(decoded);setRemoteReady(true);
+        const instagramEntries:InstagramEntry[]=(data??[]).flatMap(project=>(project.image_urls??[]).flatMap((url:string)=>{const link=safeInstagramPost(url);return link?[{url:link,title:project.title}]:[]}));
+        setInstagramEntries(instagramEntries);
+        setRemoteWorks(decoded.filter(item=>!safeInstagramPost(item.image)));
+        setRemoteReady(true);
       });
     return () => { active=false; };
   }, []);
@@ -343,7 +368,15 @@ function Sergimiz() {
           </ul>
         )}
 
-        <div className="mt-16 flex justify-between gap-4 text-[9px] uppercase tracking-[0.1em] text-foreground/60">
+        <div className="mt-12 rounded-[22px] border border-[#67513b]/40 bg-[#171310] p-5 sm:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div><p className="text-[11px] uppercase tracking-[.18em] text-[#c49c6b]">Instagram / Çalışmalar</p><h2 className="mt-2 font-display text-2xl text-[#f0dec5]">Atölyeden Yeni Paylaşımlar</h2></div>
+            <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-[#987750]/60 px-4 py-3 text-sm text-[#e4c498] hover:bg-[#30241a]">Instagram'da tümünü gör ↗</a>
+          </div>
+          {instagramEntries.length>0&&<div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{instagramEntries.map((entry,index)=><InstagramPost key={entry.url+index} entry={entry}/>)}</div>}
+          {instagramEntries.length===0&&<p className="mt-4 text-sm leading-7 text-[#ac9d8a]">Instagram hesabımızdaki yeni çalışmaları inceleyebilirsiniz. Seçilen herkese açık gönderiler bu alanda gösterilir.</p>}
+        </div>
+                <div className="mt-16 flex justify-between gap-4 text-[9px] uppercase tracking-[0.1em] text-foreground/60">
           <p>© 2026 Nil Mobilya</p>
           <p>Modern · Nitelikli · Zamansız</p>
         </div>
