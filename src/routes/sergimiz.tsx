@@ -68,14 +68,10 @@ function safeInstagramPost(url:string):string|null {
  }catch{return null}
 }
 function InstagramPost({entry}:{entry:InstagramEntry}){
- const [allowed,setAllowed]=useState(false);
  const embed=entry.url.replace(/\/$/,"")+"/embed/";
  return <article className="min-w-0 overflow-hidden rounded-[20px] border border-[#655039]/45 bg-[#1b1715]">
   <div className="flex items-center justify-between gap-2 border-b border-[#695138]/30 px-4 py-3"><span className="truncate text-sm text-[#d8c2a3]">{entry.title}</span><a href={entry.url} target="_blank" rel="noopener noreferrer" className="shrink-0 text-xs text-[#c29c69] hover:text-white">Instagram’da aç ↗</a></div>
-  {allowed?<iframe title={entry.title+" Instagram gönderisi"} src={embed} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="h-[460px] w-full bg-white sm:h-[500px]"/>:<div className="flex min-h-[245px] flex-col items-center justify-center gap-4 px-6 py-8 text-center">
-   <p className="text-sm leading-6 text-[#c1b09d]">Gönderi Instagram üzerinden görüntülenir. Açtığınızda tarayıcınız Instagram’a bağlanır.</p>
-   <button type="button" onClick={()=>setAllowed(true)} className="rounded-xl border border-[#a5845d] bg-[#392c21] px-5 py-3 text-sm font-medium text-[#f2d7ad] hover:bg-[#4d3724]">Gönderiyi burada göster</button>
-  </div>}
+  <iframe title={entry.title+" Instagram gönderisi"} src={embed} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="h-[460px] w-full bg-white sm:h-[500px]"/>
  </article>;
 }
 
@@ -373,6 +369,7 @@ function Sergimiz() {
             <div><p className="text-[11px] uppercase tracking-[.18em] text-[#c49c6b]">Instagram / Çalışmalar</p><h2 className="mt-2 font-display text-2xl text-[#f0dec5]">Atölyeden Yeni Paylaşımlar</h2></div>
             <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-[#987750]/60 px-4 py-3 text-sm text-[#e4c498] hover:bg-[#30241a]">Instagram'da tümünü gör ↗</a>
           </div>
+          {instagramEntries.length>0&&<p className="mt-3 text-xs leading-5 text-[#b5a18b]">Instagram gönderileri sayfa açıldığında otomatik yüklenir. Görüntüleme sırasında tarayıcınız Instagram sunucularına bağlanır.</p>}
           {instagramEntries.length>0&&<div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{instagramEntries.map((entry,index)=><InstagramPost key={entry.url+index} entry={entry}/>)}</div>}
           {instagramEntries.length===0&&<p className="mt-4 text-sm leading-7 text-[#ac9d8a]">Instagram hesabımızdaki yeni çalışmaları inceleyebilirsiniz. Seçilen herkese açık gönderiler bu alanda gösterilir.</p>}
         </div>
