@@ -172,7 +172,7 @@ function Index() {
           </nav>
 
           <div className="nil-nav__tools">
-            <a href="#iletisim" className="nil-quote">Teklif Al</a>
+            <Link to="/teklif" className="nil-quote">Teklif Al</Link>
             <SiteSearch sections={SCENES} />
             <button
               type="button"
