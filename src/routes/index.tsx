@@ -242,19 +242,21 @@ function Index() {
                 {/* 2 · Koleksiyon — referansın HTML/CSS karşılığı; görseller projeden gelir */}
         <section id="koleksiyon" aria-label="Yeni koleksiyon" className="nil-scene nil-scene--col">
           <div className="nil-scene__body kc kc-rebuilt">
-            <div className="kcr-heading">
+            <div className="kcr-heading kcr-heading--editorial">
               <div className="kcr-heading__left">
                 <div className="kcr-eyebrow"><span className="kcr-eyebrow__square" /> KOLEKSİYON <span className="kcr-eyebrow__rule" /></div>
                 <h2 data-s="text" className="kcr-title">Yeni Koleksiyon</h2>
+                <p className="kcr-heading__subtitle">Yaşam alanlarınıza değer katan, işlevsel ve zamansız mobilya çözümleri.</p>
               </div>
-              <div className="kcr-heading__description nil-collection-heading-actions" data-s="fade">
-                <p>Zamansız tasarımlar, modern yaşam alanları için.<br/>Nil Mobilya'nın koleksiyonunu keşfedin.</p>
-                <div className="nil-collection-heading-actions__links">
-                  <Link to="/koleksiyon/$slug" params={{slug:"tum-urunler"}} className="nil-collection-heading-actions__catalog">Koleksiyonu İncele <ArrowRight size={15}/></Link>
-                  <Link to="/teklif" className="nil-collection-heading-actions__quote"><ClipboardList size={17}/> Akıllı Teklif Oluştur <ArrowUpRight size={15}/></Link>
-                </div>
+              <Link to="/teklif" data-s="fade" className="kcr-heading__quote" aria-label="Akıllı Teklif Oluştur">
+                <Gem size={20} strokeWidth={1.5} aria-hidden="true" />
+                <span>Akıllı Teklif Oluştur</span>
+                <ArrowRight size={18} aria-hidden="true"/>
+              </Link>
+              <div className="kcr-heading__intro" data-s="fade">
+                <p>Zamansız tasarımlar, modern yaşam alanları için.<br/>Nil Mobilya'nın yeni koleksiyonunu keşfedin.</p>
               </div>
-              <div className="kcr-mark" aria-hidden="true"><span>02</span><small>COLLECTION</small></div>
+              <div className="kcr-mark" aria-hidden="true"><span>02</span></div>
             </div>
 
             <div className="kcr-values" data-s="fade" aria-label="Üretim özellikleri">
@@ -280,12 +282,14 @@ function Index() {
                       <span className="kcr-card__gradient" />
                     </div>
                     <div className="kcr-card__copy">
-                      <span data-s="fade" className="kcr-card__number">0{i + 1}<i /></span>
+                      {i === 0 ? <span data-s="fade" className="kcr-card__number">01<i /></span> : <span className="kcr-card__category-icon" aria-hidden="true">{i===1?<Layers3 size={22} strokeWidth={1.5}/>:i===2?<Diamond size={22} strokeWidth={1.5}/>:<Ruler size={22} strokeWidth={1.5}/>}</span>}
                       <h3 data-s="text">{card.title}</h3>
                       <p data-s="text">{card.description.split(/\\n|\n/).map((line, lineIndex) => (
                         <span key={lineIndex}>{line}{lineIndex === 0 && <br />}</span>
                       ))}</p>
-                      <span data-s="fade" className="kcr-card__button"><ArrowRight aria-hidden="true" strokeWidth={1.35} /></span>
+                      {i === 0
+                        ? <span data-s="fade" className="kcr-card__feature-action">Koleksiyonu İncele <ArrowRight size={16} aria-hidden="true"/></span>
+                        : <span data-s="fade" className="kcr-card__button"><ArrowRight aria-hidden="true" strokeWidth={1.35} /></span>}
                     </div>
                   </Link>
                 ))}
