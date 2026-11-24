@@ -16,7 +16,7 @@ const instagramPost=(value:string)=>{
   return url.protocol==="https:"&&["instagram.com","www.instagram.com","m.instagram.com"].includes(url.hostname)&&parts.length===2&&["p","reel","reels","tv"].includes(parts[0])&&/^[A-Za-z0-9_-]+$/.test(parts[1]);
  }catch{return false}
 };
-const safePhoto=(value:string)=>{try{const u=new URL(value);return u.protocol==="https:"&&!instagramPost(value)}catch{return value.startsWith("/")}};
+const safePhoto=(value:string)=>{try{const u=new URL(value);return u.protocol==="https:"&&!["instagram.com","www.instagram.com","m.instagram.com"].includes(u.hostname)}catch{return value.startsWith("/")}};
 
 function decode(value:string){
   if(!value?.startsWith(PREFIX))return {description:value||"",place:"",year:"",category:"diger"};
@@ -105,6 +105,7 @@ export function AdminProjects(){
       <label className="block text-sm">Proje açıklaması<textarea rows={3} value={form.description} onChange={e=>setForm({...form,description:e.target.value})} className={inputClass}/></label>
       <label className="block text-sm">Fotoğraf veya Instagram gönderi bağlantıları (her satıra bir adres)<textarea rows={4} value={form.photos} onChange={e=>setForm({...form,photos:e.target.value})} className={inputClass} placeholder={"https://www.instagram.com/p/POST_KODU/\nhttps://www.instagram.com/reel/REEL_KODU/"}/><span className="mt-2 block text-xs leading-6 text-[#b6a18b]">Instagram’da gönderiyi aç → Paylaş → Bağlantıyı kopyala. Profil adresi değil, gönderi veya Reel bağlantısı ekle. Fotoğrafı indirmen gerekmez. Otomatik senkronizasyon değildir.</span></label>
       <label className="block text-sm">Bilgisayardan fotoğraf ekle<input type="file" multiple accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={e=>{void upload(e.target.files);e.target.value="";}} className="mt-2 block w-full text-xs"/></label>
+      <p className="text-xs text-[#b7a28e]">Toplam bağlantı: {form.photos.split(/\r?\n/).filter(v=>v.trim()).length} · Instagram gönderisi: {form.photos.split(/\r?\n/).filter(v=>instagramPost(v.trim())).length}</p>
       <div className="flex flex-wrap gap-2">{form.photos.split(/\r?\n/).filter(Boolean).map((url,i)=>instagramPost(url.trim())?<div key={i} className="flex h-20 w-32 items-center justify-center rounded-md border border-[#6c5037] bg-[#211a17] p-2 text-center text-xs text-[#d0ad80]">Instagram gönderisi</div>:<img key={i} src={url.trim()} alt={"Fotoğraf "+(i+1)} className="h-20 w-20 rounded-md border border-white/15 object-cover"/>)}</div>
       <div className="flex flex-wrap items-center gap-5"><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.published} onChange={e=>setForm({...form,published:e.target.checked})}/> Yayında</label><label className="text-sm">Sıra<input type="number" value={form.sort_order} onChange={e=>setForm({...form,sort_order:Number(e.target.value)})} className={inputClass+" ml-2 w-24"}/></label></div>
       <button disabled={saving||uploading} className="rounded-md bg-[#c9a46c] px-6 py-3 text-sm font-semibold text-[#191817] disabled:opacity-50">{saving?"Kaydediliyor…":"Projeyi kaydet"}</button>
