@@ -17,6 +17,7 @@ import { GraphiteCinema } from "@/components/graphite-cinema";
 import { AboutSection } from "@/components/about-section";
 import { CustomSection } from "@/components/custom-section";
 import { ContactSection } from "@/components/contact-section";
+import { CorporatePartnershipSection } from "@/components/corporate-partnership-section";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -43,6 +44,7 @@ const SCENES = [
   ["yorumlar", "Yorumlar"],
   ["sergimiz", "Sergimiz"],
   ["hikaye", "Hikâyemiz"],
+  ["kurumsal-is-ortakligi", "İş ortaklığı"],
   ["iletisim", "İletişim"],
 ] as const;
 // Üstteki ortalanmış menü (referans tasarımdaki 4 bağlantı)
@@ -53,6 +55,7 @@ const NAV = [
   ["Yorumlar", "#yorumlar"],
   ["Sergimiz", "#sergimiz"],
   ["Hakkımızda", "#hikaye"],
+  ["İş Ortaklığı", "#kurumsal-is-ortakligi"],
   ["İletişim", "#iletisim"],
 ] as const;
 // Gerçek ürün fotoğrafları: src/lib/collections.ts içindeki mevcut asset'ler.
@@ -340,6 +343,9 @@ function Index() {
 
                 {/* 5 · Hikâye */}
         <AboutSection />
+
+                {/* Ahşap işleri ve proje ortaklığı · İletişimden önce */}
+        <CorporatePartnershipSection />
 
                 {/* 7 · İletişim */}
         <ContactSection />
