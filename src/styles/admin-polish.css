@@ -200,3 +200,18 @@
 @media(min-width:681px) and (max-width:1299px){
 .nil-one-grid>.nil-one-breakdown,.nil-one-grid>.nil-one-breakdown:nth-of-type(7){grid-column:span 3}
 }
+
+
+/* Muted gold admin accents; charcoal surfaces stay neutral */
+.nil-admin-shell{--na-bg:#0b0c0f;--na-card:#171b20;--na-line:#363c45;--na-gold:#c4a36b;--na-text:#e7e0d4;--na-muted:#a5a6a9;background:#0b0c0f;color:#e7e0d4}
+.nil-admin-shell .nil-admin-sidebar{background:#111419;border-right-color:#303640}
+.nil-admin-shell .nil-admin-topbar{background:rgba(15,17,21,.96);border-bottom-color:#313841}
+.nil-admin-shell .nil-admin-sidebar-logo,.nil-admin-shell .nil-admin-section-kicker,.nil-admin-shell .nil-admin-eyebrow{color:#c4a36b}
+.nil-admin-shell .nil-admin-navitem.is-active{background:#24272d;border-color:#53504c;color:#d5b782}
+.nil-admin-shell .nil-admin-navitem:hover:not(:disabled){background:#22272d}
+.nil-admin-shell .admin-panel,.nil-admin-shell .nil-admin-surface{background:#171b20;border-color:#323943}
+.nil-admin-shell .nil-admin-main-action{background:#2a241d;border-color:#826c4c;color:#d5b782}
+.nil-admin-shell .nil-admin-main-action:hover{background:#373026}
+.nil-admin-shell .nil-admin-outline-action{background:#1f252d;border-color:#404752;color:#dcd4c8}
+.nil-admin-shell .nil-admin-stat-icon{color:#c4a36b}
+.nil-admin-shell input:focus-visible,.nil-admin-shell select:focus-visible,.nil-admin-shell textarea:focus-visible{outline-color:#a98a59}
