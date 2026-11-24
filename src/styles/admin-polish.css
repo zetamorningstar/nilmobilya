@@ -94,3 +94,14 @@
 @media(max-width:1150px){.nil-admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.nil-admin-shortcut{min-height:110px}}
 @media(max-width:640px){.nil-admin-hero{padding:23px;min-height:230px}.nil-admin-hero-art{opacity:.42}.nil-admin-stat{padding:15px;gap:9px;min-height:95px}.nil-admin-stat-icon{width:32px;height:32px}.nil-admin-stat strong{font-size:27px}.nil-admin-stat p{font-size:10px}.nil-admin-surface{padding:17px}.nil-admin-home{gap:12px}}
 @media(prefers-reduced-motion:reduce){.nil-admin-home button,.nil-admin-home a,.nil-admin-shell .nil-admin-navitem{transition:none}}
+
+
+/* Keep all legacy admin forms visually aligned with the matte palette. */
+.nil-admin-shell .bg-\[\#c9a46c\],.nil-admin-shell .bg-\[\#c5a16d\]{background-color:#a58b6c!important}
+.nil-admin-shell .text-\[\#c9a46c\],.nil-admin-shell .text-\[\#c5a16d\]{color:#a58b6c!important}
+.nil-admin-shell input:not([type=checkbox]):not([type=radio]),.nil-admin-shell textarea,.nil-admin-shell select{accent-color:#aa9072}
+.nil-admin-shell input:focus-visible,.nil-admin-shell textarea:focus-visible,.nil-admin-shell select:focus-visible,.nil-admin-shell button:focus-visible,.nil-admin-shell a:focus-visible{outline:2px solid #a68b6e;outline-offset:2px}
+.nil-admin-shell .admin-chart-grid{opacity:.18}
+.nil-admin-shell .admin-3d-bar--gold{background:linear-gradient(90deg,#594637,#a58b6c)}
+.nil-admin-shell .admin-3d-bar--blue{background:linear-gradient(90deg,#334049,#758793)}
+.nil-admin-shell .admin-3d-bar--slate{background:linear-gradient(90deg,#3c3e44,#85838a)}
