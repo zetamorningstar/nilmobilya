@@ -4836,3 +4836,27 @@ html:not(.nil-staged) .nil-stage #iletisim {
  .nil-partnership__steps{margin-top:10px}
  .nil-partnership__steps>div{padding:7px 0}
 }
+
+
+/* Scoped fixes: home collection teaser, custom production, about.
+   Other scenes (especially reviews) stay untouched. */
+.nil-scene--col .nil-collection-heading-actions{display:flex;align-items:center;gap:clamp(14px,2vw,28px);font-style:normal}
+.nil-scene--col .nil-collection-heading-actions>p{flex:1;min-width:0;color:#c5bdb1;font-style:normal}
+.nil-scene--col .nil-collection-heading-actions__links{display:flex;flex-wrap:wrap;align-items:center;gap:9px;flex:0 0 auto}
+.nil-scene--col .nil-collection-heading-actions__links a{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:45px;padding:10px 14px;border-radius:10px;font-size:12px;line-height:1.35;white-space:nowrap;font-style:normal;font-weight:600;transition:background .2s,border-color .2s,color .2s}
+.nil-scene--col .nil-collection-heading-actions__catalog{border:1px solid #49423a;background:rgba(17,17,17,.7);color:#e0d7c9}
+.nil-scene--col .nil-collection-heading-actions__catalog:hover{border-color:#a98a59;color:#e9d4b3}
+.nil-scene--col .nil-collection-heading-actions__quote{border:1px solid #9a8058;background:#28231e;color:#d5b782}
+.nil-scene--col .nil-collection-heading-actions__quote:hover{background:#372d23;border-color:#c4a36b}
+.nil-scene--ou.nil-restored-gold,.nil-scene--hk.nil-restored-gold{background-color:#0d0d0e}
+.nil-scene--ou.nil-restored-gold [data-s="frame"],.nil-scene--hk.nil-restored-gold [data-s="frame"]{border-color:rgba(156,128,85,.24)}
+.nil-scene--ou.nil-restored-gold [data-s="fade"] a:hover,.nil-scene--hk.nil-restored-gold [data-s="fade"] a:hover{color:#e7cfab}
+@media(max-width:1499px){
+ .nil-scene--col .nil-collection-heading-actions{flex-wrap:wrap;gap:8px}
+ .nil-scene--col .nil-collection-heading-actions__links{gap:7px}
+ .nil-scene--col .nil-collection-heading-actions__links a{font-size:11px;min-height:39px;padding:9px 11px}
+}
+@media(max-width:700px){
+ .nil-scene--col .nil-collection-heading-actions__links{width:100%}
+ .nil-scene--col .nil-collection-heading-actions__links a{flex:1;white-space:normal}
+}
