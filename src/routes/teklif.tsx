@@ -72,7 +72,7 @@ function QuoteWizard(){
   const waUrl="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(waMessage);
 
   return <main lang="tr" className="relative min-h-svh overflow-hidden bg-[#0c0e11] text-[#eceff2]">
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_40%_5%,rgba(96,60,30,0.2),transparent_45%),linear-gradient(115deg,#0c0e11,#17100c_64%,#0c0e11)]"/>
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_40%_5%,rgba(97,111,132,0.13),transparent_45%),linear-gradient(115deg,#0c0e11,#1e242c_64%,#0c0e11)]"/>
     <header className="relative z-10 flex min-h-[78px] items-center justify-between gap-5 border-b border-[#4d535c]/25 bg-[#101216]/90 px-5 md:px-[5vw]">
       <Link to="/" className="flex items-center gap-3 font-display text-[24px] tracking-[.1em] text-[#d7dce3]"><span className="text-[29px]">N</span><span>Nil Mobilya</span></Link>
       <nav className="hidden items-center gap-8 text-xs text-[#c0c6ce] md:flex"><Link to="/" className="hover:text-[#ffffff]">Ana Sayfa</Link><Link to="/sergimiz" className="hover:text-[#ffffff]">Projelerimiz</Link><a href="/#kurumsal-is-ortakligi" className="hover:text-[#ffffff]">İş Ortaklığı</a></nav>
