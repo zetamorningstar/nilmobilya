@@ -9,7 +9,13 @@ const PREFIX="NIL_PROJECT_V1:";
 const inputClass="mt-2 w-full rounded-lg border border-white/20 bg-[#111215] p-3 text-sm text-white outline-none focus:border-[#c7a16d]";
 // Instagram's official public post embeds work with post/reel links; the profile feed
 // itself cannot be read automatically from a personal account without authorization.
-const instagramPost=(value:string)=>/^https:\/\/(?:www\.)?instagram\.com\/(?:p|reel)\/[A-Za-z0-9_-]+\/?(?:\?.*)?$/.test(value);
+const instagramPost=(value:string)=>{
+ try{
+  const url=new URL(value.trim());
+  const parts=url.pathname.split("/").filter(Boolean);
+  return url.protocol==="https:"&&["instagram.com","www.instagram.com","m.instagram.com"].includes(url.hostname)&&parts.length===2&&["p","reel","reels","tv"].includes(parts[0])&&/^[A-Za-z0-9_-]+$/.test(parts[1]);
+ }catch{return false}
+};
 const safePhoto=(value:string)=>{try{const u=new URL(value);return u.protocol==="https:"&&!instagramPost(value)}catch{return value.startsWith("/")}};
 
 function decode(value:string){
