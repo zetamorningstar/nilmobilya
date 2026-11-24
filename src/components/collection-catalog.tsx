@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle, ClipboardList, Search, Grid2X2, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle, ClipboardList, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -34,20 +34,6 @@ const NAV = [
 ] as const;
 
 type Sort = "oner" | "isim";
-
-const SORT_OPTIONS: readonly (readonly [Sort, string])[] = [
-  ["oner", "Sıralama: Öne Çıkanlar"],
-  ["isim", "Sıralama: İsim (A-Z)"],
-];
-
-// Dekoratif mermer: public/bg-blocks.webp (ana sayfadaki mermerle aynı)
-const marbleStyle = (position: string, direction: string) => ({
-  backgroundImage: 'url("/bg-koleksiyon.webp")',
-  backgroundSize: "cover",
-  backgroundPosition: position,
-  maskImage: `linear-gradient(${direction}, transparent, #000 65%)`,
-  WebkitMaskImage: `linear-gradient(${direction}, transparent, #000 65%)`,
-});
 
 export function CollectionCatalog({ collection }: { collection: Collection }) {
   const [menuOpen, setMenuOpen] = useState(false);
