@@ -123,3 +123,34 @@
  .nil-showroom__related-grid {grid-template-columns:1fr;}
 }
 @media(prefers-reduced-motion:reduce){.nil-product-card,.nil-showroom__cta,.nil-showroom__chip{transition:none;}}
+
+
+/* Integrated editorial collection layout — black graphite with restrained matte gold */
+.nil-catalog{background:#0c0d10;color:#e9e4dc}
+.nil-collection-vitrine{background:#101113}
+.nil-collection-content{background:#0c0d10}
+.nil-filter-control{
+ display:block;min-height:53px;width:100%;border:1px solid #42454a;border-radius:11px;
+ background:#2a2a2b;color:#e5dfd5;padding:0 15px;font-size:13px;
+ outline:none;transition:border-color .2s,background-color .2s;
+}
+.nil-filter-control:focus-visible{border-color:#b89c73;box-shadow:0 0 0 2px rgba(184,156,115,.18)}
+.nil-filter-control:hover{border-color:#6c6b68;background:#303033}
+.nil-filter-control option{background:#202124;color:#eae4db}
+.nil-collection-filters{background:rgba(25,26,28,.97);border-color:#55504b}
+.nil-collection-quote{min-width:min(100%,285px)}
+.nil-category-tile{box-shadow:0 14px 35px rgba(0,0,0,.22);transition:border-color .25s,transform .3s,box-shadow .3s}
+.nil-category-tile:hover{transform:translateY(-3px);border-color:#a98a59;box-shadow:0 22px 42px rgba(0,0,0,.35)}
+.nil-collection-content .nil-product-card{background:linear-gradient(150deg,#1c1e21,#121315);border-color:#3b3d40;border-radius:15px}
+.nil-collection-content .nil-product-card:hover{border-color:#8c795d}
+.nil-collection-content .nil-product-card__visual img{object-fit:cover}
+@media(max-width:1023px){
+ .nil-collection-quote{width:100%}
+}
+@media(max-width:639px){
+ .nil-collection-vitrine img{object-position:62% center}
+ .nil-collection-vitrine{min-height:340px}
+ .nil-collection-filters{margin-top:-22px}
+ .nil-collection-content .nil-product-card__title h2{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){.nil-category-tile,.nil-category-tile img{transition:none!important}}
