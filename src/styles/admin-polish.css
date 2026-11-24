@@ -105,3 +105,34 @@
 .nil-admin-shell .admin-3d-bar--gold{background:linear-gradient(90deg,#594637,#a58b6c)}
 .nil-admin-shell .admin-3d-bar--blue{background:linear-gradient(90deg,#334049,#758793)}
 .nil-admin-shell .admin-3d-bar--slate{background:linear-gradient(90deg,#3c3e44,#85838a)}
+
+
+/* Analytics readability upgrade — specifically scoped, retains matte dark palette */
+.nil-admin-analytics{font-size:15px}
+.nil-admin-analytics .nil-admin-surface{padding:clamp(22px,2.3vw,34px);border-radius:19px}
+.nil-admin-analytics .nil-admin-surface-head{margin-bottom:26px;gap:20px}
+.nil-admin-analytics .nil-admin-section-kicker{font-size:12px;letter-spacing:.13em;gap:10px}
+.nil-admin-analytics .nil-admin-surface h2{font-size:clamp(26px,2.2vw,33px);margin-top:10px}
+.nil-admin-analytics .nil-admin-surface-head p{font-size:14px;line-height:1.7;margin-top:7px}
+.nil-admin-analytics .nil-admin-surface .text-\[11px\]{font-size:13px}
+.nil-admin-analytics .nil-admin-surface .text-xs{font-size:14px}
+.nil-admin-analytics .nil-admin-surface .text-sm{font-size:15px}
+.nil-admin-analytics .nil-admin-surface .text-\[10px\]{font-size:12px}
+.nil-admin-analytics .nil-admin-surface .text-\[9px\]{font-size:11px}
+.nil-admin-analytics .nil-admin-surface .text-3xl{font-size:clamp(33px,3vw,43px)}
+.nil-admin-analytics .nil-admin-graph{height:270px}
+.nil-admin-analytics .nil-admin-graph-bars{padding-top:22px;padding-bottom:29px}
+.nil-admin-analytics .nil-admin-graph-day small{font-size:12px;bottom:6px}
+.nil-admin-analytics .nil-admin-chart-empty{min-height:230px;height:auto;padding:28px;font-size:15px}
+.nil-admin-analytics .nil-admin-surface select,.nil-admin-analytics .nil-admin-surface button{min-height:40px;font-size:14px}
+.nil-admin-analytics .nil-admin-surface .grid-cols-2>div{padding:clamp(17px,2vw,25px)}
+.nil-admin-analytics .admin-panel{padding:clamp(22px,2.4vw,36px);border-radius:19px}
+.nil-admin-analytics .admin-panel h2{font-size:clamp(24px,2vw,31px)}
+.nil-admin-analytics .admin-panel p,.nil-admin-analytics .admin-panel span{line-height:1.55}
+.nil-admin-analytics .admin-panel .text-\[10px\],.nil-admin-analytics .admin-panel .text-\[11px\]{font-size:13px}
+.nil-admin-analytics .admin-panel .text-xs{font-size:14px}
+.nil-admin-analytics .admin-panel .text-sm{font-size:15px}
+.nil-admin-analytics .admin-panel .text-3xl{font-size:41px}
+.nil-admin-analytics .admin-panel button,.nil-admin-analytics .admin-panel select{min-height:42px;font-size:14px}
+.nil-admin-analytics .admin-chart{height:310px}
+@media(max-width:640px){.nil-admin-analytics .nil-admin-surface{padding:19px}.nil-admin-analytics .nil-admin-surface-head{flex-direction:column}.nil-admin-analytics .nil-admin-graph{height:210px}.nil-admin-analytics .admin-panel{padding:18px}.nil-admin-analytics .nil-admin-surface .grid-cols-2>div{padding:15px}}
