@@ -247,10 +247,12 @@ function Index() {
                 <div className="kcr-eyebrow"><span className="kcr-eyebrow__square" /> KOLEKSİYON <span className="kcr-eyebrow__rule" /></div>
                 <h2 data-s="text" className="kcr-title">Yeni Koleksiyon</h2>
               </div>
-              <div className="kcr-heading__description" data-s="fade">
-                <Link to="/teklif" className="mb-4 inline-flex min-h-[58px] items-center gap-3 rounded-2xl border border-[#858e9b] bg-[#363e49] px-7 py-4 text-[15px] font-semibold text-[#f4f6f9] shadow-[0_12px_32px_rgba(0,0,0,.28)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#b5bfcc] hover:bg-[#4b5562] hover:shadow-[0_15px_35px_rgba(0,0,0,.38)]"><ClipboardList className="size-4"/> Akıllı Teklif Oluştur <ArrowUpRight className="size-4"/></Link>
-                <span aria-hidden="true" className="kcr-heading__divider" />
-                <p>Zamansız tasarımlar, modern yaşam alanları için.<br />Nil Mobilya'nın yeni koleksiyonunu keşfedin.</p>
+              <div className="kcr-heading__description nil-collection-heading-actions" data-s="fade">
+                <p>Zamansız tasarımlar, modern yaşam alanları için.<br/>Nil Mobilya'nın koleksiyonunu keşfedin.</p>
+                <div className="nil-collection-heading-actions__links">
+                  <Link to="/koleksiyon/$slug" params={{slug:"tum-urunler"}} className="nil-collection-heading-actions__catalog">Koleksiyonu İncele <ArrowRight size={15}/></Link>
+                  <Link to="/teklif" className="nil-collection-heading-actions__quote"><ClipboardList size={17}/> Akıllı Teklif Oluştur <ArrowUpRight size={15}/></Link>
+                </div>
               </div>
               <div className="kcr-mark" aria-hidden="true"><span>02</span><small>COLLECTION</small></div>
             </div>
