@@ -74,7 +74,7 @@ function QuoteWizard(){
   return <main lang="tr" className="relative min-h-svh overflow-hidden bg-[#0c0e11] text-[#eceff2]">
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_40%_5%,rgba(97,111,132,0.13),transparent_45%),linear-gradient(115deg,#0c0e11,#1e242c_64%,#0c0e11)]"/>
     <header className="relative z-10 flex min-h-[78px] items-center justify-between gap-5 border-b border-[#4d535c]/25 bg-[#101216]/90 px-5 md:px-[5vw]">
-      <Link to="/" className="flex items-center gap-3 font-display text-[24px] tracking-[.1em] text-[#d7dce3]"><span className="text-[29px]">N</span><span>Nil Mobilya</span></Link>
+      <Link to="/" className="flex items-center gap-3 font-display text-[24px] tracking-[.1em] text-[#c4a36b]"><span className="text-[29px]">N</span><span>Nil Mobilya</span></Link>
       <nav className="hidden items-center gap-8 text-xs text-[#c0c6ce] md:flex"><Link to="/" className="hover:text-[#ffffff]">Ana Sayfa</Link><Link to="/sergimiz" className="hover:text-[#ffffff]">Projelerimiz</Link><a href="/#kurumsal-is-ortakligi" className="hover:text-[#ffffff]">İş Ortaklığı</a></nav>
       <Link to="/" className="rounded-lg border border-[#646c77] px-4 py-2.5 text-xs text-[#e0e4eb]">Siteye Dön <ArrowUpRight size={14} className="ml-1 inline"/></Link>
     </header>
@@ -83,14 +83,14 @@ function QuoteWizard(){
       <section className="relative flex min-h-[340px] flex-col justify-between overflow-hidden px-6 pb-9 pt-10 md:px-[5vw] lg:min-h-[690px] lg:py-16">
         <div aria-hidden="true" className="absolute inset-0 -z-10" style={{backgroundImage:`linear-gradient(90deg,rgba(10,13,18,.90),rgba(12,16,21,.76) 70%,rgba(12,16,21,.52)),linear-gradient(0deg,rgba(10,13,18,.92),transparent 62%),url("${img}")`,backgroundPosition:"56% center",backgroundSize:"cover"}}/>
         <div>
-          <p className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[.24em] text-[#c1c7d0]">AKILLI TEKLİF SİSTEMİ <span className="h-px w-12 bg-[#7a838e]"/></p>
-          <h1 className="mt-7 max-w-[650px] font-display text-[clamp(35px,3.5vw,56px)] leading-[1.08] font-normal">Projeniz için<br/>hızlı ve doğru <span className="text-[#c9cfd8]">teklif görüşmesi.</span></h1>
+          <p className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[.24em] text-[#c4a36b]">AKILLI TEKLİF SİSTEMİ <span className="h-px w-12 bg-[#7a838e]"/></p>
+          <h1 className="mt-7 max-w-[650px] font-display text-[clamp(35px,3.5vw,56px)] leading-[1.08] font-normal">Projeniz için<br/>hızlı ve doğru <span className="text-[#c4a36b]">teklif görüşmesi.</span></h1>
           <p className="mt-6 max-w-[475px] text-sm leading-7 text-[#c9ced6]">İhtiyaçlarınızı, ölçü ve malzeme tercihlerinizi birkaç adımda paylaşın. Projenizi değerlendirerek size özel fiyat ve üretim seçeneklerini görüşelim.</p>
           <div className="mt-9 grid gap-4 text-sm text-[#d3d8df]">
-            <div className="flex items-center gap-3"><Ruler size={21} className="text-[#c9cfd8]"/> Özel ölçü üretim</div>
-            <div className="flex items-center gap-3"><Layers3 size={21} className="text-[#c9cfd8]"/> Malzeme ve kaplama seçenekleri</div>
-            <div className="flex items-center gap-3"><ClipboardList size={21} className="text-[#c9cfd8]"/> Proje bazlı değerlendirme</div>
-            <div className="flex items-center gap-3"><Handshake size={21} className="text-[#c9cfd8]"/> WhatsApp ile doğrudan görüşme</div>
+            <div className="flex items-center gap-3"><Ruler size={21} className="text-[#c4a36b]"/> Özel ölçü üretim</div>
+            <div className="flex items-center gap-3"><Layers3 size={21} className="text-[#c4a36b]"/> Malzeme ve kaplama seçenekleri</div>
+            <div className="flex items-center gap-3"><ClipboardList size={21} className="text-[#c4a36b]"/> Proje bazlı değerlendirme</div>
+            <div className="flex items-center gap-3"><Handshake size={21} className="text-[#c4a36b]"/> WhatsApp ile doğrudan görüşme</div>
           </div>
         </div>
         <p className="mt-8 text-[11px] leading-5 text-[#aab2bc]">Fiyatlar ölçü, malzeme ve iş kapsamı belirlendikten sonra sunulur. Bu sayfa otomatik fiyat hesaplamaz.</p>
@@ -98,14 +98,14 @@ function QuoteWizard(){
 
       <section className="flex flex-col justify-center bg-[#101216]/95 px-4 py-9 sm:px-8 lg:px-[4vw]">
         <div className="mx-auto w-full max-w-[670px] rounded-[18px] border border-[#555c66]/70 bg-[linear-gradient(160deg,#22262d,#14171c)] p-5 shadow-[0_30px_80px_rgba(0,0,0,.35)] sm:p-8">
-          <p className="text-[10px] tracking-[.2em] text-[#b9c1ca]">ADIM {step+1} / 5</p>
+          <p className="text-[10px] tracking-[.2em] text-[#c4a36b]">ADIM {step+1} / 5</p>
           <h2 className="mt-2 font-display text-[clamp(24px,2.3vw,36px)] leading-tight">{["Projenizi tanıyalım","Ölçü ve konum bilgileri","Tasarım tercihleri","İletişim bilgileriniz","Talebiniz hazır"][step]}</h2>
           <p className="mt-2 text-[12px] leading-5 text-[#aab1ba]">{["Hangi alan ve mobilya için çalışmak istediğinizi seçin.","Ölçüleriniz hazır değilse daha sonra paylaşabilirsiniz.","Tarz ve malzeme seçimi sadece başlangıç içindir.","Sizinle iletişime geçebilmemiz için bilgilerinizi ekleyin.","Bilgilerinizi kontrol edip WhatsApp üzerinden iletin."][step]}</p>
 
           <div className="mt-6 flex items-start gap-1.5 sm:gap-3" aria-label="Teklif aşamaları">
             {stages.map((label,i)=><button type="button" key={label} onClick={()=>{if(i<step){setStep(i);setTried(false);}}} disabled={i>step} className="min-w-0 flex-1 text-center disabled:cursor-default" aria-current={step===i?"step":undefined}>
-              <span className={`mx-auto flex size-8 items-center justify-center rounded-full border text-xs ${i<=step?"border-[#aeb5bf] bg-[#414954] text-white":"border-[#515862] text-[#aab1ba]"}`}>{i<step?<Check size={15}/>:i+1}</span>
-              <span className={`mt-2 block text-[9px] sm:text-[11px] ${i===step?"text-[#e2e6ec]":"text-[#9da6b1]"}`}>{label}</span>
+              <span className={`mx-auto flex size-8 items-center justify-center rounded-full border text-xs ${i<=step?"border-[#a98a59] bg-[#38342e] text-white":"border-[#515862] text-[#aab1ba]"}`}>{i<step?<Check size={15}/>:i+1}</span>
+              <span className={`mt-2 block text-[9px] sm:text-[11px] ${i===step?"text-[#d3b483]":"text-[#9da6b1]"}`}>{label}</span>
             </button>)}
           </div>
 
@@ -113,7 +113,7 @@ function QuoteWizard(){
             {step===0&&<>
               <p className={stepLabel}>Kullanım alanı <span className="text-[#cad0d8]">*</span></p>
               <div className="grid grid-cols-4 gap-2">
-                {rooms.map(({value,icon:Icon})=><button type="button" key={value} onClick={()=>{setRoom(value);setProduct("");}} aria-pressed={room===value} className={`flex min-h-[87px] flex-col items-center justify-center gap-2 rounded-lg border p-2 text-center text-[10px] leading-4 transition-colors sm:text-xs ${room===value?"border-[#aeb5c0] bg-[#323942] text-[#f2f4f7]":"border-[#424951] bg-[#191d22] text-[#c5ccd4] hover:border-[#a4acb6]"}`}><Icon size={23} strokeWidth={1.4}/>{value}</button>)}
+                {rooms.map(({value,icon:Icon})=><button type="button" key={value} onClick={()=>{setRoom(value);setProduct("");}} aria-pressed={room===value} className={`flex min-h-[87px] flex-col items-center justify-center gap-2 rounded-lg border p-2 text-center text-[10px] leading-4 transition-colors sm:text-xs ${room===value?"border-[#a98a59] bg-[#28241e] text-[#e5d1b0]":"border-[#424951] bg-[#191d22] text-[#c5ccd4] hover:border-[#a4acb6]"}`}><Icon size={23} strokeWidth={1.4}/>{value}</button>)}
               </div>
               <label className={stepLabel+" mt-5"} htmlFor="offer-product">Ürün / proje türü <span className="text-[#cad0d8]">*</span></label>
               <select id="offer-product" disabled={!room} className={field+" disabled:opacity-50"} value={product} onChange={e=>setProduct(e.target.value)}><option value="">{room?"İş türü seçiniz...":"Önce kullanım alanı seçiniz..."}</option>{filteredProducts.map(t=><option value={t} key={t}>{t}</option>)}</select>
@@ -147,7 +147,7 @@ function QuoteWizard(){
           {tried&&!valid[step]&&<p role="alert" className="mt-3 text-[12px] text-[#e9a78e]">{step===0?"Lütfen kullanım alanı ve ürün türü seçin.":"Lütfen ad, telefon ve onay alanını tamamlayın."}</p>}
           <div className="mt-6 flex gap-3">
             {step>0&&<button type="button" onClick={()=>{setStep(s=>s-1);setTried(false)}} className="flex min-h-[48px] items-center justify-center gap-2 rounded-lg border border-[#5b6470] px-4 text-[13px] text-[#c7cdd5]"><ArrowLeft size={16}/> Geri</button>}
-            {step<4?<button type="button" onClick={next} className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#b8c0cb] px-5 text-[13px] font-semibold text-[#14171b] hover:bg-[#dce1e8]">Devam Et <ArrowRight size={17}/></button>:<a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#b8c0cb] px-5 text-center text-[13px] font-semibold text-[#14171b] hover:bg-[#dce1e8]"><MessageCircle size={18}/> WhatsApp ile Teklif Gönder</a>}
+            {step<4?<button type="button" onClick={next} className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#2a241d] px-5 text-[13px] font-semibold text-[#d5b782] hover:bg-[#373026]">Devam Et <ArrowRight size={17}/></button>:<a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#2a241d] px-5 text-center text-[13px] font-semibold text-[#d5b782] hover:bg-[#373026]"><MessageCircle size={18}/> WhatsApp ile Teklif Gönder</a>}
           </div>
         </div>
       </section>
