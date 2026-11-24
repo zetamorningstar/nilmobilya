@@ -177,7 +177,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
           </h1>
           <p className="mt-5 max-w-lg text-sm font-light leading-7 text-foreground/75 md:text-base">{collection.lead}</p>
           <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Link to="/teklif" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-xl border border-[#727984] bg-[#343a43] px-6 py-3 text-[13px] font-semibold text-[#f1f4f6] shadow-[0_10px_26px_rgba(0,0,0,.22)] transition-all hover:-translate-y-0.5 hover:border-[#a0a8b5] hover:bg-[#454d58]"><ClipboardList size={18}/> Akıllı Teklif Oluştur <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></Link>
+            <Link to="/teklif" className="group inline-flex min-h-[60px] items-center justify-center gap-3.5 rounded-2xl border border-[#89929e] bg-[#39414d] px-8 py-4 text-[15px] font-semibold text-[#f4f6f9] shadow-[0_12px_32px_rgba(0,0,0,.3)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#b9c2cf] hover:bg-[#4d5765]"><ClipboardList size={18}/> Akıllı Teklif Oluştur <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></Link>
             <span className="max-w-[330px] text-xs leading-5 text-[#a9b0ba]">Kullanım alanı ve yapılacak ahşap işi seçin; adım adım WhatsApp teklif görüşmesi başlatın.</span>
           </div>
           <span aria-hidden="true" className="mt-6 block h-px w-16 bg-[#666e79]" />
@@ -212,7 +212,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
               );
             })}
           </ul>
-          <Link to="/teklif" className="mt-6 flex w-full items-center justify-between gap-3 rounded-xl border border-[#686f7a] bg-[#2d333b] px-4 py-3.5 text-xs font-semibold text-[#ecf0f5] transition-colors hover:bg-[#3e4651]"><span className="flex items-center gap-2"><ClipboardList size={17}/> Akıllı Teklif</span><ArrowRight size={15}/></Link>
+          <Link to="/teklif" className="mt-6 flex min-h-[58px] w-full items-center justify-between gap-3 rounded-2xl border border-[#858e9a] bg-[#353d48] px-5 py-4 text-sm font-semibold text-[#f0f3f7] shadow-[0_10px_24px_rgba(0,0,0,.22)] transition-all hover:border-[#aeb8c5] hover:bg-[#4a5360]"><span className="flex items-center gap-2"><ClipboardList size={17}/> Akıllı Teklif</span><ArrowRight size={15}/></Link>
         </aside>
 
         {/* Ürünler */}
