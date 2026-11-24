@@ -1,45 +1,140 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
+import { Activity, BarChart3, Cloud, Download, Globe2, Laptop2, MousePointerClick, RefreshCw, Smartphone, TrendingUp } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
-import { AdminCloudflareTraffic } from "@/components/admin-cloudflare-traffic";
-import { BarChart3,RefreshCw,ExternalLink,Download,CalendarDays } from "lucide-react";
-type Daily={day:string;views:number;whatsapp:number};
-type Report={daily:Daily[];top_pages:{path:string;views:number}[]};
-export function AdminTraffic(){
- const [days,setDays]=useState(14);
- const [report,setReport]=useState<Report|null>(null);
- const [error,setError]=useState("");
- const [loading,setLoading]=useState(true);
- const [refresh,setRefresh]=useState(0);
- useEffect(()=>{let alive=true;(async()=>{setLoading(true);setError("");const db=getSupabaseClient();if(!db)return;const {data,error:e}=await db.rpc("admin_site_analytics",{p_days:days});if(!alive)return;if(e)setError("Analitik SQL kurulumu veya yönetici yetkisi kontrol edilmeli: "+e.message);else setReport(data as Report);setLoading(false)})();return()=>{alive=false}},[days,refresh]);
- const total=report?.daily.reduce((n,d)=>n+d.views,0)??0;
- const clicks=report?.daily.reduce((n,d)=>n+d.whatsapp,0)??0;
- const max=Math.max(1,...(report?.daily.flatMap(d=>[d.views,d.whatsapp])??[]));
- const rate=total>0?(clicks/total*100).toFixed(1):"0.0";
 
+type Daily = { day: string; views: number; whatsapp: number };
+type Report = { daily: Daily[]; top_pages: {path: string;views: number}[] };
+type Row = {label: string;requests: number};
+type Segment = {rows: Row[];error: string|null};
+type Cloudflare = {
+ totalRequests: number;
+ daily: {day:string;requests:number;uniqueVisitors:number}[];
+ breakdown?: { countries:Segment;devices:Segment;referrers:Segment;note:string };
+};
+const number = (n:number) => n.toLocaleString("tr-TR");
+const source = (v:string) => {
+ const s=v.toLowerCase();
+ if(s.includes("google."))return "Google";
+ if(s.includes("instagram."))return "Instagram";
+ if(s.includes("facebook."))return "Facebook";
+ if(s.includes("tiktok."))return "TikTok";
+ if(s.includes("bing."))return "Bing";
+ if(!s || s==="unknown" || s==="bilinmiyor" || s==="(none)")return "Bilinmiyor";
+ if(s.includes("nilmobilyatasarim.com"))return "Site içi";
+ return v;
+};
+const country=(s:string)=>({TR:"Türkiye",US:"ABD",DE:"Almanya",GB:"Birleşik Krallık",FR:"Fransa",NL:"Hollanda"} as Record<string,string>)[s]||s;
+const device=(s:string)=>({desktop:"Masaüstü",mobile:"Mobil",tablet:"Tablet",unknown:"Bilinmiyor"} as Record<string,string>)[s.toLowerCase()]||s;
+
+function MiniBreakdown({name,icon:Icon,segment,display}:{name:string;icon:typeof Globe2;segment?:Segment;display:(s:string)=>string}){
+ const entries=new Map<string,number>();
+ for(const r of segment?.rows??[]){const key=display(r.label);entries.set(key,(entries.get(key)||0)+r.requests);}
+ const rows=[...entries].sort((a,b)=>b[1]-a[1]).slice(0,5);
+ const max=Math.max(1,...rows.map(r=>r[1]));
+ return <section className="nil-one-card nil-one-breakdown">
+   <header className="nil-one-card-title"><Icon size={17}/><h3>{name}</h3></header>
+   {segment?.error?<p className="nil-one-muted">{segment.error}</p>:rows.length?<div className="nil-one-bar-list">
+     {rows.map(([label,value])=><div className="nil-one-bar-item" key={label}>
+       <div><span title={label}>{label}</span><strong>{number(value)}</strong></div>
+       <div className="nil-one-track"><span style={{width:(value/max*100)+"%"}}/></div>
+     </div>)}
+   </div>:<p className="nil-one-muted">{segment?"Henüz ayrıntı bulunamadı.":"Cloudflare dağılımı bekleniyor."}</p>}
+   <small>Son 24 saatin HTTP istekleri · ziyaretçi sayısı değil</small>
+ </section>;
+}
+
+export function AdminTraffic(){
+ const [days,setDays]=useState<7|14|30>(7);
+ const [report,setReport]=useState<Report|null>(null);
+ const [cloud,setCloud]=useState<Cloudflare|null>(null);
+ const [supError,setSupError]=useState("");
+ const [cfError,setCfError]=useState("");
+ const [busy,setBusy]=useState(true);
+ const [revision,setRevision]=useState(0);
+ const [view,setView]=useState<"cloudflare"|"consent">("cloudflare");
+ useEffect(()=>{
+   let alive=true;
+   setBusy(true);setSupError("");setCfError("");
+   const run=async()=>{
+    const db=getSupabaseClient();
+    if(!db){if(alive){setSupError("Supabase bağlantısı bulunamadı.");setBusy(false);}return;}
+    const [session,events]=await Promise.all([
+      db.auth.getSession(),
+      db.rpc("admin_site_analytics",{p_days:days})
+    ]);
+    if(!alive)return;
+    if(events.error){setSupError("İzinli analitik okunamadı: "+events.error.message);setReport(null);}
+    else setReport(events.data as Report);
+    if(session.error||!session.data.session?.access_token){setCfError("Yönetici oturumu doğrulanamadı.");setCloud(null);setBusy(false);return;}
+    try{
+      const response=await fetch("/api/cloudflare-analytics?days="+days,{
+        headers:{Authorization:"Bearer "+session.data.session.access_token},cache:"no-store"
+      });
+      const data=await response.json() as Cloudflare & {error?:string};
+      if(!response.ok)throw new Error(data.error||"Cloudflare verisi alınamadı.");
+      if(alive)setCloud(data);
+    }catch(e){if(alive){setCloud(null);setCfError(e instanceof Error?e.message:"Cloudflare bağlantısı başarısız.");}}
+    if(alive)setBusy(false);
+   };
+   void run();
+   return()=>{alive=false};
+ },[days,revision]);
+
+ const views=report?.daily.reduce((n,d)=>n+d.views,0)??null;
+ const clicks=report?.daily.reduce((n,d)=>n+d.whatsapp,0)??null;
+ const last=cloud?.daily[cloud.daily.length-1];
+ const graph=view==="cloudflare"?(cloud?.daily.map(d=>({day:d.day,a:d.requests,b:0}))??[]):(report?.daily.map(d=>({day:d.day,a:d.views,b:d.whatsapp}))??[]);
+ const ceiling=Math.max(1,...graph.map(d=>Math.max(d.a,d.b)));
  const downloadCSV=()=>{
-  if(!report)return;
-  const rows=[["Tarih","Sayfa görüntüleme","WhatsApp tıklaması"],...report.daily.map(d=>[d.day,d.views,d.whatsapp])];
-  const csv="\uFEFF"+rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\r\n");
-  const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
-  const a=document.createElement("a");a.href=url;a.download="nil-mobilya-analitik-"+days+"-gun.csv";document.body.appendChild(a);a.click();a.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+   const rows=[["Tarih","Sayfa görüntüleme","WhatsApp tıklaması"],...(report?.daily??[]).map(d=>[d.day,d.views,d.whatsapp])];
+   const csv="\uFEFF"+rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\r\n");
+   const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+   const a=document.createElement("a");a.href=url;a.download="nil-mobilya-analitik.csv";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  };
- return <div className="nil-admin-analytics space-y-6"><AdminCloudflareTraffic /><section className="admin-panel mb-6 rounded-xl border border-[#292b32] bg-[#15161b] p-6">
-  <div className="mb-6 flex flex-wrap items-center justify-between gap-4"><div><p className="text-[10px] uppercase tracking-[.2em] text-[#c9a46c]">Nil Mobilya · Gerçek olay verileri</p><h2 className="mt-2 text-xl font-bold">Ziyaretçi Analitiği</h2><p className="mt-2 text-xs text-[#9395a0]">Benzersiz kişi değil, izin verilmiş sayfa görüntüleme ve WhatsApp tıklama sayıları</p></div><div className="flex flex-wrap gap-2"><button onClick={downloadCSV} disabled={!report||loading||!!error} className="inline-flex items-center gap-2 rounded-lg border border-[#393a42] px-3 py-2 text-xs text-[#d8bd8d] hover:bg-[#272830] disabled:opacity-40"><Download size={15}/> CSV İndir</button><select aria-label="Tarih aralığı" value={days} onChange={e=>setDays(Number(e.target.value))} className="rounded-lg border border-[#393a42] bg-[#202127] px-3 py-2 text-sm"><option value={7}>7 gün</option><option value={14}>14 gün</option><option value={30}>30 gün</option></select><button onClick={()=>setRefresh(x=>x+1)} aria-label="Yenile" className="rounded-lg border border-[#393a42] p-2"><RefreshCw size={18}/></button></div></div>
-  {loading?<p className="py-16 text-center text-sm text-[#9b9da7]">Gerçek veriler yükleniyor…</p>:error?<p role="alert" className="rounded-lg border border-amber-600/40 p-5 text-sm text-amber-200">{error}</p>:<>
-   <div className="mb-6 grid grid-cols-2 gap-3"><div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-5"><p className="text-xs text-[#a2a3ad]">Sayfa görüntüleme</p><p className="mt-3 text-3xl font-bold">{total}</p></div><div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-5"><p className="text-xs text-[#a2a3ad]">WhatsApp tıklaması</p><p className="mt-3 text-3xl font-bold">{clicks}</p></div></div>
-   <div className="mb-5 grid gap-3 sm:grid-cols-2">
-    <div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-4"><div className="flex items-center gap-2 text-xs text-[#a2a3ad]"><CalendarDays size={14}/> Günlük ortalama</div><p className="mt-2 text-2xl font-bold tabular-nums">{(total/days).toLocaleString("tr-TR",{maximumFractionDigits:1})}</p><p className="mt-1 text-[11px] text-[#858793]">Sayfa görüntüleme / gün</p></div>
-    <div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-4"><p className="text-xs text-[#a2a3ad]">En yoğun gün</p><p className="mt-2 text-xl font-bold tabular-nums">{report?.daily.length?report.daily.reduce((a,b)=>b.views>a.views?b:a).day:"—"}</p><p className="mt-1 text-[11px] text-[#858793]">En çok sayfa görüntülenen tarih</p></div>
+ return <div className="nil-one-screen">
+   <header className="nil-one-header">
+     <div><p>PERFORMANS / CANLI VERİLER</p><h1>Site Analitiği</h1></div>
+     <div className="nil-one-actions">
+       <select aria-label="Tarih aralığı" value={days} onChange={e=>setDays(Number(e.target.value) as 7|14|30)}><option value={7}>7 gün</option><option value={14}>14 gün</option><option value={30}>30 gün</option></select>
+       <button type="button" onClick={()=>setRevision(v=>v+1)} disabled={busy} title="Yenile" aria-label="Verileri yenile"><RefreshCw size={17}/></button>
+       <button type="button" onClick={downloadCSV} disabled={!report} title="Supabase CSV indir"><Download size={17}/><span>CSV</span></button>
+     </div>
+   </header>
+   <div className="nil-one-grid">
+     {[
+       {label:"HTTP istekleri",value:cloud?number(cloud.totalRequests):"—",caption:"Cloudflare · "+days+" gün",icon:Cloud},
+       {label:"Günlük tekil IP",value:last?number(last.uniqueVisitors):"—",caption:last?.day??"Cloudflare",icon:Globe2},
+       {label:"Sayfa görüntüleme",value:views===null?"—":number(views),caption:"Supabase · izinli",icon:BarChart3},
+       {label:"WhatsApp tıklaması",value:clicks===null?"—":number(clicks),caption:"Supabase · izinli",icon:MousePointerClick}
+     ].map(stat=><section key={stat.label} className="nil-one-card nil-one-stat"><div className="nil-one-stat-top"><span>{stat.label}</span><stat.icon size={20}/></div><strong>{stat.value}</strong><small>{stat.caption}</small></section>)}
+     <section className="nil-one-card nil-one-chart">
+       <header className="nil-one-card-title"><TrendingUp size={18}/><h3>Günlük Trafik</h3>
+         <div className="nil-one-switch" role="group" aria-label="Grafik kaynağı">
+           <button type="button" aria-pressed={view==="cloudflare"} onClick={()=>setView("cloudflare")}>Cloudflare</button>
+           <button type="button" aria-pressed={view==="consent"} onClick={()=>setView("consent")}>İzinli</button>
+         </div>
+       </header>
+       <div className="nil-one-chart-body">
+         {graph.length ? graph.map((d,i)=><div key={d.day} className="nil-one-chart-col" title={d.day+": "+d.a+" / "+d.b}>
+           <div className="nil-one-chart-pair"><div className="nil-one-chart-bar" style={{height:Math.max(2,d.a/ceiling*100)+"%"}}/><div className="nil-one-chart-bar nil-one-chart-alt" style={{height:Math.max(0,d.b/ceiling*100)+"%"}}/></div>
+           <small>{i%Math.max(1,Math.ceil(graph.length/7))===0||i===graph.length-1?d.day.slice(5):""}</small>
+         </div>):<p className="nil-one-muted">{busy?"Veriler yükleniyor…":view==="cloudflare"?cfError||"Cloudflare verisi yok.":supError||"İzinli veri yok."}</p>}
+       </div>
+       <footer>Cloudflare: HTTP istekleri · İzinli: sayfa ve WhatsApp olayları</footer>
+     </section>
+     <MiniBreakdown name="Trafik Kaynakları" icon={Globe2} segment={cloud?.breakdown?.referrers} display={source}/>
+     <MiniBreakdown name="Ülkeler" icon={Globe2} segment={cloud?.breakdown?.countries} display={country}/>
+     <MiniBreakdown name="Cihaz Türleri" icon={Laptop2} segment={cloud?.breakdown?.devices} display={device}/>
+     <section className="nil-one-card nil-one-summary">
+       <header className="nil-one-card-title"><Activity size={17}/><h3>Özet / En Çok Bakılanlar</h3></header>
+       <div className="nil-one-summary-list">
+         {(report?.top_pages??[]).slice(0,4).map(p=><div key={p.path}><span title={p.path}>{p.path}</span><strong>{number(p.views)}</strong></div>)}
+         {!report?.top_pages?.length&&<p className="nil-one-muted">{supError||"Henüz kayıt bulunamadı."}</p>}
+       </div>
+       <small>En çok görüntülenen sayfalar · izinli ölçüm</small>
+     </section>
    </div>
-   <div className="mb-4 flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-[#bfc0c8]">Günlük etkileşim grafiği</p><div className="flex items-center gap-4 text-xs text-[#aaa]"><span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm bg-[#c9a46c]"/> Sayfa</span><span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm bg-[#7194b6]"/> WhatsApp</span></div></div>
-   <div className="admin-chart relative flex h-[260px] items-end justify-between gap-1 overflow-hidden rounded-xl border border-[#292b32] bg-[#0f1014] px-3 pb-9 pt-8 sm:gap-2" role="img" aria-label={`Son ${days} gün toplam ${total} sayfa görüntüleme`}>
-    <div className="admin-chart-grid absolute inset-0" aria-hidden="true"/>
-    {report?.daily.map((d,i)=><div key={d.day} className="relative z-10 flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2" title={`${d.day}: ${d.views} görüntüleme, ${d.whatsapp} WhatsApp tıklaması`}><span className="text-[10px] tabular-nums text-[#d7bb90]">{d.views}</span><div className="flex h-[150px] w-full items-end justify-center gap-1"><div className="admin-3d-bar admin-3d-bar--gold !w-[min(18px,37%)]" style={{height:`${Math.max(3,d.views/max*145)}px`}}/><div className="admin-3d-bar admin-3d-bar--blue !w-[min(18px,37%)]" style={{height:`${Math.max(3,d.whatsapp/max*145)}px`}}/></div><span className="text-[9px] text-[#858793]">{days===30?(i%5===0?d.day.slice(5):""):d.day.slice(5)}</span></div>)}
-   </div>
-   <div className="mt-4 rounded-lg border border-[#33343c] bg-[#1d1e24] px-4 py-3"><span className="text-xs text-[#a2a3ad]">WhatsApp tıklaması / sayfa görüntüleme oranı</span><strong className="ml-3 text-lg text-[#e4bf87]">{rate}%</strong><p className="mt-1 text-[11px] text-[#8e909a]">Bu oran satış dönüşümü veya benzersiz kullanıcı dönüşümü değildir.</p></div>
-   <p className="mt-3 text-xs text-[#888a96]">{total===0?"Henüz ölçülmüş ziyaret yok. Site açılıp analitik izni verildiğinde veriler burada görünür.":"Grafikteki sayılar Supabase'den alındı."}</p>
-   <div className="mt-6"><h3 className="mb-3 text-sm font-semibold">En çok görüntülenen sayfalar</h3>{report?.top_pages.length?report.top_pages.map(p=><div key={p.path} className="flex justify-between border-b border-[#303139] py-3 text-sm"><span className="text-[#b6b8c1]">{p.path}</span><span className="font-semibold">{p.views}</span></div>):<p className="text-sm text-[#858793]">Henüz veri yok.</p>}</div>
-  </>}
-  <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-xs text-[#d7b47e]">Google Analytics 4 (ayrı entegrasyon) <ExternalLink size={13}/></a>
- </section></div>;
+   {cfError && <p role="alert" className="nil-one-alert">{cfError}</p>}
+   <p className="nil-one-footer">Cloudflare kaynak, ülke ve cihaz verileri istek temellidir; tekil müşteri sayısı değildir. Kendi ziyaretlerin de Cloudflare sayımlarına dahildir.</p>
+ </div>;
 }
