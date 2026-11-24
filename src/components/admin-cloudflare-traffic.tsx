@@ -126,17 +126,17 @@ export function AdminCloudflareTraffic({ compact = false }: { compact?: boolean 
           </div>
         </div>
       </div>
-      {!compact && data.breakdown && <div className="mt-6">
+      {!compact && <div className="mt-6">
         <div className="mb-4">
           <h3 className="font-serif text-2xl text-[#e7dace]">Trafik nereden geliyor?</h3>
           <p className="mt-1 text-xs text-[#a3968a]">Cloudflare ayrıntılı istek dağılımı · Son 24 saat · Ziyaretçi sayısı değildir</p>
         </div>
-        <div className="grid gap-3 lg:grid-cols-3">
+        {data.breakdown ? <div className="grid gap-4 lg:grid-cols-3">
           <BreakdownCard title="Kaynak Siteler" caption="Referer başlığından, HTTP istekleri" items={data.breakdown.referrers.rows} error={data.breakdown.referrers.error} label={sourceName}/>
           <BreakdownCard title="Ülkeler" caption="IP konumundan tahmini ülke" items={data.breakdown.countries.rows} error={data.breakdown.countries.error} label={countryName}/>
           <BreakdownCard title="Cihaz Türleri" caption="İsteklerin bildirilen cihaz türü" items={data.breakdown.devices.rows} error={data.breakdown.devices.error} label={deviceName}/>
         </div>
-        <p className="mt-3 text-xs leading-6 text-[#94877c]">{data.breakdown.note} Şehir bilgisi bu veri kaynağında mevcut değil; şehirleri yalnızca ayrı bir ziyaretçi analitiği entegrasyonu sağlayabilirse gösterebiliriz.</p>
+        <p className="mt-3 text-xs leading-6 text-[#94877c]">{data.breakdown.note} Şehir bilgisi bu veri kaynağında mevcut değil; şehirleri yalnızca ayrı bir ziyaretçi analitiği entegrasyonu sağlayabilirse gösterebiliriz.</p></div> : <div className="rounded-xl border border-[#544433] bg-[#211d1b] p-5 text-sm leading-7 text-[#d5c3ae]">Trafik dağılımı yeni sürümde eklendi. Bu alanda veri görünmüyorsa Cloudflare'ın son GitHub deployment'ının <strong>Ready</strong> olduğunu kontrol edip sayfayı Ctrl + Shift + R ile yenile.</div>}
       </div>}
       <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-[#a69a8e]"><ShieldCheck size={14}/><span>Yalnızca yöneticiler için korumalı API.</span></div>
       <p className="mt-2 text-[11px] leading-5 text-[#93877d]">{data.uniqueVisitorsNote} Günlük ölçümler Cloudflare Overview ekranındaki son 24 saatlik değerlerden farklı olabilir.</p>
