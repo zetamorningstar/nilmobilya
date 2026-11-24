@@ -215,6 +215,12 @@ function Index() {
             <p data-s="text" className="nil-hero2__text">
               Mobilyadan mimari projelere; yaşam ve çalışma alanlarınız için özel ölçü mobilya, ahşap kaplama ve projeye özel üretim çözümleri sunuyoruz.
             </p>
+            <aside data-s="fade" className="nil-hero2__partnership" aria-label="Büyük projeler için iş ortaklığı">
+              <div className="nil-hero2__partnership-top"><span className="nil-hero2__partnership-dot" aria-hidden="true" /> MİMARLIK · GAYRİMENKUL · PROJE İŞ ORTAKLIĞI</div>
+              <h2>Büyük Projelerinizde <em>Birlikte İmza Atalım.</em></h2>
+              <p>Mimarlık ofisleri, müteahhitler ve gayrimenkul projeleri için özel üretim ve uygulama çözümleri. Projenizin kapsamına göre anahtar teslim seçeneklerini de birlikte değerlendirelim.</p>
+              <a href="https://wa.me/905360236146?text=Merhaba%2C%20Nil%20Mobilya%20ile%20mimarl%C4%B1k%20veya%20gayrimenkul%20projemiz%20i%C3%A7in%20i%C5%9F%20ortakl%C4%B1%C4%9F%C4%B1n%C4%B1%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." target="_blank" rel="noopener noreferrer">Projenizi birlikte değerlendirelim <ArrowUpRight size={16}/></a>
+            </aside>
             <div data-s="fade" className="nil-hero2__ctawrap">
               <a href="#koleksiyon" className="nil-hero2__cta">
                 <span>Koleksiyonu keşfet</span>
