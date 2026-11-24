@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowLeft, BarChart3, Database, Images, LockKeyhole, LogOut, Package, LayoutDashboard, Settings2, ShieldCheck, ChevronRight, Menu, X, CircleHelp, Activity, ExternalLink } from "lucide-react";
+import { ArrowLeft, BarChart3, Database, Images, LockKeyhole, LogOut, Package, LayoutDashboard, Settings2, ShieldCheck, ChevronRight, Menu, X, CircleHelp, Activity, ExternalLink, Calculator } from "lucide-react";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { AdminProducts } from "@/components/admin-products";
 import { AdminDashboard } from "@/components/admin-dashboard";
 import { AdminProjects } from "@/components/admin-projects";
 import { AdminInsights } from "@/components/admin-insights";
 import { AdminTraffic } from "@/components/admin-traffic";
+import { AdminCostEstimator } from "@/components/admin-cost-estimator";
 import "@/styles/admin-polish.css";
 
 export const Route = createFileRoute("/admin")({
@@ -28,7 +29,7 @@ function AdminPage() {
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [section, setSection] = useState<"overview" | "products" | "analytics" | "showcase">("overview");
+  const [section, setSection] = useState<"overview" | "products" | "analytics" | "showcase" | "costing">("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [counts, setCounts] = useState<{total:number;published:number;categories:number}|null>(null);
   useEffect(()=>{ if(status!=="admin")return; const db=getSupabaseClient();if(!db)return;let active=true;Promise.all([db.from("products").select("id,published"),db.from("categories").select("id")]).then(([p,c])=>{if(active&&!p.error&&!c.error)setCounts({total:p.data?.length??0,published:p.data?.filter(x=>x.published).length??0,categories:c.data?.length??0})});return()=>{active=false}},[status,section]);
@@ -90,10 +91,11 @@ function AdminPage() {
     {id:"overview",label:"Genel Bakış",icon:LayoutDashboard,enabled:true},
     {id:"products",label:"Ürün Yönetimi",icon:Package,enabled:true},
     {id:"showcase",label:"Sergimiz",icon:Images,enabled:true},
+    {id:"costing",label:"Fiyat Hesaplama",icon:Calculator,enabled:true},
     {id:"analytics",label:"Analitik",icon:BarChart3,enabled:true},
     {id:"database",label:"Veritabanı",icon:Database,enabled:false},
   ] as const;
-  const selectSection=(id:"overview"|"products"|"analytics"|"showcase")=>{setSection(id);setSidebarOpen(false)};
+  const selectSection=(id:"overview"|"products"|"analytics"|"showcase"|"costing")=>{setSection(id);setSidebarOpen(false)};
   const panel = "admin-panel rounded-xl border border-[#282a31] bg-[#17181d]";
   const smallLabel = "text-[11px] font-semibold uppercase tracking-[.15em] text-[#92949e]";
   return <main className="nil-admin-shell min-h-screen bg-[#0b0c0e] text-[#eae4dc]">
@@ -120,11 +122,11 @@ function AdminPage() {
       </aside>
       <div className="min-w-0 flex-1">
         <header className="nil-admin-topbar sticky top-0 z-20 flex h-[72px] items-center justify-between border-b border-[#302824] bg-[#111113]/95 px-5 backdrop-blur-xl sm:px-8">
-          <div className="flex items-center gap-3"><button onClick={()=>setSidebarOpen(true)} aria-label="Menüyü aç" className="mr-1 lg:hidden"><Menu size={22}/></button><span className="text-xs text-[#777984]">Yönetim</span><ChevronRight size={14} className="text-[#666874]"/><span className="text-sm font-semibold">{section==="products"?"Ürün Yönetimi":section==="showcase"?"Sergimiz":section==="analytics"?"Analitik":"Genel Bakış"}</span></div>
+          <div className="flex items-center gap-3"><button onClick={()=>setSidebarOpen(true)} aria-label="Menüyü aç" className="mr-1 lg:hidden"><Menu size={22}/></button><span className="text-xs text-[#777984]">Yönetim</span><ChevronRight size={14} className="text-[#666874]"/><span className="text-sm font-semibold">{section==="products"?"Ürün Yönetimi":section==="showcase"?"Sergimiz":section==="analytics"?"Analitik":section==="costing"?"Fiyat Hesaplama":"Genel Bakış"}</span></div>
           <div className="flex items-center gap-4"><span className="hidden items-center gap-2 rounded-full border border-[#3c5144] bg-[#1c3026] px-3 py-1.5 text-[11px] font-medium text-[#92d9aa] sm:inline-flex"><span className="h-1.5 w-1.5 rounded-full bg-[#71d99b]"/> Yönetici doğrulandı</span><Link to="/" className="inline-flex items-center gap-2 rounded-lg border border-[#383a43] px-3 py-2 text-xs text-[#c4c5cc] hover:bg-[#292b32]"><ArrowLeft size={15}/> <span className="hidden sm:inline">Siteye dön</span></Link></div>
         </header>
         <div className="nil-admin-content mx-auto max-w-[1800px] px-4 py-5 sm:px-7 sm:py-7 lg:px-9">
-          {section==="showcase"?<AdminProjects/>:section==="analytics"?<AdminTraffic/>:section==="products"?<><div className="mb-7"><p className={smallLabel}>KATALOG / İÇERİK YÖNETİMİ</p><h1 className="mt-2 font-serif text-4xl font-normal text-[#e7dac9]">Ürün Yönetimi</h1><p className="mt-2 text-sm text-[#99918b]">Kategorileri, taslakları ve ürün bilgilerini tek yerden yönet.</p></div><AdminProducts/></>:<AdminDashboard counts={counts} navigate={selectSection}/>}
+          {section==="costing"?<AdminCostEstimator/>:section==="showcase"?<AdminProjects/>:section==="analytics"?<AdminTraffic/>:section==="products"?<><div className="mb-7"><p className={smallLabel}>KATALOG / İÇERİK YÖNETİMİ</p><h1 className="mt-2 font-serif text-4xl font-normal text-[#e7dac9]">Ürün Yönetimi</h1><p className="mt-2 text-sm text-[#99918b]">Kategorileri, taslakları ve ürün bilgilerini tek yerden yönet.</p></div><AdminProducts/></>:<AdminDashboard counts={counts} navigate={selectSection}/>}
 
         </div>
       </div>
