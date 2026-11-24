@@ -61,10 +61,15 @@ type Item = Work & { category: WorkCategory; order: number };
 type InstagramEntry={url:string;title:string};
 function safeInstagramPost(url:string):string|null {
  try{
-  const parsed=new URL(url);
-  if(parsed.protocol!=="https:"||!["instagram.com","www.instagram.com"].includes(parsed.hostname))return null;
-  const match=parsed.pathname.match(/^\/(p|reel)\/([A-Za-z0-9_-]+)\/?$/);
-  return match?"https://www.instagram.com/"+match[1]+"/"+match[2]+"/":null;
+  const parsed=new URL(url.trim());
+  if(parsed.protocol!=="https:"||!["instagram.com","www.instagram.com","m.instagram.com"].includes(parsed.hostname))return null;
+  const parts=parsed.pathname.split("/").filter(Boolean);
+  // Common public post/reel forms, including copied mobile links.
+  if(parts.length===2&&["p","reel","reels","tv"].includes(parts[0])&&/^[A-Za-z0-9_-]+$/.test(parts[1])){
+   const kind=parts[0]==="reels"?"reel":parts[0];
+   return "https://www.instagram.com/"+kind+"/"+parts[1]+"/";
+  }
+  return null;
  }catch{return null}
 }
 function InstagramPost({entry}:{entry:InstagramEntry}){
@@ -369,7 +374,7 @@ function Sergimiz() {
             <div><p className="text-[11px] uppercase tracking-[.18em] text-[#c49c6b]">Instagram / Çalışmalar</p><h2 className="mt-2 font-display text-2xl text-[#f0dec5]">Atölyeden Yeni Paylaşımlar</h2></div>
             <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-[#987750]/60 px-4 py-3 text-sm text-[#e4c498] hover:bg-[#30241a]">Instagram'da tümünü gör ↗</a>
           </div>
-          {instagramEntries.length>0&&<p className="mt-3 text-xs leading-5 text-[#b5a18b]">Instagram gönderileri sayfa açıldığında otomatik yüklenir. Görüntüleme sırasında tarayıcınız Instagram sunucularına bağlanır.</p>}
+          {instagramEntries.length>0&&<p className="mt-3 text-xs leading-5 text-[#b5a18b]">{instagramEntries.length} Instagram gönderisi kaydedilmiş ve yayında. Gönderiler sayfa açıldığında yüklenir. Bazı gönderiler Instagram tarafından başka sitelerde gösterilmeyebilir; bu durumda karttaki Instagram’da aç bağlantısını kullanabilirsiniz.</p>}
           {instagramEntries.length>0&&<div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{instagramEntries.map((entry,index)=><InstagramPost key={entry.url+index} entry={entry}/>)}</div>}
           {instagramEntries.length===0&&<p className="mt-4 text-sm leading-7 text-[#ac9d8a]">Instagram hesabımızdaki yeni çalışmaları inceleyebilirsiniz. Seçilen herkese açık gönderiler bu alanda gösterilir.</p>}
         </div>
