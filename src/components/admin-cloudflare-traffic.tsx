@@ -8,8 +8,45 @@ type CloudflareReport = {
   totalRequests: number;
   uniqueVisitorsNote: string;
   daily: Array<{ day: string; requests: number; uniqueVisitors: number }>;
+  breakdown?: {
+    period: {start:string;end:string;label:string};
+    countries: {rows:Array<{label:string;requests:number}>;error:string|null};
+    devices: {rows:Array<{label:string;requests:number}>;error:string|null};
+    referrers: {rows:Array<{label:string;requests:number}>;error:string|null};
+    note:string;
+  };
 };
 const tr = (v: number) => v.toLocaleString("tr-TR");
+
+const countryName=(s:string)=>({TR:"Türkiye",US:"ABD",DE:"Almanya",GB:"Birleşik Krallık",FR:"Fransa",NL:"Hollanda",AZ:"Azerbaycan"} as Record<string,string>)[s]||s;
+function sourceName(host:string){
+ const value=host.trim().toLowerCase();
+ if(!value||["unknown","none","(none)","bilinmiyor"].includes(value))return "Kaynak belirtilmemiş";
+ if(value==="nilmobilyatasarim.com"||value==="www.nilmobilyatasarim.com")return "Nil Mobilya iç yönlendirme";
+ if(value.includes("google."))return "Google";
+ if(value.includes("instagram.")||value==="l.instagram.com")return "Instagram";
+ if(value.includes("facebook.")||value==="l.facebook.com"||value==="m.facebook.com")return "Facebook";
+ if(value.includes("tiktok."))return "TikTok";
+ if(value.includes("bing."))return "Bing";
+ if(value.includes("pinterest."))return "Pinterest";
+ return host;
+}
+const deviceName=(s:string)=>({mobile:"Mobil",desktop:"Masaüstü",tablet:"Tablet",unknown:"Bilinmiyor"} as Record<string,string>)[s.toLowerCase()]||s;
+function BreakdownCard({title,caption,items,error,label} : {title:string;caption:string;items:Array<{label:string;requests:number}>;error:string|null;label:(s:string)=>string}){
+ const grouped=new Map<string,number>();
+ for(const item of items){const name=label(item.label);grouped.set(name,(grouped.get(name)||0)+item.requests);}
+ const rows=[...grouped].map(([name,count])=>({name,count})).sort((a,b)=>b.count-a.count).slice(0,7);
+ const max=Math.max(1,...rows.map(r=>r.count));
+ return <div className="rounded-xl border border-[#42352c] bg-[#151416] p-4">
+   <h3 className="font-serif text-xl text-[#e5d5c3]">{title}</h3>
+   <p className="mb-5 mt-1 text-[11px] text-[#94877c]">{caption}</p>
+   {error?<p className="text-xs leading-6 text-[#d4b492]">{error}</p>:rows.length? <div className="space-y-3">{rows.map(row=><div key={row.name}>
+     <div className="mb-1 flex items-center justify-between gap-3 text-xs"><span className="min-w-0 truncate text-[#d9ccc0]" title={row.name}>{row.name}</span><strong className="tabular-nums text-[#ad947a]">{tr(row.count)}</strong></div>
+     <div className="h-1.5 overflow-hidden rounded-full bg-[#292522]"><div className="h-full rounded-full bg-[#947b62]" style={{width:Math.max(2,row.count/max*100)+"%"}}/></div>
+   </div>)}</div>:<p className="text-xs text-[#999088]">Henüz ayrıntı bulunamadı.</p>}
+ </div>;
+}
+
 
 export function AdminCloudflareTraffic({ compact = false }: { compact?: boolean }) {
   const [days, setDays] = useState<7 | 14 | 30>(7);
@@ -89,6 +126,18 @@ export function AdminCloudflareTraffic({ compact = false }: { compact?: boolean 
           </div>
         </div>
       </div>
+      {!compact && data.breakdown && <div className="mt-6">
+        <div className="mb-4">
+          <h3 className="font-serif text-2xl text-[#e7dace]">Trafik nereden geliyor?</h3>
+          <p className="mt-1 text-xs text-[#a3968a]">Cloudflare ayrıntılı istek dağılımı · Son 24 saat · Ziyaretçi sayısı değildir</p>
+        </div>
+        <div className="grid gap-3 lg:grid-cols-3">
+          <BreakdownCard title="Kaynak Siteler" caption="Referer başlığından, HTTP istekleri" items={data.breakdown.referrers.rows} error={data.breakdown.referrers.error} label={sourceName}/>
+          <BreakdownCard title="Ülkeler" caption="IP konumundan tahmini ülke" items={data.breakdown.countries.rows} error={data.breakdown.countries.error} label={countryName}/>
+          <BreakdownCard title="Cihaz Türleri" caption="İsteklerin bildirilen cihaz türü" items={data.breakdown.devices.rows} error={data.breakdown.devices.error} label={deviceName}/>
+        </div>
+        <p className="mt-3 text-xs leading-6 text-[#94877c]">{data.breakdown.note} Şehir bilgisi bu veri kaynağında mevcut değil; şehirleri yalnızca ayrı bir ziyaretçi analitiği entegrasyonu sağlayabilirse gösterebiliriz.</p>
+      </div>}
       <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-[#a69a8e]"><ShieldCheck size={14}/><span>Yalnızca yöneticiler için korumalı API.</span></div>
       <p className="mt-2 text-[11px] leading-5 text-[#93877d]">{data.uniqueVisitorsNote} Günlük ölçümler Cloudflare Overview ekranındaki son 24 saatlik değerlerden farklı olabilir.</p>
       {!compact && <div className="mt-4 border-t border-[#403328] pt-4 text-xs text-[#a99a8c]">Son gün: {last?.day ?? "—"} · Önceki gün: {yesterday?.day ?? "—"} · Kaynak: Cloudflare GraphQL</div>}
