@@ -4861,3 +4861,56 @@ html:not(.nil-staged) .nil-stage #iletisim {
  --surface-raised:oklch(.18 .01 255);
  --ink-soft:oklch(.8 .01 255);
 }
+
+
+/* NIL 2026 — balanced black, graphite and muted-gold brand palette */
+:root {
+ --background:oklch(.105 .006 250);
+ --foreground:oklch(.925 .012 80);
+ --card:oklch(.18 .007 250);
+ --card-foreground:oklch(.925 .012 80);
+ --popover:oklch(.18 .007 250);
+ --popover-foreground:oklch(.925 .012 80);
+ --primary:oklch(.69 .065 78);
+ --primary-foreground:oklch(.13 .012 80);
+ --secondary:oklch(.225 .006 250);
+ --secondary-foreground:oklch(.92 .01 80);
+ --muted:oklch(.19 .006 250);
+ --muted-foreground:oklch(.7 .012 80);
+ --accent:oklch(.25 .007 250);
+ --accent-foreground:oklch(.92 .01 80);
+ --border:oklch(.36 .008 250 / 65%);
+ --input:oklch(.36 .008 250);
+ --ring:oklch(.65 .06 78);
+ --gold-bright:oklch(.74 .07 78);
+ --surface-raised:oklch(.20 .006 250);
+ --ink-soft:oklch(.76 .022 80);
+ --nil-matte-gold:#c4a36b;
+ --nil-gold-muted:#a98a59;
+ --nil-graphite:#171b20;
+ --nil-graphite-raised:#1f252d;
+}
+.nil-nav,.nil-header{background-color:rgba(10,11,14,.94)}
+.nil-brand,.nil-brand__name,.nil-brand__logo,.nil-topnav__link:hover,.nil-quote{color:#c4a36b}
+.nil-quote{border-color:rgba(196,163,107,.55);border-radius:8px;background:rgba(12,14,17,.6)}
+.nil-quote:hover{background:#2a241d;color:#e1c99f;border-color:#a98a59}
+.nil-project-hero__eyebrow,.nil-project-hero__services svg,.nil-project-hero__footer svg,.nil-project-hero__copy h1 em{color:#c4a36b}
+.nil-project-hero__eyebrow i{background:#a98a59}
+.nil-project-hero__primary{background:#28241f;color:#d5b782;border:1px solid #826c4c;border-radius:9px}
+.nil-project-hero__primary:hover{background:#373026;color:#edcf9f}
+.nil-project-hero__secondary{background:rgba(20,23,27,.78);border-color:#454b54;color:#e1dbd1;border-radius:9px}
+.nil-project-hero__secondary:hover{background:#262b32}
+.nil-project-hero__lead{color:#e0ddd7}
+.nil-partnership__eyebrow,.nil-partnership__intro h2 em,.nil-partnership__side-head,.nil-partnership__side-note svg,.nil-partnership__service svg{color:#c4a36b}
+.nil-partnership__side,.nil-partnership__service{background:#171b20;border-color:#363b43}
+.nil-partnership__primary{background:#2a241d;border-color:#826c4c;color:#d5b782}
+.nil-partnership__primary:hover{background:#373026;color:#ead0a7}
+.nil-partnership__secondary{background:#1f252d;border-color:#404752;color:#e2ddd3}
+.nil-scene--partnership{background-color:#0b0c0f}
+.nil-catalog{background-color:#0b0c0f}
+.nil-catalog__heading{background:linear-gradient(120deg,#0b0c0f,#171b20 65%,#0c0e11)}
+.nil-catalog__sidebar,.nil-catalog__products{background-color:transparent}
+.nil-catalog__toolbar,.nil-product-card{background-color:rgba(23,27,32,.82)}
+.nil-catalog__heading h1,.nil-catalog__products h2{color:#e8e0d4}
+.nil-catalog__heading .text-primary,.nil-catalog__products .text-primary{color:#c4a36b}
+@media (prefers-reduced-motion:reduce){.nil-project-hero__primary,.nil-quote{transition:none}}
