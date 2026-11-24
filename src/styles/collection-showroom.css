@@ -154,3 +154,26 @@
  .nil-collection-content .nil-product-card__title h2{font-size:21px}
 }
 @media(prefers-reduced-motion:reduce){.nil-category-tile,.nil-category-tile img{transition:none!important}}
+
+
+/* Collection palette: muted matte gold accents; graphite-black foundations */
+.nil-catalog{--showroom-gold:#c4a36b;background:#0c0c0e}
+.nil-collection-content{background:#0c0c0e}
+.nil-collection-vitrine{background:#10100f}
+.nil-filter-control{border-color:#615039;background:#25231f;color:#e8dfce}
+.nil-filter-control:hover{border-color:#91734e;background:#302a23}
+.nil-filter-control:focus-visible{border-color:#c4a36b;box-shadow:0 0 0 2px rgba(196,163,107,.14)}
+.nil-filter-control option{background:#24211e;color:#ece0cd}
+.nil-collection-filters{background:rgba(22,21,20,.97);border-color:#66543a}
+.nil-collection-quote{background:#25211c;border-color:#947a51}
+.nil-collection-quote:hover{background:#342a20;border-color:#c4a36b}
+.nil-category-tile{border-color:#65543b}
+.nil-category-tile:hover{border-color:#c4a36b}
+.nil-collection-content .nil-product-card{border-color:#514637;background:linear-gradient(150deg,#1e1c1a,#111112)}
+.nil-collection-content .nil-product-card:hover{border-color:#a98a59}
+.nil-showroom__chip.is-selected{border-color:#a98a59;background:rgba(196,163,107,.12);color:#e3c9a2}
+.nil-showroom__tab.is-active{border-bottom-color:#c4a36b;color:#d7b884}
+.nil-showroom__cta{color:#d7b884;border-color:#977a50;background:rgba(76,59,38,.2)}
+.nil-showroom__cta:hover{background:rgba(110,82,46,.27)}
+.nil-showroom__eyebrow,.nil-showroom__infoicon,.nil-showroom__related-item svg{color:#c4a36b}
+.nil-showroom__input:focus{border-color:#a98a59}
