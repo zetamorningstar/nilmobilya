@@ -188,3 +188,15 @@
 @media(min-width:1300px){.nil-one-grid>.nil-one-chart{grid-column:span 7}.nil-one-grid>.nil-one-breakdown:nth-of-type(6){grid-column:span 5}.nil-one-grid>.nil-one-breakdown:nth-of-type(7){grid-column:span 4}.nil-one-grid>.nil-one-breakdown:nth-of-type(8){grid-column:span 4}}
 @media(max-width:1299px){.nil-one-screen{height:auto;min-height:0}.nil-one-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:auto;gap:12px}.nil-one-stat{grid-column:span 3;min-height:110px}.nil-one-chart,.nil-one-breakdown,.nil-one-summary{grid-column:span 3;min-height:220px}.nil-one-chart{grid-column:span 6;min-height:265px}.nil-one-breakdown:nth-of-type(7){grid-column:span 3}}
 @media(max-width:680px){.nil-one-header{align-items:flex-start;flex-wrap:wrap}.nil-one-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nil-one-stat{grid-column:span 1;min-height:100px}.nil-one-chart,.nil-one-breakdown,.nil-one-summary,.nil-one-breakdown:nth-of-type(7){grid-column:span 2}.nil-one-stat>strong{font-size:30px}.nil-one-card{border-radius:17px;padding:15px}.nil-one-chart{min-height:245px}}
+
+
+/* Precise desktop grid placement: 4 / 2 / 3 cards, no overflow. */
+@media(min-width:1300px){
+.nil-one-grid>.nil-one-stat{grid-column:span 3}
+.nil-one-grid>.nil-one-chart{grid-column:span 7}
+.nil-one-grid>.nil-one-breakdown:nth-child(6){grid-column:span 5}
+.nil-one-grid>.nil-one-breakdown:nth-child(7),.nil-one-grid>.nil-one-breakdown:nth-child(8),.nil-one-grid>.nil-one-summary{grid-column:span 4}
+}
+@media(min-width:681px) and (max-width:1299px){
+.nil-one-grid>.nil-one-breakdown,.nil-one-grid>.nil-one-breakdown:nth-of-type(7){grid-column:span 3}
+}
