@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase-client";
+import { AdminCloudflareTraffic } from "@/components/admin-cloudflare-traffic";
 import { BarChart3,RefreshCw,ExternalLink,Download,CalendarDays } from "lucide-react";
 type Daily={day:string;views:number;whatsapp:number};
 type Report={daily:Daily[];top_pages:{path:string;views:number}[]};
@@ -22,7 +23,7 @@ export function AdminTraffic(){
   const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
   const a=document.createElement("a");a.href=url;a.download="nil-mobilya-analitik-"+days+"-gun.csv";document.body.appendChild(a);a.click();a.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1000);
  };
- return <section className="admin-panel mb-6 rounded-xl border border-[#292b32] bg-[#15161b] p-6">
+ return <div className="space-y-5"><AdminCloudflareTraffic /><section className="admin-panel mb-6 rounded-xl border border-[#292b32] bg-[#15161b] p-6">
   <div className="mb-6 flex flex-wrap items-center justify-between gap-4"><div><p className="text-[10px] uppercase tracking-[.2em] text-[#c9a46c]">Nil Mobilya · Gerçek olay verileri</p><h2 className="mt-2 text-xl font-bold">Ziyaretçi Analitiği</h2><p className="mt-2 text-xs text-[#9395a0]">Benzersiz kişi değil, izin verilmiş sayfa görüntüleme ve WhatsApp tıklama sayıları</p></div><div className="flex flex-wrap gap-2"><button onClick={downloadCSV} disabled={!report||loading||!!error} className="inline-flex items-center gap-2 rounded-lg border border-[#393a42] px-3 py-2 text-xs text-[#d8bd8d] hover:bg-[#272830] disabled:opacity-40"><Download size={15}/> CSV İndir</button><select aria-label="Tarih aralığı" value={days} onChange={e=>setDays(Number(e.target.value))} className="rounded-lg border border-[#393a42] bg-[#202127] px-3 py-2 text-sm"><option value={7}>7 gün</option><option value={14}>14 gün</option><option value={30}>30 gün</option></select><button onClick={()=>setRefresh(x=>x+1)} aria-label="Yenile" className="rounded-lg border border-[#393a42] p-2"><RefreshCw size={18}/></button></div></div>
   {loading?<p className="py-16 text-center text-sm text-[#9b9da7]">Gerçek veriler yükleniyor…</p>:error?<p role="alert" className="rounded-lg border border-amber-600/40 p-5 text-sm text-amber-200">{error}</p>:<>
    <div className="mb-6 grid grid-cols-2 gap-3"><div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-5"><p className="text-xs text-[#a2a3ad]">Sayfa görüntüleme</p><p className="mt-3 text-3xl font-bold">{total}</p></div><div className="rounded-lg border border-[#33343c] bg-[#1d1e24] p-5"><p className="text-xs text-[#a2a3ad]">WhatsApp tıklaması</p><p className="mt-3 text-3xl font-bold">{clicks}</p></div></div>
@@ -40,5 +41,5 @@ export function AdminTraffic(){
    <div className="mt-6"><h3 className="mb-3 text-sm font-semibold">En çok görüntülenen sayfalar</h3>{report?.top_pages.length?report.top_pages.map(p=><div key={p.path} className="flex justify-between border-b border-[#303139] py-3 text-sm"><span className="text-[#b6b8c1]">{p.path}</span><span className="font-semibold">{p.views}</span></div>):<p className="text-sm text-[#858793]">Henüz veri yok.</p>}</div>
   </>}
   <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-xs text-[#d7b47e]">Google Analytics 4 (ayrı entegrasyon) <ExternalLink size={13}/></a>
- </section>;
+ </section></div>;
 }
