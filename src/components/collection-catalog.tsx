@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle, ClipboardList } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -140,7 +140,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
           </nav>
 
           <div className="nil-nav__tools">
-            <a href={whatsappOfferUrl()} target="_blank" rel="noopener noreferrer" className="nil-quote">Teklif Al</a>
+            <Link to="/teklif" className="nil-quote">Teklif Al</Link>
             <SiteSearch sections={SECTIONS} base="/" />
             <button
               type="button"
@@ -176,7 +176,11 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
             {collection.pageTitle}
           </h1>
           <p className="mt-5 max-w-lg text-sm font-light leading-7 text-foreground/75 md:text-base">{collection.lead}</p>
-          <span aria-hidden="true" className="mt-6 block h-px w-16 bg-primary" />
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <Link to="/teklif" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-xl border border-[#727984] bg-[#343a43] px-6 py-3 text-[13px] font-semibold text-[#f1f4f6] shadow-[0_10px_26px_rgba(0,0,0,.22)] transition-all hover:-translate-y-0.5 hover:border-[#a0a8b5] hover:bg-[#454d58]"><ClipboardList size={18}/> Akıllı Teklif Oluştur <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></Link>
+            <span className="max-w-[330px] text-xs leading-5 text-[#a9b0ba]">Kullanım alanı ve yapılacak ahşap işi seçin; adım adım WhatsApp teklif görüşmesi başlatın.</span>
+          </div>
+          <span aria-hidden="true" className="mt-6 block h-px w-16 bg-[#666e79]" />
         </div>
       </section>
 
@@ -208,6 +212,7 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
               );
             })}
           </ul>
+          <Link to="/teklif" className="mt-6 flex w-full items-center justify-between gap-3 rounded-xl border border-[#686f7a] bg-[#2d333b] px-4 py-3.5 text-xs font-semibold text-[#ecf0f5] transition-colors hover:bg-[#3e4651]"><span className="flex items-center gap-2"><ClipboardList size={17}/> Akıllı Teklif</span><ArrowRight size={15}/></Link>
         </aside>
 
         {/* Ürünler */}
