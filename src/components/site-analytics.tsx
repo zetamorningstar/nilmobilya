@@ -4,16 +4,27 @@ import { getSupabaseClient } from "@/lib/supabase-client";
 const KEY="nil-analytics-consent-v1";
 const GA_ID="G-VCCPXJ6HMG";
 declare global { interface Window { dataLayer?: unknown[]; gtag?: (...args:unknown[])=>void; } }
-function loadGA(){
- if(!["nilmobilyatasarim.com","www.nilmobilyatasarim.com"].includes(location.hostname))return;
- if(document.getElementById("nil-ga4-script"))return;
- window.dataLayer=window.dataLayer||[];
- window.gtag=(...args:unknown[])=>{window.dataLayer?.push(args)};
- window.gtag("js",new Date());
- window.gtag("config",GA_ID,{send_page_view:false});
- const script=document.createElement("script");
- script.id="nil-ga4-script";script.async=true;script.src="https://www.googletagmanager.com/gtag/js?id="+GA_ID;
- document.head.appendChild(script);
+let gaReady: Promise<boolean> | null = null;
+function loadGA(): Promise<boolean> {
+ if(typeof window==="undefined" || !["nilmobilyatasarim.com","www.nilmobilyatasarim.com"].includes(location.hostname)) return Promise.resolve(false);
+ if(gaReady)return gaReady;
+ gaReady=new Promise(resolve=>{
+  // GA4 is only initialized after the visitor has opted in.
+  window.dataLayer=window.dataLayer||[];
+  window.gtag=(...args:unknown[])=>{window.dataLayer?.push(args)};
+  window.gtag("js",new Date());
+  window.gtag("config",GA_ID,{send_page_view:false});
+  const existing=document.getElementById("nil-ga4-script");
+  if(existing){resolve(true);return;}
+  const script=document.createElement("script");
+  script.id="nil-ga4-script";
+  script.async=true;
+  script.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA_ID);
+  script.onload=()=>resolve(true);
+  script.onerror=()=>{gaReady=null;resolve(false)};
+  document.head.appendChild(script);
+ });
+ return gaReady;
 }
 type Consent="accepted"|"rejected"|null;
 export function SiteAnalytics(){
@@ -23,23 +34,35 @@ export function SiteAnalytics(){
  const choose=(value:"accepted"|"rejected")=>{localStorage.setItem(KEY,value);setChoice(value);setPreferencesOpen(false);if(choice==="accepted"&&value==="rejected")window.location.reload()};
  useEffect(()=>{
   if(choice!=="accepted")return;
-  loadGA();
+  let active=true;
   let last="";
+  // Waiting for the tag to load avoids silently losing the first page_view
+  // on slower connections, and handles SPA navigation after initialization.
+  const tagReady=loadGA();
   const record=async(type:"page_view"|"whatsapp_click",path:string)=>{
    const db=getSupabaseClient();if(!db)return;
    try{await db.rpc("record_site_event",{p_type:type,p_path:path});}catch{}
   };
-  const view=()=>{const path=location.pathname;if(path.startsWith("/admin"))return;if(path!==last){last=path;void record("page_view",path);window.gtag?.("event","page_view",{page_path:path,page_location:location.href,page_title:document.title})}};
+  const sendPage=(path:string,href:string,title:string)=>{
+    void tagReady.then(ready=>{
+      if(!ready||!active)return;
+      window.gtag?.("event","page_view",{
+        send_to:GA_ID,page_path:path,page_location:href,page_title:title,
+        ...(new URLSearchParams(location.search).has("gtm_debug")?{debug_mode:true}:{})
+      });
+    });
+  };
+  const view=()=>{const path=location.pathname;if(path.startsWith("/admin"))return;if(path!==last){last=path;void record("page_view",path);sendPage(path,location.href,document.title)}};
   view();
   const interval=window.setInterval(view,700);
   const click=(event:MouseEvent)=>{
    const target=event.target;
    if(!(target instanceof Element))return;
    const a=target.closest("a[href]") as HTMLAnchorElement|null;
-   if(a && /(?:wa\.me|api\.whatsapp\.com)/i.test(a.href)){void record("whatsapp_click",location.pathname);window.gtag?.("event","whatsapp_click",{page_path:location.pathname,link_url:a.href})}
+   if(a && /(?:wa\.me|api\.whatsapp\.com)/i.test(a.href)){void record("whatsapp_click",location.pathname);void tagReady.then(ready=>{if(ready&&active)window.gtag?.("event","whatsapp_click",{send_to:GA_ID,page_path:location.pathname,link_url:a.href})})}
   };
   document.addEventListener("click",click,true);
-  return()=>{clearInterval(interval);document.removeEventListener("click",click,true)};
+  return()=>{active=false;clearInterval(interval);document.removeEventListener("click",click,true)};
  },[choice]);
  if(typeof window!=="undefined" && window.location.pathname.startsWith("/admin"))return null;
  if(choice!==null && !preferencesOpen)return <button type="button" onClick={()=>setPreferencesOpen(true)} className="fixed bottom-3 left-3 z-[9998] rounded-full border border-[#6b5940]/60 bg-[#18191e]/90 px-3 py-2 text-[11px] text-[#d5b37c] shadow-lg backdrop-blur-md hover:bg-[#24252b]">Analitik tercihleri</button>;
