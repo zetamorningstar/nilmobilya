@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Diamond, Layers3, Leaf, Ruler, ShieldCheck, Truck, Headset } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Diamond, Layers3, Leaf, Ruler, ShieldCheck, Truck, Headset, Building2, Handshake, KeyRound, Sofa, DraftingCompass, Gem } from "lucide-react";
 import { useEffect, useState, type PointerEvent } from "react";
 
 import diningImage from "@/assets/nil-dining.jpg";
@@ -200,53 +200,32 @@ function Index() {
       {/* ============ SAHNELER ============ */}
       <div className="nil-stage">
                 {/* 1 · Ana sayfa */}
-        <section id="top" aria-label="Ana sayfa" lang="tr" className="nil-scene nil-scene--hero">
-          <div aria-hidden="true" className="nil-hero2__veil" />
-
-          <div className="nil-hero2__content">
-            <div className="nil-hero2__eyebrow">
-              <span data-s="rule" aria-hidden="true" className="nil-hero2__line" />
-              <p data-s="text">Özel üretim &amp; mimari ahşap çözümleri</p>
+        <section id="top" aria-label="Ana sayfa" lang="tr" className="nil-scene nil-scene--hero nil-hero-premium">
+          <div aria-hidden="true" className="nil-hero-premium__photo" />
+          <div aria-hidden="true" className="nil-hero-premium__shade" />
+          <div className="nil-hero-premium__layout">
+            <div className="nil-hero-premium__lead">
+              <div data-s="fade" className="nil-hero-premium__eyebrow">MİMARLIK · GAYRİMENKUL · PROJE ORTAKLIĞI <span aria-hidden="true"/></div>
+              <h1 data-s="text" className="nil-hero-premium__title">Büyük Projelerinizde<br/><em>Birlikte İmza Atalım.</em></h1>
+              <p data-s="fade" className="nil-hero-premium__description">Mimarlık ofisleri, müteahhitler ve gayrimenkul projeleri için özel üretim ve uygulama çözümleri. Projenizin kapsamına uygun hizmetleri ve anahtar teslim seçeneklerini birlikte değerlendirelim.</p>
+              <div data-s="fade" className="nil-hero-premium__actions">
+                <a href="https://wa.me/905360236146?text=Merhaba%2C%20Nil%20Mobilya%20ile%20mimarl%C4%B1k%20veya%20gayrimenkul%20projemiz%20i%C3%A7in%20i%C5%9F%20ortakl%C4%B1%C4%9F%C4%B1n%C4%B1%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." target="_blank" rel="noopener noreferrer" className="nil-hero-premium__primary">Projenizi Değerlendirelim <ArrowRight size={17}/></a>
+                <a href="#koleksiyon" className="nil-hero-premium__secondary">Koleksiyonu İncele <ArrowUpRight size={17}/></a>
+              </div>
             </div>
-            <h1 className="nil-hero2__title">
-              <span data-s="text" className="block">Yaşam Alanınıza Özel,</span>
-              <span data-s="text" className="nil-hero2__gold block">Zamansız Tasarımlar.</span>
-            </h1>
-            <p data-s="text" className="nil-hero2__text">
-              Mobilyadan mimari projelere; yaşam ve çalışma alanlarınız için özel ölçü mobilya, ahşap kaplama ve projeye özel üretim çözümleri sunuyoruz.
-            </p>
-            <aside data-s="fade" className="nil-hero2__partnership" aria-label="Büyük projeler için iş ortaklığı">
-              <div className="nil-hero2__partnership-top"><span className="nil-hero2__partnership-dot" aria-hidden="true" /> MİMARLIK · GAYRİMENKUL · PROJE İŞ ORTAKLIĞI</div>
-              <h2>Büyük Projelerinizde <em>Birlikte İmza Atalım.</em></h2>
-              <p>Mimarlık ofisleri, müteahhitler ve gayrimenkul projeleri için özel üretim ve uygulama çözümleri. Projenizin kapsamına göre anahtar teslim seçeneklerini de birlikte değerlendirelim.</p>
-              <a href="https://wa.me/905360236146?text=Merhaba%2C%20Nil%20Mobilya%20ile%20mimarl%C4%B1k%20veya%20gayrimenkul%20projemiz%20i%C3%A7in%20i%C5%9F%20ortakl%C4%B1%C4%9F%C4%B1n%C4%B1%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." target="_blank" rel="noopener noreferrer">Projenizi birlikte değerlendirelim <ArrowUpRight size={16}/></a>
+            <aside data-s="fade" className="nil-hero-premium__aside" aria-label="Kurumsal proje hizmetleri">
+              <div><Layers3/><span><strong>Anahtar Teslim Seçenekleri</strong><small>Proje kapsamına göre değerlendirme</small></span></div>
+              <div><DraftingCompass/><span><strong>Projeye Özel Üretim</strong><small>Ölçüye ve tasarıma özel çözümler</small></span></div>
+              <div><Handshake/><span><strong>Uzun Vadeli İş Ortaklığı</strong><small>Mimarlık ve gayrimenkul projeleri</small></span></div>
+              <div><Gem/><span><strong>Nitelikli Malzeme & İşçilik</strong><small>Detaylara özenli üretim yaklaşımı</small></span></div>
             </aside>
-            <div data-s="fade" className="nil-hero2__ctawrap">
-              <a href="#koleksiyon" className="nil-hero2__cta">
-                <span>Koleksiyonu keşfet</span>
-                <ArrowRight className="size-4" strokeWidth={1.4} />
-              </a>
-              <a href="https://wa.me/905360236146?text=Merhaba%2C%20%C3%B6zel%20%C3%BCretim%20i%C3%A7in%20teklif%20almak%20istiyorum." className="nil-hero2__cta nil-hero2__cta--secondary" target="_blank" rel="noopener noreferrer">
-                <span>WhatsApp'tan teklif al</span>
-                <ArrowUpRight className="size-4" strokeWidth={1.4} />
-              </a>
-            </div>
           </div>
-
-          <div data-s="fade" className="nil-hero2__cue">
-            <span aria-hidden="true" className="nil-hero2__mouse" />
-            <span>Aşağı kaydır</span>
-            <span aria-hidden="true" className="nil-hero2__cueline" />
+          <div data-s="fade" className="nil-hero-premium__strip" aria-label="Hizmet alanlarımız">
+            <div><Sofa/><span><strong>Özel Üretim Mobilya</strong><small>Her mekâna özel çözümler</small></span></div>
+            <div><Building2/><span><strong>Ticari Proje Desteği</strong><small>Ofis, konut ve iş yerleri</small></span></div>
+            <div><KeyRound/><span><strong>Anahtar Teslim Seçenekleri</strong><small>Projeye göre üretim ve uygulama</small></span></div>
+            <div><Handshake/><span><strong>Kurumsal İş Ortaklığı</strong><small>Büyük projelerde birlikte çalışma</small></span></div>
           </div>
-
-          <ul data-s="fade" className="nil-hero2__tags">
-            {["Özel ölçü üretim", "Mimari ahşap uygulamalar", "Usta işçilik"].map((item, i) => (
-              <li key={item} className="flex items-center gap-[18px]">
-                {i > 0 && <span aria-hidden="true" className="text-foreground/40">/</span>}
-                {item}
-              </li>
-            ))}
-          </ul>
         </section>
                 {/* 2 · Koleksiyon — referansın HTML/CSS karşılığı; görseller projeden gelir */}
         <section id="koleksiyon" aria-label="Yeni koleksiyon" className="nil-scene nil-scene--col">
