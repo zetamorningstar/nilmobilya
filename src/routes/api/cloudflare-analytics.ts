@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { env } from "cloudflare:workers";
 
 type CloudflareDay = { dimensions?: { date?: string }; sum?: { requests?: number }; uniq?: { uniques?: number } };
 type CloudflareResponse = {
@@ -48,9 +47,11 @@ export const Route = createFileRoute("/api/cloudflare-analytics")({
             return json({ error: "Bu işlem için yönetici yetkisi gerekiyor." }, 403);
           }
 
-          const runtimeEnv = env as unknown as Record<string, string | undefined>;
-          const token = runtimeEnv.CLOUDFLARE_ANALYTICS_TOKEN;
-          const zoneId = runtimeEnv.CLOUDFLARE_ZONE_ID;
+          // Nitro injects Cloudflare runtime variables during each request.
+          // Do not read secrets at module scope or use a cloudflare:workers
+          // import: the Vite client build cannot resolve that virtual module.
+          const token = process.env.CLOUDFLARE_ANALYTICS_TOKEN;
+          const zoneId = process.env.CLOUDFLARE_ZONE_ID;
           if (!token || !zoneId) return json({ error: "Cloudflare analitik değişkenleri eksik." }, 503);
 
           const url = new URL(request.url);
