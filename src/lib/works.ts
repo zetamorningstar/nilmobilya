@@ -23,5 +23,5 @@ export interface Work {
 
 export const works: Work[] = [
   // Buraya işlerini ekleyeceksin.
-  { title: "Salon Yenileme", place: "İstanbul", year: "2025", image: "/sergi/salon-1.jpg", alt: "Yenilenen salon" },
+  // Gerçek proje fotoğrafları yönetici panelinden yayınlandığında burada gösterilir.
 ];
