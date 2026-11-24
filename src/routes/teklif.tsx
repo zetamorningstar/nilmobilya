@@ -31,9 +31,9 @@ const roomProducts:Record<string,string[]>={
 const styles=["Modern","Minimal","Klasik","İskandinav","Endüstriyel","Henüz karar vermedim"];
 const materials=["Doğal ahşap","Ahşap kaplama","MDF / Lake","Laminat / Melamin","Kararsızım / Öneri istiyorum"];
 const stages=["Proje Türü","Ölçüler","Tasarım","İletişim","Tamamla"] as const;
-const field="w-full rounded-lg border border-[#695640] bg-[#191714]/90 px-4 py-3 text-[13px] text-[#e9e2d8] outline-none placeholder:text-[#9f9281] focus:border-[#b4976c]";
+const field="w-full min-h-[47px] rounded-xl border border-[#5f503e]/65 bg-[#141210]/75 px-4 py-3 text-[13px] text-[#f1e8dc] outline-none transition-colors placeholder:text-[#9f9180] hover:border-[#9e8059]/70 focus:border-[#c4a36b] focus:ring-2 focus:ring-[#c4a36b]/10";
 const stepLabel="mb-2 block text-[12px] font-medium text-[#d6c6ae]";
-const img="/Alacakaranl%C4%B1kta%20L%C3%BCks%20Modern%20Salon.webp";
+const img="/S%C4%B1cak%20Tonlarda%20Minimalist%20L%C3%BCks%20%C4%B0%C3%A7%20Mek%C3%A2n.webp";
 
 function QuoteWizard(){
   const [step,setStep]=useState(0);
@@ -71,58 +71,51 @@ function QuoteWizard(){
   ].join("\n");
   const waUrl="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(waMessage);
 
-  return <main lang="tr" className="relative min-h-svh overflow-hidden bg-[#0c0b0b] text-[#e9e2d8]">
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_40%_5%,rgba(117,85,45,0.12),transparent_45%),linear-gradient(115deg,#0c0b0b,#1b1714_64%,#0c0b0b)]"/>
-    <header className="relative z-10 flex min-h-[78px] items-center justify-between gap-5 border-b border-[#66543c]/25 bg-[#100e0d]/90 px-5 md:px-[5vw]">
-      <Link to="/" className="flex items-center gap-3 font-display text-[24px] tracking-[.1em] text-[#c4a36b]"><span className="text-[29px]">N</span><span>Nil Mobilya</span></Link>
-      <nav className="hidden items-center gap-8 text-xs text-[#c8bbaa] md:flex"><Link to="/" className="hover:text-[#f4ebdf]">Ana Sayfa</Link><Link to="/sergimiz" className="hover:text-[#f4ebdf]">Projelerimiz</Link><a href="/#kurumsal-is-ortakligi" className="hover:text-[#f4ebdf]">İş Ortaklığı</a></nav>
-      <Link to="/" className="rounded-lg border border-[#89704c] px-4 py-2.5 text-xs text-[#e0d6c7]">Siteye Dön <ArrowUpRight size={14} className="ml-1 inline"/></Link>
+  return <main lang="tr" className="relative min-h-svh overflow-hidden bg-[#0d0c0b] text-[#eee5d8]">
+    <header className="relative z-20 flex min-h-[78px] items-center justify-between gap-5 border-b border-[#a68a61]/20 bg-[#0d0c0b] px-5 md:px-[4.5vw]">
+      <Link to="/" className="flex items-center gap-3 font-display text-[21px] tracking-[.095em] text-[#c4a36b]"><span className="text-[30px] leading-none">N</span><span>Nil Mobilya</span></Link>
+      <nav className="hidden items-center gap-8 text-xs text-[#c8bbaa] md:flex"><Link to="/" className="hover:text-[#e4c89d]">Ana Sayfa</Link><Link to="/sergimiz" className="hover:text-[#e4c89d]">Projelerimiz</Link><a href="/#kurumsal-is-ortakligi" className="hover:text-[#e4c89d]">İş Ortaklığı</a></nav>
+      <Link to="/" className="inline-flex items-center gap-2 rounded-full border border-[#786348] bg-[#221d18] px-4 py-2.5 text-xs text-[#dcc49e] transition-colors hover:border-[#c4a36b]">Siteye Dön <ArrowUpRight size={14}/></Link>
     </header>
 
-    <div className="relative z-10 mx-auto grid max-w-[1660px] lg:min-h-[calc(100svh-78px)] lg:grid-cols-[minmax(0,0.97fr)_minmax(0,1.03fr)]">
-      <section className="relative isolate flex min-h-[390px] flex-col justify-between overflow-hidden px-6 pb-9 pt-10 md:px-[5vw] lg:min-h-[690px] lg:py-16">
-        {/* The approved warm, cinematic design language; actual Nil Mobilya image, no invented projects. */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20" style={{backgroundImage:`url("${img}")`,backgroundPosition:"61% center",backgroundSize:"cover"}}/>
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{background:"linear-gradient(90deg,rgba(8,7,7,.96) 0%,rgba(10,8,7,.83) 45%,rgba(12,10,9,.43) 100%),linear-gradient(0deg,rgba(8,7,6,.94) 0%,transparent 45%),linear-gradient(180deg,rgba(8,7,7,.43) 0%,transparent 38%)"}}/>
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 opacity-70" style={{background:"radial-gradient(ellipse at 86% 60%,rgba(173,123,64,.17),transparent 43%)"}}/>
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-6 top-8 h-px bg-gradient-to-r from-[#bc9a63]/55 via-[#bc9a63]/10 to-transparent md:inset-x-[5vw] lg:top-11"/>
-        <div aria-hidden="true" className="pointer-events-none absolute right-[5%] top-[22%] hidden h-[280px] w-[190px] rounded-t-full border border-[#b99b72]/20 lg:block"/>
-        <div aria-hidden="true" className="pointer-events-none absolute right-[8%] top-[26%] hidden h-[250px] w-[150px] rounded-t-full border border-[#b99b72]/10 lg:block"/>
+    <div className="relative mx-auto grid max-w-[1800px] lg:min-h-[calc(100svh-78px)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,.98fr)]">
+      <section className="relative isolate flex min-h-[500px] flex-col justify-between overflow-hidden border-b border-[#8d7451]/20 px-[clamp(24px,4.5vw,82px)] pb-9 pt-10 lg:min-h-[730px] lg:border-b-0 lg:border-r lg:pb-12 lg:pt-14">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20" style={{backgroundImage:`url("${img}")`,backgroundPosition:"58% center",backgroundSize:"cover"}}/>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{background:"linear-gradient(90deg,rgba(8,7,6,.88),rgba(9,8,7,.70) 54%,rgba(10,8,7,.38)),linear-gradient(0deg,rgba(7,6,5,.93) 0%,rgba(7,6,5,.10) 55%),linear-gradient(180deg,rgba(8,7,6,.40),transparent 45%)"}}/>
         <div className="relative z-10">
-          <div className="mb-9 flex items-center gap-3 text-[10px] uppercase tracking-[.24em] text-[#baa17d]"><span className="h-px w-8 bg-[#ae8d5e]"/> NİL MOBİLYA <span className="text-[#827464]">/</span> ÖZEL ÜRETİM</div>
-          <p className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[.24em] text-[#c4a36b]">AKILLI TEKLİF SİSTEMİ <span className="h-px w-12 bg-[#ad8a59]"/></p>
-          <h1 className="mt-7 max-w-[650px] font-display text-[clamp(35px,3.5vw,56px)] leading-[1.08] font-normal">Projeniz için<br/>hızlı ve doğru <span className="text-[#c4a36b]">teklif görüşmesi.</span></h1>
-          <p className="mt-6 max-w-[475px] text-sm leading-7 text-[#d5c8b8]">İhtiyaçlarınızı, ölçü ve malzeme tercihlerinizi birkaç adımda paylaşın. Projenizi değerlendirerek size özel fiyat ve üretim seçeneklerini görüşelim.</p>
-          <div className="mt-9 grid max-w-[500px] grid-cols-2 gap-x-6 gap-y-4 border-t border-[#a88b62]/30 pt-6 text-[12px] leading-5 text-[#e2d7c6]">
-            <div className="flex items-center gap-3"><Ruler size={20} className="shrink-0 text-[#c4a36b]"/> Özel ölçü üretim</div>
-            <div className="flex items-center gap-3"><Layers3 size={20} className="shrink-0 text-[#c4a36b]"/> Malzeme seçenekleri</div>
-            <div className="flex items-center gap-3"><ClipboardList size={20} className="shrink-0 text-[#c4a36b]"/> Proje bazlı teklif</div>
-            <div className="flex items-center gap-3"><Handshake size={20} className="shrink-0 text-[#c4a36b]"/> WhatsApp görüşmesi</div>
-          </div>
+          <div className="mb-12 flex items-center gap-3 text-[10px] font-medium uppercase tracking-[.25em] text-[#d6b680]"><span className="h-px w-8 bg-[#c4a36b]"/> NİL MOBİLYA <span className="text-[#a99b88]">/</span> KİŞİYE ÖZEL TASARIM</div>
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#bc9865]/40 bg-[#18130e]/55 px-3.5 py-2 text-[10px] font-medium tracking-[.13em] text-[#ddbb83] backdrop-blur-sm"><Sparkles size={13}/> AKILLI TEKLİF</span>
+          <h1 className="mt-6 max-w-[650px] font-display text-[clamp(42px,4.5vw,76px)] font-normal leading-[1.06] tracking-[-.025em] text-[#f4eee7]">Fikrinizden<br/><span className="italic text-[#d6b587]">size özel</span><br/>bir tasarıma.</h1>
+          <p className="mt-6 max-w-[450px] text-[14px] leading-[1.9] text-[#d8cbb9]">Mekânınızı ve ihtiyaçlarınızı birkaç adımda tanıyalım. Ölçü, malzeme ve tasarım tercihlerinize göre size özel teklif görüşmesini başlatalım.</p>
         </div>
-        <div className="relative z-10 mt-12 flex items-end justify-between gap-5 border-t border-[#bba078]/30 pt-6">
-          <p className="max-w-[375px] text-[11px] leading-6 text-[#c8baa7]">Fiyatlar ölçü, malzeme ve iş kapsamı belirlendikten sonra sunulur. Bu sayfa otomatik fiyat hesaplamaz.</p>
-          <div aria-hidden="true" className="hidden shrink-0 flex-col items-end gap-1 text-right sm:flex"><span className="font-display text-[31px] leading-none text-[#c7a573]/80">N.</span><span className="text-[9px] uppercase tracking-[.25em] text-[#af9b7e]">Form · Doku · Denge</span></div>
+        <div className="relative z-10 mt-12">
+          <div className="mb-5 h-px w-full bg-gradient-to-r from-[#bb996b]/70 via-[#bb996b]/20 to-transparent"/>
+          <div className="grid grid-cols-2 gap-x-5 gap-y-4 text-[12px] leading-5 text-[#e8dfd2]">
+            <div className="flex items-center gap-3"><Ruler size={19} className="shrink-0 text-[#c4a36b]"/> Size özel ölçüler</div>
+            <div className="flex items-center gap-3"><Layers3 size={19} className="shrink-0 text-[#c4a36b]"/> Malzeme seçenekleri</div>
+            <div className="flex items-center gap-3"><ClipboardList size={19} className="shrink-0 text-[#c4a36b]"/> Proje bazlı teklif</div>
+            <div className="flex items-center gap-3"><MessageCircle size={19} className="shrink-0 text-[#c4a36b]"/> WhatsApp görüşmesi</div>
+          </div>
+          <p className="mt-6 max-w-[520px] text-[10px] leading-5 text-[#bcb0a0]">Fiyatlar projenin ölçü, malzeme ve iş kapsamı netleştirildikten sonra belirlenir; form otomatik fiyat hesaplamaz.</p>
         </div>
       </section>
 
-      <section className="relative isolate flex flex-col justify-center overflow-hidden bg-[#100e0d]/95 px-4 py-9 sm:px-8 lg:px-[4vw]">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(145deg,#181410,#0e0d0c_52%,#17120e)]"/>
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{background:"radial-gradient(ellipse at 78% 20%,rgba(196,163,107,.085),transparent 54%),repeating-linear-gradient(0deg,transparent 0 95px,rgba(196,163,107,.025) 96px 97px),repeating-linear-gradient(90deg,transparent 0 95px,rgba(196,163,107,.025) 96px 97px)"}}/>
-        <div aria-hidden="true" className="pointer-events-none absolute right-[5%] top-[7%] hidden h-48 w-48 rounded-full border border-[#c4a36b]/10 lg:block"/>
+      <section className="relative isolate flex min-w-0 flex-col justify-center overflow-hidden px-4 py-10 sm:px-8 lg:px-[clamp(24px,4vw,72px)] lg:py-12">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_70%_15%,rgba(104,76,43,.16),transparent_52%),linear-gradient(145deg,#17130f,#0d0c0b_68%)]"/>
         <div className="relative mx-auto w-full max-w-[670px]">
-          <div className="mb-5 flex items-center justify-between gap-4 px-1">
-            <span className="text-[10px] uppercase tracking-[.24em] text-[#bea37e]">PROJENİZE ÖZEL</span>
-            <span className="flex items-center gap-3 text-[10px] text-[#bca88b]"><span className="h-px w-9 bg-[#a98a59]/65"/> 05 ADIMDA BAŞLANGIÇ</span>
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <span className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#d2b481]">TASARIMINIZI PLANLAYALIM</span>
+            <span className="text-[11px] text-[#b2a594]">Yaklaşık 2–3 dk.</span>
           </div>
-          <div className="rounded-[18px] border border-[#786044]/65 bg-[linear-gradient(150deg,rgba(37,30,24,.96),rgba(18,16,14,.98))] p-5 shadow-[0_30px_80px_rgba(0,0,0,.35)] sm:p-8">
-          <p className="text-[10px] tracking-[.2em] text-[#c4a36b]">ADIM {step+1} / 5</p>
+          <div className="overflow-hidden rounded-[24px] border border-[#7a6548]/50 bg-[linear-gradient(155deg,rgba(39,32,26,.90),rgba(17,15,13,.96))] p-5 shadow-[0_28px_95px_rgba(0,0,0,.32)] backdrop-blur-xl sm:p-8">
+          <div className="mb-5 flex items-center justify-between gap-4"><p className="text-[10px] font-semibold tracking-[.20em] text-[#c4a36b]">ADIM {String(step+1).padStart(2,"0")} <span className="text-[#9d8a70]">/ 05</span></p><span className="text-[11px] text-[#b8aa97]">{Math.round(((step+1)/5)*100)} tamamlandı</span></div>
+          <div className="mb-7 h-[3px] w-full overflow-hidden rounded-full bg-[#5f4d37]/55"><div className="h-full rounded-full bg-[#c4a36b] transition-all duration-300" style={{width:`${((step+1)/5)*100}%`}}/></div>
           <h2 className="mt-2 font-display text-[clamp(24px,2.3vw,36px)] leading-tight">{["Projenizi tanıyalım","Ölçü ve konum bilgileri","Tasarım tercihleri","İletişim bilgileriniz","Talebiniz hazır"][step]}</h2>
           <p className="mt-2 text-[12px] leading-5 text-[#b6aa98]">{["Hangi alan ve mobilya için çalışmak istediğinizi seçin.","Ölçüleriniz hazır değilse daha sonra paylaşabilirsiniz.","Tarz ve malzeme seçimi sadece başlangıç içindir.","Sizinle iletişime geçebilmemiz için bilgilerinizi ekleyin.","Bilgilerinizi kontrol edip WhatsApp üzerinden iletin."][step]}</p>
 
-          <div className="mt-6 flex items-start gap-1.5 sm:gap-3" aria-label="Teklif aşamaları">
+          <div className="mt-7 flex items-start gap-1.5 sm:gap-3" aria-label="Teklif aşamaları">
             {stages.map((label,i)=><button type="button" key={label} onClick={()=>{if(i<step){setStep(i);setTried(false);}}} disabled={i>step} className="min-w-0 flex-1 text-center disabled:cursor-default" aria-current={step===i?"step":undefined}>
-              <span className={`mx-auto flex size-8 items-center justify-center rounded-full border text-xs ${i<=step?"border-[#a98a59] bg-[#413427] text-white":"border-[#64543e] text-[#b6aa98]"}`}>{i<step?<Check size={15}/>:i+1}</span>
+              <span className={`mx-auto flex size-9 items-center justify-center rounded-xl border text-xs font-semibold transition-colors ${i===step?"border-[#c4a36b] bg-[#bfa074] text-[#18130e]":i<step?"border-[#98784d] bg-[#3b2e20] text-[#e8ca98]":"border-[#62503b] bg-[#1a1714] text-[#9f9180]"}`}>{i<step?<Check size={15}/>:i+1}</span>
               <span className={`mt-2 block text-[9px] sm:text-[11px] ${i===step?"text-[#c4a36b]":"text-[#a89a88]"}`}>{label}</span>
             </button>)}
           </div>
@@ -131,7 +124,7 @@ function QuoteWizard(){
             {step===0&&<>
               <p className={stepLabel}>Kullanım alanı <span className="text-[#c4a36b]">*</span></p>
               <div className="grid grid-cols-4 gap-2">
-                {rooms.map(({value,icon:Icon})=><button type="button" key={value} onClick={()=>{setRoom(value);setProduct("");}} aria-pressed={room===value} className={`flex min-h-[87px] flex-col items-center justify-center gap-2 rounded-lg border p-2 text-center text-[10px] leading-4 transition-colors sm:text-xs ${room===value?"border-[#a98a59] bg-[#33291f] text-[#e4c99d]":"border-[#55483a] bg-[#1d1a17] text-[#d2c4b2] hover:border-[#a98a59]"}`}><Icon size={23} strokeWidth={1.4}/>{value}</button>)}
+                {rooms.map(({value,icon:Icon})=><button type="button" key={value} onClick={()=>{setRoom(value);setProduct("");}} aria-pressed={room===value} className={`flex min-h-[90px] flex-col items-center justify-center gap-2 rounded-xl border p-2 text-center text-[10px] leading-4 transition-all duration-200 sm:text-xs ${room===value?"border-[#c4a36b] bg-[#57412a]/55 text-[#f0d7ae] shadow-[inset_0_0_0_1px_rgba(196,163,107,.15)]":"border-[#62523f]/70 bg-[#191613]/70 text-[#d4c6b5] hover:border-[#b3956a] hover:bg-[#2c241c]"}`}><Icon size={23} strokeWidth={1.4}/>{value}</button>)}
               </div>
               <label className={stepLabel+" mt-5"} htmlFor="offer-product">Ürün / proje türü <span className="text-[#c4a36b]">*</span></label>
               <select id="offer-product" disabled={!room} className={field+" disabled:opacity-50"} value={product} onChange={e=>setProduct(e.target.value)}><option value="">{room?"İş türü seçiniz...":"Önce kullanım alanı seçiniz..."}</option>{filteredProducts.map(t=><option value={t} key={t}>{t}</option>)}</select>
@@ -165,7 +158,7 @@ function QuoteWizard(){
           {tried&&!valid[step]&&<p role="alert" className="mt-3 text-[12px] text-[#e9a78e]">{step===0?"Lütfen kullanım alanı ve ürün türü seçin.":"Lütfen ad, telefon ve onay alanını tamamlayın."}</p>}
           <div className="mt-6 flex gap-3">
             {step>0&&<button type="button" onClick={()=>{setStep(s=>s-1);setTried(false)}} className="flex min-h-[48px] items-center justify-center gap-2 rounded-lg border border-[#695640] px-4 text-[13px] text-[#d7c5af]"><ArrowLeft size={16}/> Geri</button>}
-            {step<4?<button type="button" onClick={next} className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#2b251f] px-5 text-[13px] font-semibold text-[#d5b782] hover:bg-[#373026]">Devam Et <ArrowRight size={17}/></button>:<a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#2b251f] px-5 text-center text-[13px] font-semibold text-[#d5b782] hover:bg-[#373026]"><MessageCircle size={18}/> WhatsApp ile Teklif Gönder</a>}
+            {step<4?<button type="button" onClick={next} className="flex min-h-[50px] flex-1 items-center justify-center gap-3 rounded-xl border border-[#c6a473] bg-[#bda071] px-5 text-[13px] font-semibold text-[#17130f] transition-colors hover:bg-[#e2c28e]">Devam Et <ArrowRight size={17}/></button>:<a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-[50px] flex-1 items-center justify-center gap-3 rounded-xl border border-[#c6a473] bg-[#bda071] px-5 text-center text-[13px] font-semibold text-[#17130f] transition-colors hover:bg-[#e2c28e]"><MessageCircle size={18}/> WhatsApp ile Teklif Gönder</a>}
           </div>
           </div>
         </div>
