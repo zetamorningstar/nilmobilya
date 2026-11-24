@@ -30,7 +30,7 @@ function LegalPage() {
         {legalDraft && <aside role="note" aria-label="Yasal metin taslak uyarısı" className="mt-6 rounded-xl border border-amber-600/45 bg-amber-950/20 px-5 py-4 text-sm leading-7 text-amber-100">
           <strong className="block font-semibold">Bu sayfa henüz tamamlanmamış bir taslaktır.</strong>
           İşletmenin resmî kimlik bilgileri ve bazı veri işleme ayrıntıları doğrulanmayı bekliyor. Bu içerik nihai sözleşme, eksiksiz KVKK aydınlatması veya siparişe özel ön bilgilendirme yerine geçmez. Satış koşulları için sipariş vermeden önce yazılı bilgi isteyin.
-        </aside>
+        </aside>}
         <p className="mt-5 text-sm leading-7 text-[#c6b9a9]">{doc.description}</p>
         <div className="mt-10 border-t border-[#6b5539]/65" />
         {doc.sections.map((section) => (
