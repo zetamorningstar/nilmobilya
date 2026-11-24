@@ -80,24 +80,42 @@ function QuoteWizard(){
     </header>
 
     <div className="relative z-10 mx-auto grid max-w-[1660px] lg:min-h-[calc(100svh-78px)] lg:grid-cols-[minmax(0,0.97fr)_minmax(0,1.03fr)]">
-      <section className="relative flex min-h-[340px] flex-col justify-between overflow-hidden px-6 pb-9 pt-10 md:px-[5vw] lg:min-h-[690px] lg:py-16">
-        <div aria-hidden="true" className="absolute inset-0 -z-10" style={{backgroundImage:`linear-gradient(90deg,rgba(9,8,8,.91),rgba(14,12,11,.75) 70%,rgba(18,14,11,.54)),linear-gradient(0deg,rgba(9,8,7,.92),transparent 62%),url("${img}")`,backgroundPosition:"56% center",backgroundSize:"cover"}}/>
-        <div>
+      <section className="relative isolate flex min-h-[390px] flex-col justify-between overflow-hidden px-6 pb-9 pt-10 md:px-[5vw] lg:min-h-[690px] lg:py-16">
+        {/* The approved warm, cinematic design language; actual Nil Mobilya image, no invented projects. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20" style={{backgroundImage:`url("${img}")`,backgroundPosition:"61% center",backgroundSize:"cover"}}/>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{background:"linear-gradient(90deg,rgba(8,7,7,.96) 0%,rgba(10,8,7,.83) 45%,rgba(12,10,9,.43) 100%),linear-gradient(0deg,rgba(8,7,6,.94) 0%,transparent 45%),linear-gradient(180deg,rgba(8,7,7,.43) 0%,transparent 38%)"}}/>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 opacity-70" style={{background:"radial-gradient(ellipse at 86% 60%,rgba(173,123,64,.17),transparent 43%)"}}/>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-6 top-8 h-px bg-gradient-to-r from-[#bc9a63]/55 via-[#bc9a63]/10 to-transparent md:inset-x-[5vw] lg:top-11"/>
+        <div aria-hidden="true" className="pointer-events-none absolute right-[5%] top-[22%] hidden h-[280px] w-[190px] rounded-t-full border border-[#b99b72]/20 lg:block"/>
+        <div aria-hidden="true" className="pointer-events-none absolute right-[8%] top-[26%] hidden h-[250px] w-[150px] rounded-t-full border border-[#b99b72]/10 lg:block"/>
+        <div className="relative z-10">
+          <div className="mb-9 flex items-center gap-3 text-[10px] uppercase tracking-[.24em] text-[#baa17d]"><span className="h-px w-8 bg-[#ae8d5e]"/> NİL MOBİLYA <span className="text-[#827464]">/</span> ÖZEL ÜRETİM</div>
           <p className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[.24em] text-[#c4a36b]">AKILLI TEKLİF SİSTEMİ <span className="h-px w-12 bg-[#ad8a59]"/></p>
           <h1 className="mt-7 max-w-[650px] font-display text-[clamp(35px,3.5vw,56px)] leading-[1.08] font-normal">Projeniz için<br/>hızlı ve doğru <span className="text-[#c4a36b]">teklif görüşmesi.</span></h1>
           <p className="mt-6 max-w-[475px] text-sm leading-7 text-[#d5c8b8]">İhtiyaçlarınızı, ölçü ve malzeme tercihlerinizi birkaç adımda paylaşın. Projenizi değerlendirerek size özel fiyat ve üretim seçeneklerini görüşelim.</p>
-          <div className="mt-9 grid gap-4 text-sm text-[#e2d7c6]">
-            <div className="flex items-center gap-3"><Ruler size={21} className="text-[#c4a36b]"/> Özel ölçü üretim</div>
-            <div className="flex items-center gap-3"><Layers3 size={21} className="text-[#c4a36b]"/> Malzeme ve kaplama seçenekleri</div>
-            <div className="flex items-center gap-3"><ClipboardList size={21} className="text-[#c4a36b]"/> Proje bazlı değerlendirme</div>
-            <div className="flex items-center gap-3"><Handshake size={21} className="text-[#c4a36b]"/> WhatsApp ile doğrudan görüşme</div>
+          <div className="mt-9 grid max-w-[500px] grid-cols-2 gap-x-6 gap-y-4 border-t border-[#a88b62]/30 pt-6 text-[12px] leading-5 text-[#e2d7c6]">
+            <div className="flex items-center gap-3"><Ruler size={20} className="shrink-0 text-[#c4a36b]"/> Özel ölçü üretim</div>
+            <div className="flex items-center gap-3"><Layers3 size={20} className="shrink-0 text-[#c4a36b]"/> Malzeme seçenekleri</div>
+            <div className="flex items-center gap-3"><ClipboardList size={20} className="shrink-0 text-[#c4a36b]"/> Proje bazlı teklif</div>
+            <div className="flex items-center gap-3"><Handshake size={20} className="shrink-0 text-[#c4a36b]"/> WhatsApp görüşmesi</div>
           </div>
         </div>
-        <p className="mt-8 text-[11px] leading-5 text-[#b7ac9e]">Fiyatlar ölçü, malzeme ve iş kapsamı belirlendikten sonra sunulur. Bu sayfa otomatik fiyat hesaplamaz.</p>
+        <div className="relative z-10 mt-12 flex items-end justify-between gap-5 border-t border-[#bba078]/30 pt-6">
+          <p className="max-w-[375px] text-[11px] leading-6 text-[#c8baa7]">Fiyatlar ölçü, malzeme ve iş kapsamı belirlendikten sonra sunulur. Bu sayfa otomatik fiyat hesaplamaz.</p>
+          <div aria-hidden="true" className="hidden shrink-0 flex-col items-end gap-1 text-right sm:flex"><span className="font-display text-[31px] leading-none text-[#c7a573]/80">N.</span><span className="text-[9px] uppercase tracking-[.25em] text-[#af9b7e]">Form · Doku · Denge</span></div>
+        </div>
       </section>
 
-      <section className="flex flex-col justify-center bg-[#100e0d]/95 px-4 py-9 sm:px-8 lg:px-[4vw]">
-        <div className="mx-auto w-full max-w-[670px] rounded-[18px] border border-[#68543d]/70 bg-[linear-gradient(160deg,#201c19,#12100f)] p-5 shadow-[0_30px_80px_rgba(0,0,0,.35)] sm:p-8">
+      <section className="relative isolate flex flex-col justify-center overflow-hidden bg-[#100e0d]/95 px-4 py-9 sm:px-8 lg:px-[4vw]">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(145deg,#181410,#0e0d0c_52%,#17120e)]"/>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{background:"radial-gradient(ellipse at 78% 20%,rgba(196,163,107,.085),transparent 54%),repeating-linear-gradient(0deg,transparent 0 95px,rgba(196,163,107,.025) 96px 97px),repeating-linear-gradient(90deg,transparent 0 95px,rgba(196,163,107,.025) 96px 97px)"}}/>
+        <div aria-hidden="true" className="pointer-events-none absolute right-[5%] top-[7%] hidden h-48 w-48 rounded-full border border-[#c4a36b]/10 lg:block"/>
+        <div className="relative mx-auto w-full max-w-[670px]">
+          <div className="mb-5 flex items-center justify-between gap-4 px-1">
+            <span className="text-[10px] uppercase tracking-[.24em] text-[#bea37e]">PROJENİZE ÖZEL</span>
+            <span className="flex items-center gap-3 text-[10px] text-[#bca88b]"><span className="h-px w-9 bg-[#a98a59]/65"/> 05 ADIMDA BAŞLANGIÇ</span>
+          </div>
+          <div className="rounded-[18px] border border-[#786044]/65 bg-[linear-gradient(150deg,rgba(37,30,24,.96),rgba(18,16,14,.98))] p-5 shadow-[0_30px_80px_rgba(0,0,0,.35)] sm:p-8">
           <p className="text-[10px] tracking-[.2em] text-[#c4a36b]">ADIM {step+1} / 5</p>
           <h2 className="mt-2 font-display text-[clamp(24px,2.3vw,36px)] leading-tight">{["Projenizi tanıyalım","Ölçü ve konum bilgileri","Tasarım tercihleri","İletişim bilgileriniz","Talebiniz hazır"][step]}</h2>
           <p className="mt-2 text-[12px] leading-5 text-[#b6aa98]">{["Hangi alan ve mobilya için çalışmak istediğinizi seçin.","Ölçüleriniz hazır değilse daha sonra paylaşabilirsiniz.","Tarz ve malzeme seçimi sadece başlangıç içindir.","Sizinle iletişime geçebilmemiz için bilgilerinizi ekleyin.","Bilgilerinizi kontrol edip WhatsApp üzerinden iletin."][step]}</p>
@@ -148,6 +166,7 @@ function QuoteWizard(){
           <div className="mt-6 flex gap-3">
             {step>0&&<button type="button" onClick={()=>{setStep(s=>s-1);setTried(false)}} className="flex min-h-[48px] items-center justify-center gap-2 rounded-lg border border-[#695640] px-4 text-[13px] text-[#d7c5af]"><ArrowLeft size={16}/> Geri</button>}
             {step<4?<button type="button" onClick={next} className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#2b251f] px-5 text-[13px] font-semibold text-[#d5b782] hover:bg-[#373026]">Devam Et <ArrowRight size={17}/></button>:<a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-[48px] flex-1 items-center justify-center gap-3 rounded-lg bg-[#2b251f] px-5 text-center text-[13px] font-semibold text-[#d5b782] hover:bg-[#373026]"><MessageCircle size={18}/> WhatsApp ile Teklif Gönder</a>}
+          </div>
           </div>
         </div>
       </section>
