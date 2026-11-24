@@ -216,6 +216,13 @@ function Index() {
                   <a className="nil-project-hero__primary" href="https://wa.me/905360236146?text=Merhaba%2C%20Nil%20Mobilya%20ile%20b%C3%BCy%C3%BCk%20projemizde%20i%C5%9F%20ortakl%C4%B1%C4%9F%C4%B1%20hakk%C4%B1nda%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyoruz." target="_blank" rel="noopener noreferrer">Projenizi değerlendirelim <ArrowUpRight size={17}/></a>
                   <a className="nil-project-hero__secondary" href="#koleksiyon">Koleksiyonu incele <ArrowRight size={17}/></a>
                 </div>
+                <div className="mt-5 flex w-full max-w-[540px] justify-center">
+                  <Link to="/sergimiz" className="group inline-flex items-center gap-2.5 border-b border-[#c8a06b]/65 pb-2 text-[12px] font-medium tracking-[.06em] text-[#e2c29a] transition-colors hover:border-[#ead0a9] hover:text-white">
+                    <span className="size-1.5 rounded-full bg-[#d7aa70] shadow-[0_0_12px_rgba(215,170,112,.65)]" aria-hidden="true" />
+                    Yaptığımız Ürünleri Gör
+                    <ArrowUpRight size={15} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"/>
+                  </Link>
+                </div>
               </div>
               <aside className="nil-project-hero__services" aria-label="Proje çözümlerimiz">
                 <div><Layers3 aria-hidden="true"/><span><strong>Anahtar Teslim Seçenekleri</strong><small>Proje kapsamına göre planlama</small></span></div>
@@ -306,36 +313,49 @@ function Index() {
         <ReviewsMarquee />
 
         {/*5 · Sergimiz */}
-<section id="sergimiz" aria-label="Sergimiz" className="nil-scene">
-  {/* Mevcut Sergimiz arka planı aynen korunur; yalnızca ön plandaki içerik yenilenmiştir. */}
-  <div className="nil-scene__body relative z-10 mx-auto flex h-full w-full max-w-[1660px] flex-col justify-center gap-7 px-5 py-9 md:px-8 lg:px-12">
-    <div className="grid items-center gap-8 lg:grid-cols-[.9fr_1.1fr]">
-      <div className="max-w-[620px]">
-        <p data-s="fade" className="mb-5 text-[11px] uppercase tracking-[.32em] text-[#aaa29a]">NİL MOBİLYA / SERGİMİZ</p>
-        <h2 data-s="text" className="font-display text-[clamp(3.3rem,6vw,6rem)] leading-[1.03] text-[#e8e3df]">Sergimiz</h2>
-        <p data-s="text" className="mt-6 max-w-[510px] text-base leading-8 text-[#b5ada6]">Üretim ve tasarım çalışmalarımızı Sergimiz sayfasında keşfedin. Yeni projeler eklendikçe galeri güncellenir.</p>
-        <Link to="/sergimiz" data-s="fade" className="mt-7 inline-flex items-center gap-3 rounded-xl border border-[#a58b6a]/40 bg-[#161411]/75 px-5 py-3 text-sm text-[#c9b294] hover:border-[#d1a66c] hover:text-white">
-          Sergimizi incele <ArrowRight size={17}/>
-        </Link>
+<section id="sergimiz" aria-label="Sergimiz" className="nil-scene relative isolate overflow-hidden bg-[#0c0a09]">
+  <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{backgroundImage:'linear-gradient(90deg,rgba(8,7,6,.90),rgba(9,8,7,.76) 53%,rgba(13,9,6,.67)),url("/bg-sergimiz.webp")',backgroundPosition:"center",backgroundSize:"cover"}}/>
+  <div className="nil-scene__body relative z-10 mx-auto flex h-full w-full max-w-[1660px] flex-col justify-center gap-6 px-5 py-9 md:px-8 lg:px-12">
+    <div className="grid items-center gap-7 lg:grid-cols-[.86fr_1.14fr] lg:gap-10">
+      <div className="max-w-[650px]">
+        <p data-s="fade" className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[.2em] text-[#caa06e]"><span className="h-px w-9 bg-[#c8a06b]"/> NİL MOBİLYA / SERGİMİZ</p>
+        <h2 data-s="text" className="mt-5 font-display text-[clamp(2.8rem,4.8vw,5rem)] font-normal leading-[1.03] text-[#f0e7de]">Ürettiklerimizi<br/><span className="text-[#d3ac80]">Yakından Keşfedin.</span></h2>
+        <p data-s="text" className="mt-5 max-w-[530px] text-[clamp(13px,1vw,16px)] leading-7 text-[#c4b7a9]">Atölyemizden paylaştığımız mobilyaları, özel üretimleri ve uygulama detaylarını inceleyin. Sergimizdeki Instagram gönderileriyle çalışmalarımıza daha yakından bakın.</p>
+        <div data-s="fade" className="mt-6 flex flex-wrap items-center gap-4">
+          <Link to="/sergimiz" className="group inline-flex items-center gap-3 rounded-xl border border-[#c09966] bg-[#b38c5b] px-5 py-3.5 text-[13px] font-semibold text-[#19120e] transition-colors hover:bg-[#dfb582]">Sergimizi Keşfet <ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></Link>
+          <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[12px] text-[#e0bd92] hover:text-white">Instagram'daki işlerimiz <ArrowUpRight size={15}/></a>
+        </div>
+        <p data-s="fade" className="mt-7 inline-flex items-center gap-2.5 text-[11px] tracking-[.08em] text-[#b7a58f]"><span className="size-2 rounded-full bg-[#ba8c55] shadow-[0_0_12px_rgba(200,157,96,.5)]"/> Gerçek atölye paylaşımları · Özel ölçü üretim</p>
       </div>
-      <div data-s="frame" className="flex min-h-[220px] items-center justify-center rounded-[24px] border border-white/10 bg-[#141414]/35 p-7 backdrop-blur-[2px] lg:min-h-[330px]">
-        <div className="max-w-[430px] text-center">
-          <Layers3 className="mx-auto size-12 text-[#aa9785]" strokeWidth={.9}/>
-          <p className="mt-6 font-display text-[clamp(1.5rem,2.4vw,2.3rem)] leading-snug text-[#ded6cf]">Tamamlanan projelerimiz</p>
-          <p className="mt-4 text-sm leading-7 text-[#9e958d]">Atölye üretimlerimiz ve seçili uygulamalarımızdan fotoğraflar için galeriye göz atın.</p>
+      <div data-s="frame" className="grid grid-cols-[1.04fr_.96fr] gap-3">
+        <Link to="/sergimiz" className="group relative min-h-[310px] overflow-hidden rounded-[24px] border border-[#b18a59]/35 bg-[#241b15] shadow-[0_18px_45px_rgba(0,0,0,.28)] md:min-h-[380px]">
+          <img src="/04_makyaj_masasi_kahverengi.jpg" alt="Nil Mobilya makyaj masası örneği" loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent"/>
+          <div className="absolute inset-x-0 bottom-0 p-4 md:p-6"><span className="text-[10px] uppercase tracking-[.2em] text-[#e3bc82]">ÖZEL ÜRETİM</span><h3 className="mt-1 font-display text-xl text-white md:text-2xl">Mobilya Detayları</h3><p className="mt-2 flex items-center gap-2 text-xs text-[#e7d0ae]">Fotoğrafları incele <ArrowUpRight size={14}/></p></div>
+        </Link>
+        <div className="flex min-w-0 flex-col gap-3">
+          <Link to="/sergimiz" className="group relative min-h-[200px] flex-1 overflow-hidden rounded-[24px] border border-[#b18a59]/35 bg-[#241b15]">
+            <img src="/03_antrasit_banko.jpg" alt="Nil Mobilya banko tasarımı örneği" loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"/>
+            <div className="absolute inset-x-0 bottom-0 p-4"><h3 className="font-display text-lg text-white md:text-xl">Ahşap Uygulamalar</h3><span className="mt-1 flex items-center gap-1 text-[11px] text-[#e7c49b]">Sergimizde gör <ArrowUpRight size={13}/></span></div>
+          </Link>
+          <Link to="/sergimiz" className="group flex min-h-[106px] items-center justify-between gap-3 rounded-[22px] border border-[#b18a59]/45 bg-[linear-gradient(125deg,rgba(67,45,28,.95),rgba(24,19,15,.96))] px-4 py-5 transition-colors hover:border-[#ddae71] md:px-6">
+            <span><span className="block text-[10px] uppercase tracking-[.17em] text-[#c8a175]">NİL MOBİLYA</span><strong className="mt-1 block font-display text-lg font-normal text-[#f0e4d6] md:text-xl">Tüm Çalışmalarımız</strong><small className="mt-1 block text-[11px] text-[#b8a18a]">Sergimizi keşfet</small></span><ArrowUpRight size={24} className="shrink-0 text-[#d4ac77] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"/>
+          </Link>
         </div>
       </div>
     </div>
-    <div className="grid gap-3 md:grid-cols-3 md:gap-4">
+    <div className="grid gap-3 md:grid-cols-3">
       {[
-        {icon: Layers3, title:"Yeni Projeler", detail:"Yeni tasarım ve uygulamalar."},
-        {icon: Ruler, title:"Özel Üretimler", detail:"Projeye özel çözümler ve detaylar."},
-        {icon: Diamond, title:"Koleksiyon Gelişimleri", detail:"Yakında eklenecek yeni parçalar."}
+        {icon: Layers3, title:"Ölçüye Özel Mobilyalar", detail:"İhtiyacınıza göre üretim seçenekleri."},
+        {icon: Ruler, title:"Mimari Ahşap İşleri", detail:"Projeye uygun ahşap uygulamalar."},
+        {icon: Diamond, title:"Atölyeden Gerçek Kareler", detail:"Instagram'da yayınladığımız çalışmalar."}
       ].map(({icon:Icon,title,detail})=>(
-        <div data-s="fade" key={title} className="flex min-h-[115px] items-center gap-4 rounded-[20px] border border-white/10 bg-[#151515]/75 px-5 py-5">
-          <div className="grid size-12 shrink-0 place-items-center rounded-xl border border-white/10"><Icon className="size-6 text-[#b19a83]" strokeWidth={1.2}/></div>
-          <div><h3 className="font-display text-xl text-[#e2dcd6]">{title}</h3><p className="mt-1 text-xs leading-6 text-[#a69c93]">{detail}</p></div>
-        </div>
+        <Link to="/sergimiz" data-s="fade" key={title} className="group flex min-h-[102px] items-center gap-4 rounded-[18px] border border-[#98724b]/35 bg-[#161310]/80 px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#c09b65]/75 hover:bg-[#302217]/90">
+          <div className="grid size-11 shrink-0 place-items-center rounded-xl border border-[#ae8558]/35 bg-[#2c2119]/65"><Icon className="size-5 text-[#d0a577]" strokeWidth={1.3}/></div>
+          <div className="min-w-0"><h3 className="font-display text-[19px] text-[#eadbc8]">{title}</h3><p className="mt-1 text-[11px] leading-5 text-[#b9a997]">{detail}</p></div>
+          <ArrowUpRight size={15} className="ml-auto shrink-0 text-[#c19b6d] opacity-60 transition-opacity group-hover:opacity-100"/>
+        </Link>
       ))}
     </div>
   </div>
