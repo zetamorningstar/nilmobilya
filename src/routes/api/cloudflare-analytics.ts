@@ -1,6 +1,42 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 type CloudflareDay = { dimensions?: { date?: string }; sum?: { requests?: number }; uniq?: { uniques?: number } };
+type RequestGroup = { count?: number; dimensions?: { clientCountryName?: string; clientDeviceType?: string; clientRefererHost?: string } };
+type BreakdownResponse = { data?: { viewer?: { zones?: Array<{ breakdown?: RequestGroup[] }> } }; errors?: Array<{message?: string}> };
+type Breakdown = { label: string; requests: number };
+async function readBreakdown(token: string, zoneId: string, dimension: "clientCountryName" | "clientDeviceType" | "clientRefererHost", from: string, until: string): Promise<{ rows: Breakdown[]; error: string | null }> {
+  const query = `query TrafficBreakdown($zoneTag: string, $start: Time, $end: Time) {
+    viewer { zones(filter: {zoneTag: $zoneTag}) {
+      breakdown: httpRequestsAdaptiveGroups(
+        filter: {datetime_geq: $start, datetime_lt: $end}
+        limit: 30
+        orderBy: [count_DESC]
+      ) { count dimensions { ${dimension} } }
+    }}
+  }`;
+  try {
+    const response = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+      method: "POST",
+      headers: {Authorization: "Bearer " + token,"Content-Type": "application/json"},
+      body: JSON.stringify({query,variables:{zoneTag:zoneId,start:from,end:until}}),
+      cache: "no-store",
+    });
+    if (!response.ok) return {rows:[],error:"Cloudflare ayrıntı sorgusu şu an kullanılamıyor."};
+    const data = await response.json() as BreakdownResponse;
+    if (data.errors?.length || !data.data?.viewer?.zones?.[0]) return {rows:[],error:"Bu ayrıntı Cloudflare planı veya sorgu limiti nedeniyle sunulamadı."};
+    const list = data.data.viewer.zones[0].breakdown ?? [];
+    return {
+      rows:list.map(d=>({
+        label:String(d.dimensions?.[dimension] || "Bilinmiyor").slice(0,140),
+        requests:Math.max(0,Number(d.count ?? 0)),
+      })).filter(d=>Number.isFinite(d.requests)),
+      error:null,
+    };
+  } catch {
+    return {rows:[],error:"Ayrıntılı analitik bağlantısı geçici olarak kullanılamıyor."};
+  }
+}
+
 type CloudflareResponse = {
   data?: { viewer?: { zones?: Array<{ httpRequests1dGroups?: CloudflareDay[] }> } };
   errors?: Array<{ message?: string }>;
@@ -103,6 +139,16 @@ export const Route = createFileRoute("/api/cloudflare-analytics")({
             requests: Number(d.sum?.requests ?? 0),
             uniqueVisitors: Number(d.uniq?.uniques ?? 0),
           })).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d.day));
+          // Adaptive breakdown is sampled request traffic, not visitors, sessions or verified customers.
+          // Query last 24 hours separately so a dataset/plan limitation cannot break daily statistics.
+          const breakdownEnd = now.toISOString();
+          const breakdownStart = new Date(now.getTime() - 24*60*60*1000).toISOString();
+          const [countries, devices, referrers] = await Promise.all([
+            readBreakdown(token,zoneId,"clientCountryName",breakdownStart,breakdownEnd),
+            readBreakdown(token,zoneId,"clientDeviceType",breakdownStart,breakdownEnd),
+            readBreakdown(token,zoneId,"clientRefererHost",breakdownStart,breakdownEnd),
+          ]);
+
           // Unique visitors MUST NOT be summed across dates: that counts repeat visits multiple times.
           // The API reports daily unique IP approximations, not exact human shoppers.
           return json({
@@ -110,6 +156,11 @@ export const Route = createFileRoute("/api/cloudflare-analytics")({
             period: { start: dateStart, end: dateEnd, days: rawDays },
             daily,
             totalRequests: daily.reduce((sum, day) => sum + day.requests, 0),
+            breakdown: {
+              period: {start:breakdownStart,end:breakdownEnd,label:"Son 24 saat"},
+              countries,devices,referrers,
+              note:"Cloudflare örneklenmiş HTTP istekleri. Kişi, oturum veya kesin trafik kaynağı sayısı değildir. Referer başlığı eksik olabilir; kaynak belirtilmeyenler doğrudan ziyaret anlamına gelmeyebilir.",
+            },
             uniqueVisitorsNote: "Günlük benzersiz IP tahmini; günlük sayılar toplanarak dönemsel tekil kişi hesaplanamaz.",
           });
         } catch {
