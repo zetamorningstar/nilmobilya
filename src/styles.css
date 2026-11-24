@@ -4710,3 +4710,63 @@ html:not(.nil-staged) .nil-stage #iletisim {
  .nil-hero-premium__strip strong{font-size:11px}
  .nil-hero-premium__strip small{font-size:9px}
 }
+
+
+/* === Nil Mobilya 2026 · Project-led immersive home hero === */
+.nil-scene.nil-project-hero{position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100svh;padding:0!important;overflow:hidden;background:#0e0b09}
+.nil-project-hero__photo{position:absolute;inset:0;z-index:-3;background-image:url("/hero-project.webp"),url("/images/anasayfa/hero.webp");background-size:cover,cover;background-position:center center,center center;background-repeat:no-repeat;transform:none}
+.nil-project-hero__shade{position:absolute;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(90deg,rgba(7,6,5,.87) 0%,rgba(8,7,6,.72) 27%,rgba(10,8,7,.33) 57%,rgba(8,6,5,.76) 100%),linear-gradient(0deg,rgba(8,7,6,.93) 0%,transparent 25%,rgba(0,0,0,.18) 100%)}
+.nil-project-hero__shell{position:relative;z-index:2;display:flex;flex:1;flex-direction:column;justify-content:space-between;gap:2rem;width:100%;max-width:1680px;min-height:100svh;margin:0 auto;padding:clamp(112px,15svh,170px) clamp(24px,6vw,112px) clamp(20px,3svh,32px)}
+.nil-project-hero__main{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,320px);gap:clamp(30px,4vw,80px);align-items:center;flex:1}
+.nil-project-hero__copy{max-width:740px}
+.nil-project-hero__eyebrow{display:flex;align-items:center;gap:18px;font-size:clamp(10px,.82vw,13px);font-weight:600;letter-spacing:.21em;color:#e8bc7e}
+.nil-project-hero__eyebrow i{width:55px;height:1px;background:#d6a96e;flex:none}
+.nil-project-hero__copy h1{margin-top:25px;font-family:var(--font-display);font-size:clamp(35px,3.45vw,62px);font-weight:400;line-height:1.1;letter-spacing:-.012em;color:#f8efe5;text-shadow:0 3px 22px rgba(0,0,0,.65)}
+.nil-project-hero__copy h1 em{font-weight:400;font-style:normal;color:#e7cfb3}
+.nil-project-hero__lead{max-width:560px;margin-top:20px;font-size:clamp(14px,1vw,17px);line-height:1.75;color:#f0e7dc;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+.nil-project-hero__actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:28px}
+.nil-project-hero__actions a{min-height:50px;display:inline-flex;align-items:center;justify-content:center;gap:16px;border-radius:6px;padding:12px 23px;font-size:13px;font-weight:600;transition:background .2s,border-color .2s,transform .2s}
+.nil-project-hero__actions a:hover{transform:translateY(-2px)}
+.nil-project-hero__primary{background:#d9ac6e;color:#17100c;border:1px solid #e4bb7b}
+.nil-project-hero__primary:hover{background:#f0c68c}
+.nil-project-hero__secondary{background:rgba(12,10,8,.58);border:1px solid rgba(221,169,103,.66);color:#f2d4a8}
+.nil-project-hero__secondary:hover{background:rgba(51,35,21,.9)}
+.nil-project-hero__services{display:flex;flex-direction:column;gap:0;padding:8px 0 8px 22px;border-left:1px solid rgba(215,170,110,.55);background:linear-gradient(90deg,rgba(12,10,9,.50),rgba(12,10,9,.12))}
+.nil-project-hero__services>div{display:flex;align-items:center;gap:17px;min-height:85px;padding:10px 0;border-bottom:1px solid rgba(219,178,119,.16)}
+.nil-project-hero__services>div:last-child{border-bottom:0}
+.nil-project-hero__services svg{width:28px;height:28px;color:#d3a568;flex:none;stroke-width:1.5}
+.nil-project-hero__services strong,.nil-project-hero__footer strong{display:block;font-size:14px;font-weight:600;line-height:1.5;color:#fff5e8}
+.nil-project-hero__services small,.nil-project-hero__footer small{display:block;margin-top:3px;font-size:11px;line-height:1.5;color:#c4b8ab}
+.nil-project-hero__footer{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:19px 10px 8px;border-top:1px solid rgba(204,167,119,.24);background:linear-gradient(180deg,rgba(20,15,11,.05),rgba(20,15,11,.42))}
+.nil-project-hero__footer>div{display:flex;align-items:center;justify-content:center;gap:15px;padding:3px 12px;border-right:1px solid rgba(205,168,118,.22)}
+.nil-project-hero__footer>div:last-child{border-right:0}
+.nil-project-hero__footer svg{width:29px;height:29px;color:#d5a86b;flex:none;stroke-width:1.4}
+@media(max-width:1099px){
+ .nil-scene.nil-project-hero,.nil-project-hero__shell{min-height:100svh;height:auto}
+ .nil-project-hero__shell{padding-top:120px;padding-bottom:25px}
+ .nil-project-hero__main{grid-template-columns:minmax(0,1fr);gap:27px}
+ .nil-project-hero__services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px;padding:12px 16px;border:1px solid rgba(215,170,110,.3);border-radius:14px}
+ .nil-project-hero__services>div{min-height:64px}
+ .nil-project-hero__footer{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+ .nil-project-hero__footer>div:nth-child(2){border-right:0}
+ .nil-project-hero__photo{background-position:57% center,center}
+}
+@media(max-width:620px){
+ .nil-project-hero__shell{padding:103px 20px 22px;gap:20px}
+ .nil-project-hero__copy h1{font-size:clamp(32px,8vw,44px);line-height:1.13;margin-top:17px}
+ .nil-project-hero__eyebrow{font-size:9px;letter-spacing:.1em}
+ .nil-project-hero__eyebrow i{width:22px}
+ .nil-project-hero__lead{font-size:13px;line-height:1.6;margin-top:13px}
+ .nil-project-hero__actions{margin-top:18px}
+ .nil-project-hero__actions a{min-height:45px;flex:1;min-width:170px;padding:10px 14px;font-size:12px}
+ .nil-project-hero__services{grid-template-columns:1fr 1fr;gap:0 12px;padding:7px 10px}
+ .nil-project-hero__services>div{gap:9px;min-height:72px}
+ .nil-project-hero__services svg{width:20px;height:20px}
+ .nil-project-hero__services strong,.nil-project-hero__footer strong{font-size:11px}
+ .nil-project-hero__services small,.nil-project-hero__footer small{font-size:10px}
+ .nil-project-hero__footer{gap:10px;padding:15px 0 0}
+ .nil-project-hero__footer>div{justify-content:flex-start;gap:8px;padding:0 3px;border-right:0}
+ .nil-project-hero__footer svg{width:19px;height:19px}
+ .nil-project-hero__photo{background-position:61% center,center}
+}
+@media(prefers-reduced-motion:reduce){.nil-project-hero__actions a{transition:none}}
