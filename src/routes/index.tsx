@@ -200,31 +200,33 @@ function Index() {
       {/* ============ SAHNELER ============ */}
       <div className="nil-stage">
                 {/* 1 · Ana sayfa */}
-        <section id="top" aria-label="Ana sayfa" lang="tr" className="nil-scene nil-scene--hero nil-hero-premium">
-          <div aria-hidden="true" className="nil-hero-premium__photo" />
-          <div aria-hidden="true" className="nil-hero-premium__shade" />
-          <div className="nil-hero-premium__layout">
-            <div className="nil-hero-premium__lead">
-              <div data-s="fade" className="nil-hero-premium__eyebrow">MİMARLIK · GAYRİMENKUL · PROJE ORTAKLIĞI <span aria-hidden="true"/></div>
-              <h1 data-s="text" className="nil-hero-premium__title">Büyük Projelerinizde<br/><em>Birlikte İmza Atalım.</em></h1>
-              <p data-s="fade" className="nil-hero-premium__description">Mimarlık ofisleri, müteahhitler ve gayrimenkul projeleri için özel üretim ve uygulama çözümleri. Projenizin kapsamına uygun hizmetleri ve anahtar teslim seçeneklerini birlikte değerlendirelim.</p>
-              <div data-s="fade" className="nil-hero-premium__actions">
-                <a href="https://wa.me/905360236146?text=Merhaba%2C%20Nil%20Mobilya%20ile%20mimarl%C4%B1k%20veya%20gayrimenkul%20projemiz%20i%C3%A7in%20i%C5%9F%20ortakl%C4%B1%C4%9F%C4%B1n%C4%B1%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." target="_blank" rel="noopener noreferrer" className="nil-hero-premium__primary">Projenizi Değerlendirelim <ArrowRight size={17}/></a>
-                <a href="#koleksiyon" className="nil-hero-premium__secondary">Koleksiyonu İncele <ArrowUpRight size={17}/></a>
+        <section id="top" aria-label="Ana sayfa" lang="tr" className="nil-scene nil-scene--hero nil-project-hero">
+          <div className="nil-project-hero__photo" aria-hidden="true"/>
+          <div className="nil-project-hero__shade" aria-hidden="true"/>
+          <div className="nil-project-hero__shell">
+            <div className="nil-project-hero__main">
+              <div className="nil-project-hero__copy">
+                <p className="nil-project-hero__eyebrow"><span>MİMARLIK · GAYRİMENKUL · PROJE ORTAKLIĞI</span><i aria-hidden="true"/></p>
+                <h1>Büyük Projelerinizde<br/><em>Birlikte İmza Atalım.</em></h1>
+                <p className="nil-project-hero__lead">Mimarlık ofisleri, müteahhitler ve gayrimenkul projeleri için özel üretim ve uygulama çözümleri. Projenizin kapsamına göre anahtar teslim seçeneklerini birlikte değerlendirelim.</p>
+                <div className="nil-project-hero__actions">
+                  <a className="nil-project-hero__primary" href="https://wa.me/905360236146?text=Merhaba%2C%20Nil%20Mobilya%20ile%20b%C3%BCy%C3%BCk%20projemizde%20i%C5%9F%20ortakl%C4%B1%C4%9F%C4%B1%20hakk%C4%B1nda%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyoruz." target="_blank" rel="noopener noreferrer">Projenizi değerlendirelim <ArrowUpRight size={17}/></a>
+                  <a className="nil-project-hero__secondary" href="#koleksiyon">Koleksiyonu incele <ArrowRight size={17}/></a>
+                </div>
               </div>
+              <aside className="nil-project-hero__services" aria-label="Proje çözümlerimiz">
+                <div><Layers3 aria-hidden="true"/><span><strong>Anahtar Teslim Seçenekleri</strong><small>Proje kapsamına göre planlama</small></span></div>
+                <div><Ruler aria-hidden="true"/><span><strong>Projeye Özel Üretim</strong><small>Ölçünüze ve tasarımınıza uygun</small></span></div>
+                <div><ShieldCheck aria-hidden="true"/><span><strong>Uzun Vadeli İş Ortaklığı</strong><small>Birlikte sürdürülebilir çözümler</small></span></div>
+                <div><Diamond aria-hidden="true"/><span><strong>Özenli İşçilik</strong><small>Malzemede ve detayda kalite</small></span></div>
+              </aside>
             </div>
-            <aside data-s="fade" className="nil-hero-premium__aside" aria-label="Kurumsal proje hizmetleri">
-              <div><Layers3/><span><strong>Anahtar Teslim Seçenekleri</strong><small>Proje kapsamına göre değerlendirme</small></span></div>
-              <div><DraftingCompass/><span><strong>Projeye Özel Üretim</strong><small>Ölçüye ve tasarıma özel çözümler</small></span></div>
-              <div><Handshake/><span><strong>Uzun Vadeli İş Ortaklığı</strong><small>Mimarlık ve gayrimenkul projeleri</small></span></div>
-              <div><Gem/><span><strong>Nitelikli Malzeme & İşçilik</strong><small>Detaylara özenli üretim yaklaşımı</small></span></div>
-            </aside>
-          </div>
-          <div data-s="fade" className="nil-hero-premium__strip" aria-label="Hizmet alanlarımız">
-            <div><Sofa/><span><strong>Özel Üretim Mobilya</strong><small>Her mekâna özel çözümler</small></span></div>
-            <div><Building2/><span><strong>Ticari Proje Desteği</strong><small>Ofis, konut ve iş yerleri</small></span></div>
-            <div><KeyRound/><span><strong>Anahtar Teslim Seçenekleri</strong><small>Projeye göre üretim ve uygulama</small></span></div>
-            <div><Handshake/><span><strong>Kurumsal İş Ortaklığı</strong><small>Büyük projelerde birlikte çalışma</small></span></div>
+            <div className="nil-project-hero__footer" aria-label="Çalışma alanlarımız">
+              <div><Layers3 aria-hidden="true"/><span><strong>Özel Üretim Mobilya</strong><small>Mekâna özel, özgün tasarımlar</small></span></div>
+              <div><Ruler aria-hidden="true"/><span><strong>Ticari Proje Desteği</strong><small>Ofis, konut ve işletmeler</small></span></div>
+              <div><Truck aria-hidden="true"/><span><strong>Uygulama Çözümleri</strong><small>Üretim ve montaj planlaması</small></span></div>
+              <div><Headset aria-hidden="true"/><span><strong>Kurumsal İş Ortaklığı</strong><small>Büyük projelerde birlikte</small></span></div>
+            </div>
           </div>
         </section>
                 {/* 2 · Koleksiyon — referansın HTML/CSS karşılığı; görseller projeden gelir */}
