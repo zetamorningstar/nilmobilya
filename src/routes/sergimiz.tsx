@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Instagram, ArrowUpRight, Layers3, Camera, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 import { SiteMenu } from "@/components/site-menu";
@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { cn } from "@/lib/utils";
 import { works, type Work, type WorkCategory } from "@/lib/works";
 import { getSupabaseClient } from "@/lib/supabase-client";
+import showcaseHero from "@/assets/custom-hero.jpg";
 
 export const Route = createFileRoute("/sergimiz")({
   head: () => ({
@@ -72,14 +73,20 @@ function safeInstagramPost(url:string):string|null {
   return null;
  }catch{return null}
 }
-function InstagramPost({entry}:{entry:InstagramEntry}){
+function InstagramPost({entry,index}:{entry:InstagramEntry;index:number}){
  const embed=entry.url.replace(/\/$/,"")+"/embed/";
- return <article className="min-w-0 overflow-hidden rounded-[20px] border border-[#655039]/45 bg-[#1b1715]">
-  <div className="flex items-center justify-between gap-2 border-b border-[#695138]/30 px-4 py-3"><span className="truncate text-sm text-[#d8c2a3]">{entry.title}</span><a href={entry.url} target="_blank" rel="noopener noreferrer" className="shrink-0 text-xs text-[#c29c69] hover:text-white">Instagram’da aç ↗</a></div>
-  <iframe title={entry.title+" Instagram gönderisi"} src={embed} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="h-[460px] w-full bg-white sm:h-[500px]"/>
+ return <article className="group min-w-0 overflow-hidden rounded-[22px] border border-[#75583d]/40 bg-[#181411] shadow-[0_18px_45px_rgba(0,0,0,.18)] transition-all duration-300 hover:-translate-y-1 hover:border-[#b38b57]/70">
+  <div className="flex items-center justify-between gap-3 border-b border-[#604630]/45 px-4 py-3.5">
+    <div className="flex min-w-0 items-center gap-2.5">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-[#8f6c40]/50 bg-[#352719]"><Instagram size={17} className="text-[#d6aa74]"/></span>
+      <div className="min-w-0"><span className="block truncate text-[11px] text-[#bfa27c]">@nill.mobilya</span><h3 className="truncate font-display text-lg text-[#f0dec8]">{entry.title}</h3></div>
+    </div>
+    <span className="shrink-0 rounded-full border border-[#71563a]/50 px-2.5 py-1 text-[10px] text-[#ac8e69]">#{String(index+1).padStart(2,"0")}</span>
+  </div>
+  <iframe title={entry.title+" Instagram gönderisi"} src={embed} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="block h-[430px] w-full bg-white sm:h-[475px]"/>
+  <a href={entry.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-3 border-t border-[#604630]/45 px-5 py-4 text-sm text-[#d2ac7b] transition-colors hover:bg-[#2a2018]"><span>Gönderiyi Instagram'da incele</span><ArrowUpRight size={17}/></a>
  </article>;
 }
-
 
 const DEFAULT_RATIO = 1.9; // fotoğraf yüklenene kadar kullanılan en/boy oranı
 
@@ -284,103 +291,53 @@ function Sergimiz() {
       </div>
       <SiteMenu open={menuOpen} onClose={() => setMenuOpen(false)} items={SECTIONS} base="/" />
 
-      {/* ---- Başlık alanı: mermer zemin + filtreler ---- */}
-      <section className="relative overflow-hidden px-[clamp(1.25rem,4.9vw,7rem)] pb-10 pt-[calc(83px+3.2rem)] max-lg:pt-[calc(68px+2.5rem)]">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: 'url("/bg-blocks.webp")',
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            WebkitMaskImage: "linear-gradient(to bottom, #000 70%, transparent)",
-            maskImage: "linear-gradient(to bottom, #000 70%, transparent)",
-          }}
-        />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/85 via-background/35 to-transparent" />
-
-        <div className="relative">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Sergimiz</p>
-          <h1 className="mt-4 font-display text-[clamp(2.4rem,3vw,4.4rem)] font-medium leading-[1.06] text-foreground">
-            Müşterilerimizin
-            <br />
-            Yaşam Alanları
-          </h1>
-          <p className="mt-5 max-w-[28rem] text-sm font-light leading-6 text-foreground/80 md:text-base md:leading-7">
-            Nil Mobilya tasarımlarının, gerçek yaşam alanlarındaki uygulamalarını keşfedin. Her biri, müşterilerimizin tarzına ve ihtiyacına özel olarak hayata geçirildi.
-          </p>
-          <span aria-hidden="true" className="mt-6 block h-px w-14 bg-primary" />
-        </div>
-
-        <div className="relative mt-10 flex flex-wrap items-center justify-between gap-4">
-          <div role="group" aria-label="Kategoriler" className="flex flex-wrap items-center gap-y-2">
-            {[["all", "Tümü"] as const, ...chips].map(([key, label]) => {
-              const active = category === key;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setCategory(key)}
-                  className={cn(
-                    "h-[34px] rounded-md border px-6 text-base transition-colors",
-                    active ? "border-primary text-primary" : "border-transparent text-foreground/85 hover:text-primary",
-                  )}
-                >
-                  {label}
-                </button>
-              );
-            })}
+      {/* ---- Editoryal giriş: doğal ahşap ve sıcak ışık ---- */}
+      <section className="relative isolate overflow-hidden border-b border-[#59432d]/40 bg-[#16120f] pt-[calc(78px+3.5rem)] pb-10 max-lg:pt-[calc(68px+3rem)] md:pb-14">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{backgroundImage:`linear-gradient(90deg,rgba(10,9,8,.98) 0%,rgba(10,9,8,.91) 36%,rgba(10,9,8,.46) 69%,rgba(10,9,8,.24) 100%),url("${showcaseHero}")`,backgroundSize:"cover",backgroundPosition:"center 45%"}}/>
+        <div className="relative mx-auto grid max-w-[1500px] gap-10 px-[clamp(1.25rem,4.9vw,6rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,.7fr)] lg:items-center">
+          <div>
+            <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[.24em] text-[#cf9f63]">SERGİMİZ <span className="h-px w-12 bg-[#b38a5a]"/></p>
+            <h1 className="mt-5 max-w-[810px] font-display text-[clamp(3.2rem,5.2vw,6.2rem)] font-medium leading-[.98] tracking-[-.028em] text-[#f0e4d7]">Tasarımlarımızı<br/><span className="text-[#d4af83]">Sergiliyoruz.</span></h1>
+            <p className="mt-6 max-w-[620px] text-sm leading-7 text-[#d5c8b9] md:text-base md:leading-8">Özel üretim mobilyalarımızı, tamamlanan uygulamalarımızı ve atölyemizden gerçek paylaşımları keşfedin. İlham veren detayları bir araya getirdik.</p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a href="#instagram-calismalar" className="inline-flex items-center gap-2 rounded-xl bg-[#b68d5c] px-5 py-3.5 text-sm font-semibold text-[#17110c] transition hover:bg-[#d1a879]"><Instagram size={17}/> Çalışmalarımıza göz at</a>
+              <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-[#a78152]/60 bg-black/25 px-5 py-3.5 text-sm text-[#e2c29b] transition hover:bg-[#34281d]">Instagram profilimiz <ArrowUpRight size={16}/></a>
+            </div>
           </div>
-
-          <div className="relative">
-            <label htmlFor="sergi-siralama" className="sr-only">Sıralama</label>
-            <select
-              id="sergi-siralama"
-              value={sort}
-              onChange={(event) => setSort(event.target.value as Sort)}
-              className="h-[30px] min-w-[12.5rem] cursor-pointer appearance-none rounded-md border border-foreground/20 bg-background/40 pl-4 pr-9 text-sm text-foreground/85 outline-none transition-colors hover:border-primary focus-visible:border-primary"
-            >
-              {SORTS.map(([value, label]) => (
-                <option key={value} value={value} className="bg-background text-foreground">{label}</option>
-              ))}
-            </select>
-            <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-foreground/70" strokeWidth={1.4} />
+          <div className="hidden lg:flex min-h-[280px] items-end justify-end">
+            <div className="max-w-[300px] rounded-2xl border border-[#8f6c45]/40 bg-[#0d0b09]/60 p-6 backdrop-blur-md">
+              <p className="text-[11px] uppercase tracking-[.2em] text-[#c69c68]">NİL MOBİLYA</p>
+              <p className="mt-3 font-display text-3xl text-[#f0dfc9]">Her mekâna özel bir dokunuş.</p>
+              <p className="mt-3 text-xs leading-6 text-[#c2b4a4]">Ölçüye özel üretim, seçilmiş malzemeler ve kişisel tasarım yaklaşımı.</p>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* ---- Galeri ---- */}
-      <section aria-label="Çalışmalar" className="px-[clamp(1.25rem,4.9vw,7rem)] pb-16">
-        {items.length === 0 ? (
-          <p className="py-16 text-center text-sm font-light uppercase tracking-[0.2em] text-foreground/60">
-            Sergimiz çok yakında burada.
-          </p>
-        ) : visible.length === 0 ? (
-          <p className="py-16 text-center text-sm font-light text-foreground/60">Bu kategoride henüz çalışma yok.</p>
-        ) : (
-          <ul
-            className="flex flex-wrap gap-[10px] after:grow-[10000] after:content-['']"
-            style={{ "--row-h": "clamp(170px, 14.1vw, 300px)" } as CSSProperties}
-          >
-            {visible.map((item, index) => (
-              <Tile key={item.image} item={item} index={index} onOpen={() => setOpen(index)} />
-            ))}
-          </ul>
-        )}
-
-        <div className="mt-12 rounded-[22px] border border-[#67513b]/40 bg-[#171310] p-5 sm:p-7">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div><p className="text-[11px] uppercase tracking-[.18em] text-[#c49c6b]">Instagram / Çalışmalar</p><h2 className="mt-2 font-display text-2xl text-[#f0dec5]">Atölyeden Yeni Paylaşımlar</h2></div>
-            <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-[#987750]/60 px-4 py-3 text-sm text-[#e4c498] hover:bg-[#30241a]">Instagram'da tümünü gör ↗</a>
-          </div>
-          {instagramEntries.length>0&&<p className="mt-3 text-xs leading-5 text-[#b5a18b]">{instagramEntries.length} Instagram gönderisi kaydedilmiş ve yayında. Gönderiler sayfa açıldığında yüklenir. Bazı gönderiler Instagram tarafından başka sitelerde gösterilmeyebilir; bu durumda karttaki Instagram’da aç bağlantısını kullanabilirsiniz.</p>}
-          {instagramEntries.length>0&&<div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{instagramEntries.map((entry,index)=><InstagramPost key={entry.url+index} entry={entry}/>)}</div>}
-          {instagramEntries.length===0&&<p className="mt-4 text-sm leading-7 text-[#ac9d8a]">Instagram hesabımızdaki yeni çalışmaları inceleyebilirsiniz. Seçilen herkese açık gönderiler bu alanda gösterilir.</p>}
+      <section aria-label="Çalışma yaklaşımımız" className="border-b border-[#49392b]/55 bg-[#141110] px-[clamp(1.25rem,4.9vw,6rem)]">
+        <div className="mx-auto grid max-w-[1500px] gap-4 py-5 md:grid-cols-3 md:divide-x md:divide-[#4d3c2d]/70">
+          <div className="flex items-center gap-3 md:px-5"><Layers3 size={22} className="shrink-0 text-[#c09a6e]"/><div><strong className="block text-sm text-[#e5d6c4]">Özel Üretim Projeler</strong><span className="text-xs text-[#a99a8b]">Mekânınıza göre tasarım</span></div></div>
+          <div className="flex items-center gap-3 md:px-5"><Camera size={22} className="shrink-0 text-[#c09a6e]"/><div><strong className="block text-sm text-[#e5d6c4]">Gerçek Uygulamalar</strong><span className="text-xs text-[#a99a8b]">Atölyeden paylaşımlar</span></div></div>
+          <div className="flex items-center gap-3 md:px-5"><Sparkles size={22} className="shrink-0 text-[#c09a6e]"/><div><strong className="block text-sm text-[#e5d6c4]">İlham Veren Çözümler</strong><span className="text-xs text-[#a99a8b]">Farklı mekânlar için fikirler</span></div></div>
         </div>
-                <div className="mt-16 flex justify-between gap-4 text-[9px] uppercase tracking-[0.1em] text-foreground/60">
-          <p>© 2026 Nil Mobilya</p>
-          <p>Modern · Nitelikli · Zamansız</p>
+      </section>
+      {/* ---- Instagram gönderilerinden oluşan kart galerisi ---- */}
+      <section id="instagram-calismalar" className="scroll-mt-24 bg-[radial-gradient(ellipse_at_top,#2b2119_0%,#12100e_48%,#0b0a09_100%)] px-[clamp(1.25rem,4.9vw,6rem)] py-12 md:py-16">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+            <div><p className="text-xs font-semibold uppercase tracking-[.22em] text-[#c49c6b]">INSTAGRAM / ÇALIŞMALAR</p><h2 className="mt-3 font-display text-[clamp(2.5rem,3.5vw,4.3rem)] leading-[1.04] text-[#f0dec9]">Atölyeden Yeni Paylaşımlar</h2><p className="mt-4 max-w-[680px] text-sm leading-7 text-[#b8a898]">Üretim süreçlerimiz, tamamlanan işlerimiz ve atölyemizden en yeni kareler. Her gönderi gerçek Instagram paylaşımına bağlıdır.</p></div>
+            <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-[#96734b]/60 px-4 py-3 text-sm text-[#e1bc8b] hover:bg-[#35271b]"><Instagram size={16}/> Instagram'da tümünü gör <ArrowUpRight size={15}/></a>
+          </div>
+          {instagramEntries.length>0 ? <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{instagramEntries.map((entry,index)=><InstagramPost key={entry.url+index} entry={entry} index={index}/>)}</div> : <div className="rounded-2xl border border-[#6b543b]/50 bg-[#1a1512] p-8 text-center"><p className="text-sm text-[#c5b19a]">Paylaşımlarımızı Instagram profilimizden inceleyebilirsiniz.</p><a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm text-[#deb887]">Instagram'a git <ArrowUpRight size={15}/></a></div>}
+          <p className="mt-5 text-xs leading-6 text-[#978777]">Gönderiler doğrudan Instagram üzerinden yüklenir. Bazı gönderiler, Instagram veya tarayıcı ayarlarına bağlı olarak görüntülenmeyebilir.</p>
+          {items.length>0&&<div className="mt-14 border-t border-[#53402e]/55 pt-9">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-4"><h3 className="font-display text-3xl text-[#ead6c1]">Proje Fotoğrafları</h3><div className="flex flex-wrap gap-2" role="group" aria-label="Proje kategorisi">{[["all","Tümü"] as const,...chips].map(([key,label])=><button type="button" key={key} onClick={()=>setCategory(key)} aria-pressed={category===key} className={cn("rounded-full border px-4 py-2 text-xs",category===key?"border-[#c7a06b] bg-[#5a3d20] text-[#f3e4cd]":"border-[#56412e] text-[#b5a18d] hover:border-[#b48a5d]")}>{label}</button>)}</div></div>
+            {visible.length>0?<ul className="flex flex-wrap gap-[10px] after:grow-[10000] after:content-['']" style={{"--row-h":"clamp(170px,14.1vw,300px)"} as CSSProperties}>{visible.map((item,index)=><Tile key={item.image} item={item} index={index} onOpen={()=>setOpen(index)}/>)}</ul>:<p className="text-sm text-[#b4a28f]">Bu kategoride henüz fotoğraf bulunmuyor.</p>}
+          </div>}
+          <div className="mt-14 flex flex-wrap items-center justify-between gap-4 rounded-[22px] border border-[#765536]/50 bg-[linear-gradient(120deg,#211710,#39291c,#171310)] px-6 py-7 md:px-9">
+            <div className="flex items-center gap-4"><Instagram size={33} className="shrink-0 text-[#d5a165]"/><div><h3 className="font-display text-2xl text-[#f0dfc9] md:text-3xl">Bizi Instagram'da Takip Edin</h3><p className="mt-1 text-xs leading-6 text-[#bcaa95] md:text-sm">Yeni projeler, özel üretimler ve atölyeden güncel paylaşımlar için @nill.mobilya.</p></div></div>
+            <a href="https://www.instagram.com/nill.mobilya/" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-[#c29964] px-6 py-3 text-sm font-semibold text-[#21150e] hover:bg-[#d8ae77]">@nill.mobilya ↗</a>
+          </div>
+          <div className="mt-12 flex justify-between gap-4 text-[10px] uppercase tracking-[.1em] text-[#9b8875]"><span>© 2026 Nil Mobilya</span><span>Modern · Nitelikli · Zamansız</span></div>
         </div>
       </section>
 
