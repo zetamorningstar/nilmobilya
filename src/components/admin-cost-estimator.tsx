@@ -23,8 +23,8 @@ const initial=():Store=>{const r=newRecipe();return{materials:defaultMaterials()
 const num=(n:number)=>Number.isFinite(n)?Math.max(0,n):0;
 const money=(n:number)=>n.toLocaleString("tr-TR",{style:"currency",currency:"TRY",minimumFractionDigits:0,maximumFractionDigits:2});
 const panel="rounded-2xl border border-[#353c46] bg-[#171b20] p-4 shadow-[0_10px_35px_rgba(0,0,0,.16)] sm:p-5";
-const input="w-full min-w-0 rounded-lg border border-[#424b57] bg-[#111419] px-3 py-2.5 text-sm text-[#f0f2f5] outline-none focus:border-[#9faab8]";
-const button="inline-flex items-center justify-center gap-2 rounded-lg border border-[#4b5563] bg-[#292f38] px-3.5 py-2.5 text-xs font-medium text-[#e6eaf0] transition-colors hover:bg-[#38414d]";
+const input="w-full min-w-0 rounded-lg border border-[#424b57] bg-[#111419] px-3 py-2.5 text-sm text-[#e7e0d4] outline-none focus:border-[#a98a59]";
+const button="inline-flex items-center justify-center gap-2 rounded-lg border border-[#4b5563] bg-[#242a31] px-3.5 py-2.5 text-xs font-medium text-[#d7bd94] transition-colors hover:border-[#826c4c] hover:bg-[#302c27]";
 const label="block text-[11px] text-[#aeb6c1]";
 export function AdminCostEstimator(){
  const [data,setData]=useState<Store|null>(null);
@@ -63,14 +63,14 @@ export function AdminCostEstimator(){
  const isFresh=calc.lines.some(l=>l.updatedAt&&!isNaN(Date.parse(l.updatedAt))&&Date.now()-Date.parse(l.updatedAt)>30*24*3600e3);
  return <section className="space-y-5 text-[#e9edf2]">
   <div className="flex flex-wrap items-center justify-between gap-3">
-   <div><p className="text-[10px] uppercase tracking-[.17em] text-[#939eac]">ÜRETİM / FİYATLANDIRMA</p><h1 className="mt-1 font-display text-3xl">Fiyat Hesaplama</h1><p className="mt-1 text-xs text-[#a9b2bf]">Ürününü oluştur, giderleri gir, satış fiyatını gör.</p></div>
+   <div><p className="text-[10px] uppercase tracking-[.17em] text-[#939eac]">ÜRETİM / FİYATLANDIRMA</p><h1 className="mt-1 font-display text-3xl text-[#c4a36b]">Fiyat Hesaplama</h1><p className="mt-1 text-xs text-[#a9b2bf]">Ürününü oluştur, giderleri gir, satış fiyatını gör.</p></div>
    <div className="flex flex-wrap gap-2"><button className={button} onClick={()=>{const r=newRecipe();setData({...data,recipes:[...data.recipes,r],selected:r.id});setTab("product")}}><Plus size={15}/> Yeni ürün</button><button className={button} onClick={exportJson}><Download size={15}/> Yedek al</button></div>
   </div>
   {notice&&<p role="status" className="rounded-lg border border-[#5f6977] bg-[#27303a] p-3 text-xs">{notice}</p>}
   <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(290px,.38fr)]">
    <div className="space-y-4">
     <div className="grid grid-cols-3 gap-2 rounded-xl border border-[#343c46] bg-[#15191e] p-2" aria-label="Hesaplama bölümleri">
-     {([["product","1. Ürün"],["materials","2. Malzemeler"],["expenses","3. Giderler"]] as const).map(([id,title])=><button type="button" key={id} onClick={()=>setTab(id)} aria-pressed={tab===id} className={`rounded-lg px-2 py-3 text-xs font-semibold transition-colors sm:text-sm ${tab===id?"bg-[#39424d] text-white":"text-[#aab2bd] hover:bg-[#252b33]"}`}>{title}</button>)}
+     {([["product","1. Ürün"],["materials","2. Malzemeler"],["expenses","3. Giderler"]] as const).map(([id,title])=><button type="button" key={id} onClick={()=>setTab(id)} aria-pressed={tab===id} className={`rounded-lg px-2 py-3 text-xs font-semibold transition-colors sm:text-sm ${tab===id?"bg-[#302c27] text-[#d7bd94]":"text-[#aab2bd] hover:bg-[#252b33]"}`}>{title}</button>)}
     </div>
     {tab==="product"&&<div className={panel}>
      <h2 className="mb-5 flex items-center gap-2 text-base font-semibold"><Box size={18}/> Ürünü tanımla</h2>
@@ -110,7 +110,7 @@ export function AdminCostEstimator(){
     <div className="rounded-2xl border border-[#5b6978] bg-[linear-gradient(145deg,#2a333e,#151b22)] p-5 shadow-[0_18px_45px_rgba(0,0,0,.25)]">
       <div className="flex items-center gap-2 text-sm font-semibold"><Calculator size={17}/> Fiyat özeti</div>
       <p className="mt-4 text-[11px] text-[#b4bdca]">Tahmini satış fiyatı · KDV dahil</p>
-      <p className="mt-2 text-[clamp(25px,3vw,37px)] font-semibold tabular-nums tracking-tight">{money(calc.saleGross)}</p>
+      <p className="mt-2 text-[clamp(25px,3vw,37px)] font-semibold tabular-nums tracking-tight text-[#d2b17c]">{money(calc.saleGross)}</p>
       <p className="mt-1 text-xs text-[#aebbc9]">{calc.count} ürün · Birim: {money(calc.saleGross/calc.count)}</p>
       <div className="mt-5 border-t border-[#566171] pt-2">{([["Malzeme",calc.materials],["İşçilik",calc.labor],["Diğer doğrudan giderler",calc.direct-calc.materials-calc.labor],["Genel gider + risk",calc.overhead+calc.contingency],["Toplam maliyet",calc.cost],["KDV hariç satış",calc.saleNet],["Satış KDV",calc.saleVat],["Tahmini kâr",calc.profit]] as const).map(([name,val])=><div key={name} className="flex justify-between gap-3 border-b border-[#4c5765]/45 py-2.5 text-xs"><span className="text-[#b3beca]">{name}</span><strong className="shrink-0">{money(val)}</strong></div>)}</div>
       <div className="mt-4 grid grid-cols-2 gap-2"><div className="rounded-lg border border-[#606b78] p-3 text-center"><span className="block text-[10px] text-[#b9c4cf]">Hedef marj</span><strong className="mt-1 block text-sm">%{calc.margin}</strong></div><div className="rounded-lg border border-[#606b78] p-3 text-center"><span className="block text-[10px] text-[#b9c4cf]">Birim maliyet</span><strong className="mt-1 block text-sm">{money(calc.cost/calc.count)}</strong></div></div>
