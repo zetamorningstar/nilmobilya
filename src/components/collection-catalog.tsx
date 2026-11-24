@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle, ClipboardList } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Heart, Ruler, Info, Layers3, Expand, MessageCircle, ClipboardList, Search, Grid2X2, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -52,6 +52,8 @@ const marbleStyle = (position: string, direction: string) => ({
 export function CollectionCatalog({ collection }: { collection: Collection }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sort, setSort] = useState<Sort>("oner");
+  const [query, setQuery] = useState("");
+  const [materialFilter, setMaterialFilter] = useState("all");
   const [favorites, setFavorites] = useState<ReadonlySet<string>>(new Set());
   const [quick, setQuick] = useState<CollectionProduct | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
@@ -84,11 +86,20 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
     }),
   ];
 
+  const materialOptions = useMemo(() => Array.from(new Set(products.map(p => p.material?.trim()).filter((name): name is string => !!name))).sort((a,b)=>a.localeCompare(b,"tr")), [products]);
   const visible = useMemo(() => {
-    const list = [...products];
+    const term = query.trim().toLocaleLowerCase("tr-TR");
+    const list = products.filter(product =>
+      (!term || [product.name,product.category,product.material].some(value=>value?.toLocaleLowerCase("tr-TR").includes(term))) &&
+      (materialFilter==="all" || product.material===materialFilter));
     if (sort === "isim") list.sort((a, b) => a.name.localeCompare(b.name, "tr"));
     return list;
-  }, [products, sort]);
+  }, [products, sort, query, materialFilter]);
+  const categoryCards = useMemo(() => CATALOG_SLUGS.flatMap(slug=>{
+    const category=getCollection(slug);
+    if(!category) return [];
+    return [{...category,count:mergeCatalogProducts(slug,liveProducts,liveCategories).length}];
+  }),[liveProducts,liveCategories]);
   const toggleFavorite = (name: string) =>
     setFavorites((current) => {
       const next = new Set(current);
@@ -159,82 +170,73 @@ export function CollectionCatalog({ collection }: { collection: Collection }) {
       </div>
       <SiteMenu open={menuOpen} onClose={() => setMenuOpen(false)} items={SECTIONS} base="/" />
 
-      {/* ---- Başlık alanı ---- */}
-      <section className="nil-catalog__heading relative overflow-hidden border-b border-primary/25 px-[clamp(1.25rem,4.9vw,7rem)] pb-12 pt-[calc(83px+3.25rem)] max-lg:pt-[calc(68px+2.5rem)]">
-        
-        <span aria-hidden="true" className="absolute bottom-10 right-[clamp(1.25rem,4.9vw,7rem)] hidden h-24 w-px bg-primary/50 lg:block" />
-
-        <div className="relative">
-          <nav aria-label="Sayfa yolu" className="flex flex-wrap items-center gap-x-2 text-[10px] font-medium uppercase tracking-[0.2em]">
-            <Link to="/" className="text-primary transition-colors hover:text-foreground">Ana sayfa</Link>
-            <span aria-hidden="true" className="text-foreground/40">/</span>
-            <Link to="/" hash="koleksiyon" className="text-primary transition-colors hover:text-foreground">Koleksiyon</Link>
-            <span aria-hidden="true" className="text-foreground/40">/</span>
-            <span className="text-foreground/70" aria-current="page">{collection.title}</span>
+      {/* Showroom hero — same composition on all collection routes, no fictitious inventory. */}
+      <section className="nil-collection-vitrine relative isolate overflow-hidden border-b border-[#45413a]/40">
+        <img src="/Alacakaranl%C4%B1kta%20L%C3%BCks%20Modern%20Salon.webp" alt="" aria-hidden="true" className="absolute inset-0 -z-20 h-full w-full object-cover object-[56%_center]"/>
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(9,10,12,.98)_0%,rgba(10,11,13,.94)_30%,rgba(10,11,13,.58)_61%,rgba(8,9,11,.24)_100%)]"/>
+        <div className="mx-auto flex min-h-[330px] max-w-[1800px] flex-col justify-center px-[clamp(1.25rem,4.9vw,7rem)] pb-12 pt-[125px] sm:min-h-[390px] sm:pb-14 md:pt-[145px] lg:min-h-[430px]">
+          <nav aria-label="Sayfa yolu" className="flex flex-wrap items-center gap-2 text-[11px] tracking-[.04em] text-[#bbb6ae]">
+            <Link to="/" className="hover:text-[#d8bd8f]">Ana Sayfa</Link><ArrowRight size={12}/>
+            <span className="text-[#d5bb90]">Koleksiyon</span>
+            {collection.slug!==ALL_SLUG&&<><ArrowRight size={12}/><span>{collection.title}</span></>}
           </nav>
-          <h1 className="mt-5 font-display text-5xl font-medium leading-[1.02] text-foreground md:text-6xl lg:text-7xl">
-            {collection.pageTitle}
-          </h1>
-          <p className="mt-5 max-w-lg text-sm font-light leading-7 text-foreground/75 md:text-base">{collection.lead}</p>
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Link to="/teklif" className="group inline-flex min-h-[60px] items-center justify-center gap-3.5 rounded-2xl border border-[#89929e] bg-[#39414d] px-8 py-4 text-[15px] font-semibold text-[#f4f6f9] shadow-[0_12px_32px_rgba(0,0,0,.3)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#b9c2cf] hover:bg-[#4d5765]"><ClipboardList size={18}/> Akıllı Teklif Oluştur <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></Link>
-            <span className="max-w-[330px] text-xs leading-5 text-[#a9b0ba]">Kullanım alanı ve yapılacak ahşap işi seçin; adım adım WhatsApp teklif görüşmesi başlatın.</span>
-          </div>
-          <span aria-hidden="true" className="mt-6 block h-px w-16 bg-[#666e79]" />
+          <h1 className="mt-6 max-w-[780px] font-display text-[clamp(42px,4.8vw,72px)] font-normal leading-[1.02] tracking-[-.025em] text-[#f0ebe5]">{collection.slug===ALL_SLUG?"Koleksiyon":collection.pageTitle}</h1>
+          <p className="mt-5 max-w-[550px] text-[13px] leading-[1.85] text-[#cec9c2] md:text-[15px]">{collection.slug===ALL_SLUG?"Ölçülerinize ve yaşam alanınıza göre şekillenen mobilya koleksiyonumuzu keşfedin. Tasarımı birlikte, ihtiyaçlarınıza göre planlayalım.":collection.lead}</p>
+          <span className="mt-6 h-px w-20 bg-[#b49b73]"/>
         </div>
       </section>
 
-      {/* ---- Katalog: kategoriler + ürünler ---- */}
-      <div className="nil-catalog__layout grid lg:grid-cols-[17rem_minmax(0,1fr)]">
-        {/* Kategoriler */}
-                {/* Sayfa menüsü */}
-        <aside className="nil-catalog__sidebar relative overflow-hidden border-foreground/10 px-[clamp(1.25rem,4.9vw,7rem)] py-6 lg:border-r lg:px-8 lg:py-8 lg:pl-[clamp(1.25rem,4.9vw,7rem)]">
-          <ul className="relative flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-0 lg:overflow-visible lg:pb-0" aria-label="Ürün sayfaları">
-            {sideLinks.map(({ slug, label, count }) => {
-              const active = collection.slug === slug;
-              return (
-                <li key={slug} className="shrink-0">
-                  <Link
-                    to="/koleksiyon/$slug"
-                    params={{ slug }}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "flex w-full items-center justify-between gap-6 border border-foreground/15 px-4 py-2.5 text-left text-sm transition-colors lg:border-0 lg:border-b lg:border-l-2 lg:border-b-foreground/10 lg:px-4 lg:py-3.5",
-                      active
-                        ? "border-primary/60 bg-primary/5 text-primary lg:border-l-primary"
-                        : "text-foreground/80 hover:text-primary lg:border-l-transparent",
-                    )}
-                  >
-                    <span>{label}</span>
-                    <span className="text-xs tabular-nums text-foreground/60">({count})</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-          <Link to="/teklif" className="mt-6 flex min-h-[58px] w-full items-center justify-between gap-3 rounded-2xl border border-[#858e9a] bg-[#353d48] px-5 py-4 text-sm font-semibold text-[#f0f3f7] shadow-[0_10px_24px_rgba(0,0,0,.22)] transition-all hover:border-[#aeb8c5] hover:bg-[#4a5360]"><span className="flex items-center gap-2"><ClipboardList size={17}/> Akıllı Teklif</span><ArrowRight size={15}/></Link>
-        </aside>
-
-        {/* Ürünler */}
-        <section aria-label={`${collection.pageTitle} ürünleri`} className="nil-catalog__products px-[clamp(1.25rem,4.9vw,7rem)] py-6 lg:px-10 lg:py-8 lg:pr-[clamp(1.25rem,4.9vw,7rem)]">
-          <div className="nil-catalog__toolbar mb-6 flex flex-wrap items-center justify-between gap-4">
+      <div className="nil-collection-content relative mx-auto max-w-[1800px] px-[clamp(1.25rem,4.9vw,7rem)] pb-16">
+        {/* Real filters and an integrated quote entry, not a separate billboard. */}
+        <div className="nil-collection-filters relative z-10 -mt-7 mb-9 grid items-center gap-3 rounded-2xl border border-[#50545a] bg-[#191b1e]/95 p-3 shadow-[0_18px_55px_rgba(0,0,0,.32)] backdrop-blur-lg lg:grid-cols-[minmax(0,1fr)_auto] lg:p-4">
+          <div className="grid min-w-0 gap-2 sm:grid-cols-2 xl:grid-cols-[1.05fr_1.1fr_1.1fr]">
             <div className="relative">
-              <label htmlFor="siralama" className="sr-only">Sıralama</label>
-              <select
-                id="siralama"
-                value={sort}
-                onChange={(event) => setSort(event.target.value as Sort)}
-                className="h-10 min-w-[15rem] cursor-pointer appearance-none border border-primary/40 bg-transparent pl-4 pr-10 text-xs text-foreground/85 outline-none transition-colors hover:border-primary focus-visible:border-primary"
-              >
-                {SORT_OPTIONS.map(([value, label]) => (
-                  <option key={value} value={value} className="bg-background text-foreground">{label}</option>
-                ))}
+              <label htmlFor="nil-category" className="sr-only">Ürün kategorisi</label>
+              <select id="nil-category" value={collection.slug} onChange={e=>{const slug=e.target.value;window.location.assign("/koleksiyon/"+encodeURIComponent(slug));}} className="nil-filter-control w-full appearance-none pr-9">
+                <option value={ALL_SLUG}>Tüm Kategoriler</option>
+                {sideLinks.filter(x=>x.slug!==ALL_SLUG).map(x=><option key={x.slug} value={x.slug}>{x.label}</option>)}
               </select>
-              <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-primary" strokeWidth={1.4} />
+              <ChevronDown aria-hidden="true" size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#c7b086]"/>
             </div>
-            <div className="flex flex-wrap items-center gap-4"><p className="text-xs text-foreground/60">{visible.length} ürün</p><Link to="/siparis-ve-teslimat" className="text-xs text-[#d3ad79] underline-offset-4 hover:underline">Sipariş ve Teslimat <ArrowRight className="inline size-3"/></Link></div>
+            <div className="relative">
+              <label htmlFor="nil-material" className="sr-only">Malzeme filtresi</label>
+              <select id="nil-material" value={materialFilter} onChange={e=>setMaterialFilter(e.target.value)} className="nil-filter-control w-full appearance-none pr-9">
+                <option value="all">Tüm Malzemeler</option>
+                {materialOptions.map(name=><option key={name} value={name}>{name}</option>)}
+              </select>
+              <ChevronDown aria-hidden="true" size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#c7b086]"/>
+            </div>
+            <div className="relative sm:col-span-2 xl:col-span-1">
+              <label htmlFor="nil-product-search" className="sr-only">Ürün ara</label>
+              <Search aria-hidden="true" size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#c7b086]"/>
+              <input id="nil-product-search" type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Ürün ara…" className="nil-filter-control w-full pl-10 placeholder:text-[#a7a19a]"/>
+            </div>
           </div>
+          <Link to="/teklif" className="nil-collection-quote group flex min-h-[55px] items-center justify-between gap-5 rounded-xl border border-[#947a51] bg-[#25231f] px-5 py-2.5 text-left transition-colors hover:border-[#c5a577] hover:bg-[#302b24]">
+            <div className="flex min-w-0 items-center gap-3"><ClipboardList size={22} className="shrink-0 text-[#c9a771]"/><span><strong className="block text-[14px] font-semibold text-[#d7b884]">Akıllı Teklif Oluştur</strong><small className="mt-0.5 block text-[11px] text-[#b7afa4]">Ürün ve ölçülerini birlikte belirleyelim</small></span></div>
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#bd9e6b] text-[#171614] transition-transform group-hover:translate-x-1"><ArrowRight size={17}/></span>
+          </Link>
+        </div>
 
+        {collection.slug===ALL_SLUG && !query && materialFilter==="all" &&
+        <section aria-label="Koleksiyon kategorileri" className="mb-11">
+          <div className="mb-5 flex items-baseline justify-between gap-3"><h2 className="font-display text-2xl text-[#e8e1d7] md:text-3xl">Kategorileri Keşfedin</h2><span className="text-[11px] text-[#b4aea4]">{categoryCards.length} kategori</span></div>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {categoryCards.map(category=><Link key={category.slug} to="/koleksiyon/$slug" params={{slug:category.slug}} className="nil-category-tile group relative isolate min-h-[190px] overflow-hidden rounded-[15px] border border-[#4d4640] bg-[#191a1c] sm:min-h-[225px]">
+              <img src={category.hero} alt="" loading="lazy" className="absolute inset-0 -z-20 size-full object-cover transition-transform duration-700 group-hover:scale-[1.035]" style={{objectPosition:category.heroFocus}}/>
+              <span aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/25 to-transparent"/>
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5"><div><h3 className="font-display text-[25px] leading-none text-[#f2ece5]">{category.pageTitle}</h3><p className="mt-2 text-[12px] text-[#ddd0bb]">{category.count} ürün</p></div><span className="grid size-9 place-items-center rounded-full border border-[#bca077] text-[#ead6b5] transition-colors group-hover:bg-[#bca077] group-hover:text-[#111]"><ArrowRight size={16}/></span></div>
+            </Link>)}
+          </div>
+        </section>}
+        <section aria-label={`${collection.pageTitle} ürünleri`}>
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+            <p className="text-[13px] text-[#d4c8b4]"><strong className="text-[19px] text-[#c5a371]">{visible.length}</strong> ürün</p>
+            <div className="flex items-center gap-3"><label htmlFor="siralama" className="text-xs text-[#aaa39b]">Sıralama</label><div className="relative">
+              <select id="siralama" value={sort} onChange={e=>setSort(e.target.value as Sort)} className="nil-filter-control min-w-[165px] appearance-none pr-9"><option value="oner">Öne Çıkanlar</option><option value="isim">İsim (A–Z)</option></select><ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#bda277]"/>
+            </div></div>
+          </div>
+          {visible.length===0&&<div className="rounded-xl border border-[#464a50] bg-[#191b1f] px-6 py-10 text-center text-sm text-[#bfc0c2]">Bu filtrelere uygun ürün bulunamadı. Arama veya malzeme filtresini değiştirebilirsin.</div>}
           <div className="nil-catalog__grid grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {visible.map((product) => {
               const liked = favorites.has(product.name);
