@@ -59,7 +59,18 @@ export function SiteAnalytics(){
    const target=event.target;
    if(!(target instanceof Element))return;
    const a=target.closest("a[href]") as HTMLAnchorElement|null;
-   if(a && /(?:wa\.me|api\.whatsapp\.com)/i.test(a.href)){void record("whatsapp_click",location.pathname);void tagReady.then(ready=>{if(ready&&active)window.gtag?.("event","whatsapp_click",{send_to:GA_ID,page_path:location.pathname,link_url:a.href})})}
+   if(a && /(?:wa\.me|api\.whatsapp\.com)/i.test(a.href)){
+    void record("whatsapp_click",location.pathname);
+    // WhatsApp links contain the customer's composed message in ?text=.
+    // Never forward the full URL, contact details, or message to GA4.
+    const safeDestination=new URL(a.href).origin+new URL(a.href).pathname;
+    void tagReady.then(ready=>{if(ready&&active)window.gtag?.("event","whatsapp_click",{send_to:GA_ID,page_path:location.pathname,link_url:safeDestination})});
+   }
+   const marked=target.closest("[data-marketing-event]");
+   const marketingEvent=marked?.getAttribute("data-marketing-event");
+   if(marketingEvent==="quote_category_select"||marketingEvent==="quote_whatsapp_open"){
+    void tagReady.then(ready=>{if(ready&&active)window.gtag?.("event",marketingEvent,{send_to:GA_ID,page_path:location.pathname})});
+   }
   };
   document.addEventListener("click",click,true);
   return()=>{active=false;clearInterval(interval);document.removeEventListener("click",click,true)};
